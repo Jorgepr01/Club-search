@@ -74,6 +74,8 @@ scripts/csv-a-json.mjs    regenera data/catalogo-clubes.json desde el CSV
 
 ## Conectar Gemma
 
+> La guía completa para conectar modelos (contrato HTTP, esquemas, instrucciones y pasos) está en [`docs/integracion-ia/`](docs/integracion-ia/README.md). Este apartado es el resumen original.
+
 La interfaz solo habla con la interfaz `DiscoveryEngine` (`lib/engine/types.ts`):
 
 - `reply(history)`: siguiente turno del asistente y sugerencias.
