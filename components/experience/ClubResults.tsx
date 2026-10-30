@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useImperativeHandle, useRef, useState, type Ref } from "react";
 import { CLUB_BY_ID } from "@/lib/catalog";
 import { BRANCH_BY_ID } from "@/lib/catalog/branches";
 import type { BranchId, Recommendation } from "@/lib/types";
@@ -19,6 +19,13 @@ interface ClubResultsProps {
   onShowOthers: () => void;
   onBackToTree: () => void;
   onEditProfile: () => void;
+  /** Control para la guía de voz: abrir los detalles de un club o voltear la tarjeta principal. */
+  controls?: Ref<ClubResultsControls>;
+}
+
+export interface ClubResultsControls {
+  open: (clubId: string) => void;
+  flip: () => void;
 }
 
 const wideFrom: Anchor = (r) => ({ x: r.x + r.width / 2, y: r.y + r.height });
@@ -27,7 +34,8 @@ const narrowFrom: Anchor = (r) => ({ x: r.x + 18, y: r.y + r.height });
 const narrowTo: Anchor = (r) => ({ x: r.x, y: r.y + 44 });
 
 export function ClubResults(props: ClubResultsProps) {
-  const { branchId, recommendations, totalInBranch, error, onRetry, onShowOthers, onBackToTree, onEditProfile } = props;
+  const { branchId, recommendations, totalInBranch, error, onRetry, onShowOthers, onBackToTree, onEditProfile, controls } =
+    props;
   const branch = BRANCH_BY_ID[branchId];
   const wide = useMediaQuery(WIDE_LAYOUT, true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,6 +52,17 @@ export function ClubResults(props: ClubResultsProps) {
   function select(id: string) {
     setSelection({ batch, id, flipped: id === activeId ? !flipped : false });
   }
+
+  useImperativeHandle(
+    controls,
+    () => ({
+      open: (id) => setSelection({ batch, id, flipped: true }),
+      flip: () => {
+        if (activeId) setSelection({ batch, id: activeId, flipped: !flipped });
+      },
+    }),
+    [batch, activeId, flipped],
+  );
 
   return (
     <section

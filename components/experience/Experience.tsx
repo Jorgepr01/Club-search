@@ -2,16 +2,17 @@
 
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { clubsInBranch } from "@/lib/catalog";
+import { CLUB_BY_ID, clubsInBranch } from "@/lib/catalog";
 import { demoEngine } from "@/lib/demo/engine";
 import type { AssistantTurn, DiscoveryEngine } from "@/lib/engine/types";
 import type { BranchId, ChatMessage, Profile, Recommendation } from "@/lib/types";
-import { ClubResults } from "./ClubResults";
+import { ClubResults, type ClubResultsControls } from "./ClubResults";
 import { Conversation } from "./Conversation";
 import { InterestTree } from "./InterestTree";
 import { ProfileEditor } from "./ProfileEditor";
-import { StepNav, type Step } from "./StepNav";
+import type { Step } from "./steps";
 import { Welcome } from "./Welcome";
+import { VoiceGuide } from "./VoiceGuide";
 
 // Para conectar Gemma, sustituye este motor por uno que implemente DiscoveryEngine
 // llamando a rutas del servidor (ver lib/engine/types.ts y el README).
@@ -33,6 +34,7 @@ export function Experience() {
   const [seenIds, setSeenIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
+  const clubsRef = useRef<ClubResultsControls>(null);
   const firstRender = useRef(true);
 
   // Al cambiar de paso, el foco va al título del nuevo paso para lectores de pantalla y teclado.
@@ -136,6 +138,13 @@ export function Experience() {
     setStep(target);
   };
 
+  const confirmProfile = () => {
+    setProfileConfirmed(true);
+    setStep("tree");
+  };
+
+  const shownClubIds = recommendations.map((r) => r.clubId).filter((id) => CLUB_BY_ID.has(id));
+
   const reachable: Record<Step, boolean> = {
     welcome: true,
     chat: true,
@@ -156,7 +165,6 @@ export function Experience() {
             <img className="brand__kokoa" src="/Kokoa.svg" alt="Kokoa" />
             Comunidad ESPOL
           </button>
-          {step !== "welcome" && <StepNav current={step} reachable={reachable} onSelect={goTo} />}
           <p className="demo-tag">Demo sin IA</p>
         </header>
 
@@ -202,10 +210,7 @@ export function Experience() {
                       setProfileConfirmed(false);
                     }}
                     onOpenConversation={() => setConversationOpen(true)}
-                    onConfirm={() => {
-                      setProfileConfirmed(true);
-                      setStep("tree");
-                    }}
+                    onConfirm={confirmProfile}
                   />
                   <motion.aside
                     id="conversation-drawer"
@@ -245,11 +250,43 @@ export function Experience() {
                   totalInBranch={clubsInBranch(branchId).length}
                   onBackToTree={() => setStep("tree")}
                   onEditProfile={() => showProfile()}
+                  controls={clubsRef}
                 />
               )}
             </motion.div>
           </AnimatePresence>
         </main>
+
+        <VoiceGuide
+          step={step}
+          voice={{
+            profile,
+            updateProfile: (p) => {
+              setProfile(p);
+              setProfileConfirmed(false);
+            },
+            confirmProfile,
+            setConversationOpen,
+            chooseBranch,
+            clubIds: shownClubIds,
+            openClub: (id) => clubsRef.current?.open(id),
+            flipClub: () => clubsRef.current?.flip(),
+            canShowOthers: branchId !== null && clubsInBranch(branchId).length > shownClubIds.length,
+            showOthers: () => {
+              if (branchId && profile) void loadRecommendations(branchId, profile, seenIds);
+            },
+          }}
+          reachable={reachable}
+          onNavigate={goTo}
+          chatMessage={messages.findLast((message) => message.role === "assistant") ?? null}
+          canConverse={step === "profile" || (step === "chat" && !(turn?.readyForProfile ?? false))}
+          busy={thinking}
+          onSend={(text) => {
+            // En el perfil, la respuesta aparece en el panel de conversación.
+            if (step === "profile") setConversationOpen(true);
+            void send(text);
+          }}
+        />
       </div>
     </MotionConfig>
   );

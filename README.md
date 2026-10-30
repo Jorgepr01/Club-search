@@ -103,11 +103,11 @@ La conversación usa [assistant-ui](https://www.assistant-ui.com) (`@assistant-u
 
 `lib/speech/dictation.ts` implementa el `DictationAdapter` de assistant-ui con el reconocimiento de voz del navegador. No usa `WebSpeechDictationAdapter` directamente porque hacía falta explicar cada error y probar varios idiomas.
 
-- Solo empieza al pulsar el micrófono; el mismo botón lo detiene. Nunca envía lo reconocido: el texto queda en el cuadro para revisarlo y editarlo.
+- Se dicta con el micrófono de la guía de voz (ver «Guía de voz»), no desde el composer. Al detenerlo sin errores, lo dictado se envía como respuesta; si el reconocimiento falla, no se envía nada.
 - Idioma: `es-EC`; si el navegador no lo admite, prueba `es-419` y luego `es-ES`.
-- Al composer solo llegan frases finales y se agregan después de lo que ya estaba escrito. El texto provisional se muestra aparte, así no se duplican transcripciones parciales y se puede seguir escribiendo mientras se dicta.
+- Solo se usan frases finales; el texto provisional se muestra aparte en la barra de la guía mientras se habla.
 - Mensajes para permiso denegado, falta de micrófono, falta de red, silencio, idioma no disponible y navegador sin soporte. Escribir siempre sigue disponible.
-- Se detiene al salir del chat, al terminar la conversación, al enviar desde el cuadro y al llegar a 500 caracteres.
+- Se detiene al cambiar de paso, al pulsar detener o descartar, tras 60 segundos de mensaje o 10 de orden; el mensaje se recorta a 500 caracteres.
 
 **Limitaciones según navegador.** Chrome y Edge envían el audio a un servicio de reconocimiento del propio navegador: necesitan conexión y el audio no se procesa solo en el dispositivo. Safari (macOS e iOS) también lo ofrece y puede depender de los servicios de dictado de Apple. Firefox no tiene reconocimiento de voz: allí el micrófono aparece como no disponible. La calidad del español y la disponibilidad de `es-EC` dependen del navegador. En Chrome para Android el modo continuo puede comportarse distinto.
 
@@ -116,10 +116,10 @@ La conversación usa [assistant-ui](https://www.assistant-ui.com) (`@assistant-u
 `lib/speech/synthesis.ts` implementa el `SpeechSynthesisAdapter` con `speechSynthesis`. Cada mensaje de la guía tiene «Escuchar respuesta», que pasa a «Detener lectura» mientras suena.
 
 - Elige una voz en español: primero `es-EC`, luego otras de Latinoamérica, luego `es-ES`. Si el sistema no tiene voces en español, el navegador usa la que tenga.
-- Nunca se reproduce sola y nunca suenan dos lecturas a la vez. Se detiene al salir del chat y al empezar a dictar.
+- Nunca suenan dos lecturas a la vez. Se reproduce sola solo si se activó «Leer guía y respuestas» o si se le habló al chat por voz. Se detiene al salir del chat y al empezar a dictar.
 - Si el navegador no tiene `speechSynthesis`, el botón no aparece y el texto sigue disponible.
 
-No hay conversación de voz en tiempo real.
+No hay conversación de voz en tiempo real: cada mensaje se envía al pulsar detener.
 
 ### Probado y pendiente
 
@@ -140,3 +140,38 @@ Se verificaron en el navegador integrado: el recorrido completo hasta Clubes, el
 - Probar dictado y lectura con micrófono y altavoces reales en Chrome, Edge, Safari (macOS e iOS) y Chrome para Android.
 - Revisar contactos y vigencia de cada organización. Conseguir logos y fotos con permiso.
 - Elegir licencia.
+
+## Guía de voz: navegación del recorrido
+
+La guía es una barra fija al pie de la página y la forma principal de moverse por el recorrido (no hay barra de pasos en la cabecera). Muestra el paso actual («Paso 2 de 4 · Perfil»), una indicación breve y los botones **Atrás** y **Siguiente**. Cuando un paso aún no está disponible, Siguiente queda atenuado y la barra explica qué falta: responder las preguntas, confirmar el perfil o elegir una rama. Al pulsar el resumen se abren los detalles: la guía completa con «Escuchar», el interruptor «Leer guía y respuestas» (lee la guía al cambiar de paso y, en la conversación, cada respuesta nueva), la lista de pasos para saltar a cualquiera ya disponible y los comandos de voz.
+
+La guía tiene un solo micrófono con dos usos, que se distinguen por la palabra clave «Guía» al inicio de la frase:
+
+- **Navegar:** «Guía, siguiente», «Guía, atrás», «Guía, ir a perfil / ramas / clubes» (también «vamos a…», «volvamos a…» o «llévame a…»: basta con nombrar el paso), «Guía, vamos», «Guía, inicio», «Guía, repite», «Guía, para» o «Guía, ayuda» (ver `components/experience/voiceCommands.ts`). Se ejecuta al terminar la frase y la guía responde en voz alta. En los pasos sin chat, una frase sin la palabra clave recibe una indicación de cómo empezarla.
+- **Conversar con el chat** (en Conversación y Perfil): se habla normal, sin «Guía». Lo dicho se acumula en la barra y se envía al pulsar detener (✕ lo descarta); la respuesta del chat se lee en voz alta. En el Perfil se abre el panel de conversación para ver la respuesta.
+
+Además de navegar, en cada paso la guía puede actuar sobre la página (las órdenes también empiezan con «Guía»):
+
+- **Perfil:** «me llamo Ana», «mi carrera es Computación», «agrega interés fotografía», «agrega objetivo hacer amigos», «quita fotografía», «mi disponibilidad es cinco horas», «abre / cierra la conversación» y «confirmar perfil».
+- **Ramas:** decir el nombre de una rama la elige («Guía, robótica»).
+- **Clubes:** «abre el primero / segundo / tercero» o «abre PHYCOM» voltea la tarjeta y lee su descripción; «ver otras organizaciones» y «voltea la tarjeta».
+
+Para que la guía haga algo nuevo, agrega una entrada en `actionsFor` (`components/experience/voiceActions.ts`): un `example` que se muestra en la guía y una función `run(said)` que ejecuta la acción y devuelve lo que la guía responde, o `null` si la frase no es para ella. Si la acción necesita algo de la página, agrégalo a `VoiceContext` y pásalo desde `Experience`. Las acciones del paso se prueban antes que la navegación.
+
+Por eso el composer del chat ya no tiene micrófono: hay un solo punto de voz en la página. Todo usa las API de voz del navegador; el reconocimiento puede enviar audio a un servicio del navegador y requiere permiso.
+
+### Contrato propuesto para conectar un modelo
+
+Aún no hay integración con un modelo; antes de enviar datos hay que informar del proveedor y obtener la autorización de la persona. No enviar audio, nombre ni carrera por defecto. Limitar el historial y no conservarlo de forma persistente. Los datos concretos para cada solicitud serían:
+
+- **Bienvenida:** etapa y pregunta actual, sin perfil ni catálogo.
+- **Conversación:** pregunta actual y los turnos de conversación necesarios para responder; para proponer el perfil, las respuestas aportadas por el estudiante. No enviar el catálogo completo.
+- **Perfil:** pregunta actual y solo los campos editables pertinentes del borrador; marcar las inferencias como propuestas. No confirmar ni guardar por voz.
+- **Ramas:** pregunta actual y los intereses y objetivos confirmados, junto con identificadores y descripciones de las ramas disponibles. La selección sigue siendo manual.
+- **Clubes:** pregunta actual, rama seleccionada, intereses y objetivos pertinentes y campos públicos disponibles de los clubes que se muestran; incluir disponibilidad solo cuando sea relevante. No inventar datos ausentes ni seleccionar o abrir un club por voz.
+
+Validar en servidor cualquier respuesta estructurada contra IDs y datos del catálogo; mantener la clave en el servidor y ofrecer error recuperable. La definición exacta del proveedor, consentimiento, retención y límites del contexto requiere validación del equipo antes de habilitar el envío.
+
+### Ensayo de tiempos en la computadora de la demo
+
+Con micrófono, altavoces y red reales, medir al menos cinco turnos por etapa y anotar navegador, dispositivo y condiciones de red. Registrar por separado: fin de la frase → transcripción final; transcripción → respuesta del modelo (cuando exista); respuesta → inicio del audio; y fin de la frase → inicio y fin de la respuesta hablada. Anotar mediana, peor caso, errores y si el reconocimiento necesita reintentos. Probar también permiso denegado, red desconectada, interrupción del audio y navegación durante una lectura. Esta medición sigue pendiente: las pruebas locales de compilación no sustituyen el ensayo en el equipo de la demo.

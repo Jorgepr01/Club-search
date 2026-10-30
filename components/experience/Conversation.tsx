@@ -8,7 +8,6 @@ import {
   MessagePrimitive,
   ThreadPrimitive,
   useAui,
-  useAuiEvent,
   useAuiState,
   useExternalStoreRuntime,
   type AppendMessage,
@@ -25,7 +24,6 @@ import {
   type ReactNode,
 } from "react";
 import type { AssistantTurn } from "@/lib/engine/types";
-import { BrowserDictationAdapter, type DictationProblem } from "@/lib/speech/dictation";
 import { SpanishSpeechAdapter } from "@/lib/speech/synthesis";
 import type { ChatMessage } from "@/lib/types";
 
@@ -60,19 +58,6 @@ function useBrowserSupport(check: () => boolean) {
   return useSyncExternalStore(noSubscribe, check, () => false);
 }
 
-const DICTATION_MESSAGES: Record<DictationProblem, string> = {
-  unsupported:
-    "Este navegador no ofrece dictado por voz. Puedes escribir tu respuesta o probar con Chrome, Edge o Safari.",
-  "not-allowed":
-    "No hay permiso para usar el micrófono. Actívalo en la configuración del sitio en tu navegador o escribe tu respuesta.",
-  "audio-capture": "No se encontró un micrófono disponible. Revisa que esté conectado o escribe tu respuesta.",
-  network:
-    "El reconocimiento de voz del navegador necesita conexión y no respondió. Intenta de nuevo o escribe tu respuesta.",
-  "no-speech": "No se escuchó nada. Pulsa el micrófono y vuelve a intentarlo cuando estés listo.",
-  language: "Tu navegador no ofrece reconocimiento de voz en español. Puedes escribir tu respuesta.",
-  unknown: "El dictado se detuvo por un error. Lo que ya estaba en el cuadro se conserva; puedes seguir escribiendo.",
-};
-
 interface ChatUi {
   reportSpeechError: () => void;
 }
@@ -91,16 +76,9 @@ export function Conversation({
   onClose,
 }: ConversationProps) {
   const done = (turn?.readyForProfile ?? false) && !allowReplies;
-  const dictationSupported = useBrowserSupport(BrowserDictationAdapter.isSupported);
   const speechSupported = useBrowserSupport(SpanishSpeechAdapter.isSupported);
   const [speechFailed, setSpeechFailed] = useState(false);
-  const [dictation] = useState(() => new BrowserDictationAdapter());
   const [speech] = useState(() => new SpanishSpeechAdapter(() => setSpeechFailed(true)));
-
-  const suggestions = useMemo(
-    () => (turn && !thinking && !done ? turn.suggestions.map((prompt) => ({ prompt })) : []),
-    [turn, thinking, done],
-  );
 
   const runtime = useExternalStoreRuntime<ChatMessage>({
     messages,
@@ -108,7 +86,6 @@ export function Conversation({
     isRunning: thinking,
     // Mientras llega la respuesta o al terminar se puede seguir escribiendo, pero no enviar.
     isSendDisabled: thinking || done,
-    suggestions,
     onNew: async (message: AppendMessage) => {
       const text = message.content
         .map((part) => (part.type === "text" ? part.text : ""))
@@ -119,22 +96,11 @@ export function Conversation({
     },
     adapters: {
       speech: speechSupported ? speech : undefined,
-      dictation: dictationSupported ? dictation : undefined,
     },
   });
 
-  // Al salir del chat (o desmontar) se detienen el micrófono y la lectura.
-  useEffect(
-    () => () => {
-      dictation.abort();
-      speech.stop();
-    },
-    [dictation, speech],
-  );
-
-  useEffect(() => {
-    if (done) dictation.abort();
-  }, [done, dictation]);
+  // Al salir del chat (o desmontar) se detiene la lectura.
+  useEffect(() => () => speech.stop(), [speech]);
 
   // Chrome carga las voces de forma diferida: pedirlas temprano evita leer con una voz en inglés.
   useEffect(() => {
@@ -188,13 +154,7 @@ export function Conversation({
               {done ? (
                 <DonePanel canReview={canReview} onReviewProfile={onReviewProfile} />
               ) : (
-                <ChatComposer
-                  dictation={dictation}
-                  dictationSupported={dictationSupported}
-                  speechFailed={speechFailed}
-                  onDismissSpeechError={() => setSpeechFailed(false)}
-                  onBeforeDictation={() => speech.stop()}
-                />
+                <ChatComposer speechFailed={speechFailed} />
               )}
             </div>
           </ThreadPrimitive.Root>
@@ -286,103 +246,26 @@ function LatestQuestionAnnouncer({ messages }: { messages: ChatMessage[] }) {
    ------------------------------------------------------------------ */
 
 interface ChatComposerProps {
-  dictation: BrowserDictationAdapter;
-  dictationSupported: boolean;
   speechFailed: boolean;
-  onDismissSpeechError: () => void;
-  onBeforeDictation: () => void;
 }
 
-function ChatComposer({
-  dictation,
-  dictationSupported,
-  speechFailed,
-  onDismissSpeechError,
-  onBeforeDictation,
-}: ChatComposerProps) {
-  const aui = useAui();
+// Para responder hablando se usa el micrófono de la guía de voz (VoiceGuide),
+// que envía aquí lo dictado: así hay un solo micrófono en la página.
+function ChatComposer({ speechFailed }: ChatComposerProps) {
   const length = useAuiState((s) => s.composer.text.length);
-  const dictating = useAuiState((s) => s.composer.dictation != null);
   const sendBlocked = useAuiState((s) => s.thread.isSendDisabled);
-  const snapshot = useSyncExternalStore(dictation.subscribe, dictation.getSnapshot, dictation.getSnapshot);
-  const [notice, setNotice] = useState<string | null>(null);
-
-  // El dictado puede sobrepasar el límite: se recorta y se detiene el micrófono.
-  useAuiEvent("composer.textChange", ({ text, messageId }) => {
-    if (messageId !== undefined || text.length <= MAX_ANSWER_LENGTH) return;
-    aui.composer.setText(text.slice(0, MAX_ANSWER_LENGTH));
-    if (aui.composer.getState().dictation) aui.composer.stopDictation();
-    setNotice(`Llegaste al límite de ${MAX_ANSWER_LENGTH} caracteres; el dictado se detuvo.`);
-  });
-
-  const toggleDictation = () => {
-    setNotice(null);
-    onDismissSpeechError();
-    if (!dictationSupported) {
-      setNotice(DICTATION_MESSAGES.unsupported);
-      return;
-    }
-    if (dictating) {
-      aui.composer.stopDictation();
-      return;
-    }
-    dictation.clearProblem();
-    onBeforeDictation();
-    try {
-      aui.composer.startDictation();
-    } catch {
-      setNotice(DICTATION_MESSAGES.unknown);
-    }
-  };
-
-  let status: string | null = null;
-  if (dictating) {
-    status = snapshot.listening
-      ? "Escuchando… Habla con naturalidad y pulsa detener al terminar. El texto quedará en el cuadro para que lo revises antes de enviarlo."
-      : "Activando el micrófono… Si el navegador lo pide, acepta el permiso.";
-  } else if (snapshot.problem) {
-    status = DICTATION_MESSAGES[snapshot.problem];
-  } else if (notice) {
-    status = notice;
-  } else if (speechFailed) {
-    status = "No se pudo leer la respuesta en voz alta en este navegador. El texto sigue disponible.";
-  }
-  const isProblem = !dictating && (snapshot.problem !== null || speechFailed || notice === DICTATION_MESSAGES.unsupported);
 
   return (
     <>
-      <AuiIf condition={(s) => s.thread.suggestions.length > 0}>
-        <div className="chat__suggestions" role="group" aria-label="Respuestas sugeridas">
-          <ThreadPrimitive.Suggestions>
-            {({ suggestion }) => (
-              <ThreadPrimitive.Suggestion
-                prompt={suggestion.prompt}
-                send
-                clearComposer={false}
-                className="chip chip--suggest"
-              >
-                {suggestion.prompt}
-              </ThreadPrimitive.Suggestion>
-            )}
-          </ThreadPrimitive.Suggestions>
-        </div>
-      </AuiIf>
-
-      <div className="chat__status" role="status" data-tone={isProblem ? "problem" : dictating ? "live" : undefined}>
-        {status && (
-          <p className="chat__status-text">
-            {dictating && <span className="chat__pulse" aria-hidden="true" />}
-            {status}
-          </p>
-        )}
-        {dictating && snapshot.interim && (
-          <p className="chat__interim" aria-hidden="true">
-            «{snapshot.interim}»
-          </p>
-        )}
+      <div className="chat__status" role="status" data-tone={speechFailed ? "problem" : undefined}>
+        <p className="chat__status-text">
+          {speechFailed
+            ? "No se pudo leer la respuesta en voz alta en este navegador. El texto sigue disponible."
+            : "¿Prefieres hablar? Pulsa el micrófono de la guía de abajo y responde en voz alta."}
+        </p>
       </div>
 
-      <ComposerPrimitive.Root className="composer" data-dictating={dictating || undefined}>
+      <ComposerPrimitive.Root className="composer">
         <label htmlFor="composer-input" className="sr-only">
           Tu respuesta
         </label>
@@ -401,23 +284,6 @@ function ChatComposer({
           aria-describedby="composer-hint"
         />
         <div className="composer__tools">
-          <button
-            type="button"
-            className="composer__icon"
-            data-active={dictating || undefined}
-            aria-disabled={!dictationSupported || undefined}
-            aria-label={
-              !dictationSupported
-                ? "Dictar por voz (no disponible en este navegador)"
-                : dictating
-                  ? "Detener dictado"
-                  : "Dictar por voz"
-            }
-            title={dictating ? "Detener dictado" : "Dictar por voz"}
-            onClick={toggleDictation}
-          >
-            {dictating ? <StopIcon /> : <MicIcon />}
-          </button>
           <ComposerPrimitive.Send className="composer__send" aria-label="Enviar respuesta" title="Enviar">
             <SendIcon />
           </ComposerPrimitive.Send>
@@ -489,15 +355,6 @@ function Icon({ children }: { children: ReactNode }) {
     >
       {children}
     </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <Icon>
-      <rect x="9" y="3" width="6" height="11" rx="3" />
-      <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
-    </Icon>
   );
 }
 
