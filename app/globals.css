@@ -37,6 +37,7 @@ html {
 
 body {
   margin: 0;
+  min-height: 100vh;
   min-height: 100dvh;
   background: var(--wall);
   color: var(--ink);
@@ -286,6 +287,7 @@ a {
    Estructura
    ------------------------------------------------------------------ */
 .app {
+  min-height: 100vh;
   min-height: 100dvh;
   overflow-x: clip;
   display: flex;
@@ -300,9 +302,9 @@ a {
 }
 
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+  display: inline-grid;
+  justify-items: start;
+  gap: 5px;
   padding: 6px 4px;
   border: 0;
   background: none;
@@ -313,11 +315,23 @@ a {
   white-space: nowrap;
 }
 
+.brand__identity {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .brand__mark {
   width: 22px;
   height: 22px;
   border-radius: 6px;
   background: linear-gradient(90deg, #2e5bd6 0 25%, #c93a2c 25% 50%, #f0a030 50% 75%, #7fd3c0 75%);
+}
+
+.brand__kokoa {
+  width: 52px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .steps {
@@ -1312,6 +1326,57 @@ a {
   font-variant-numeric: tabular-nums;
 }
 
+.composer__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn--microphone {
+  flex: 0 0 48px;
+  width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.btn--microphone:hover:not(:disabled) {
+  background: transparent;
+}
+
+.btn--microphone[aria-pressed="true"] {
+  background: transparent;
+  color: #c93a2c;
+}
+
+.btn--microphone svg,
+.btn--microphone img {
+  width: 18px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.btn--microphone svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.btn--microphone img {
+  filter: brightness(0) saturate(100%) opacity(0.7);
+}
+
+.composer__voice-status {
+  margin: 8px 4px 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
 .chat__done {
   display: flex;
   flex-wrap: wrap;
@@ -1459,10 +1524,75 @@ a {
   margin: 0;
 }
 
+.profile__identity {
+  margin-bottom: 20px;
+}
+
+.profile__interests {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile__identity-fields {
+  display: grid;
+  gap: 18px;
+}
+
+.profile__field {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.profile__field--career {
+  max-width: 680px;
+  font-size: 0.96rem;
+}
+
+.field--profile-name {
+  min-height: 68px;
+  font-size: 1.55rem;
+  font-weight: 750;
+}
+
+.field--profile-career {
+  min-height: 50px;
+  font-size: 1.02rem;
+}
+
+.profile__divider {
+  width: 100%;
+  margin: 24px 0 12px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.profile__identity .placard__title {
+  font-size: 1.2rem;
+}
+
+.profile__secondary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
 .inline-add {
   display: flex;
   gap: 8px;
   margin-top: 4px;
+}
+
+.btn--plus {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 12px;
+  font-size: 1.6rem;
+  line-height: 1;
 }
 
 /* ------------------------------------------------------------------
@@ -2113,6 +2243,10 @@ a {
   }
 
   .placards {
+    grid-template-columns: 1fr;
+  }
+
+  .profile__secondary {
     grid-template-columns: 1fr;
   }
 

@@ -72,7 +72,13 @@ export function Experience() {
       setMessages((m) => [...m, { id: newId(), role: "assistant", text: next.text }]);
       setTurn(next);
       if (next.readyForProfile) {
-        setProfile(await engine.proposeProfile(history));
+        const proposed = await engine.proposeProfile(history);
+        // Conserva lo que la persona ya escribió a mano en el perfil (nombre y carrera).
+        setProfile((current) => ({
+          ...proposed,
+          name: current?.name || proposed.name,
+          career: current?.career || proposed.career,
+        }));
         setProfileConfirmed(false);
       }
     } catch {
@@ -171,7 +177,7 @@ export function Experience() {
                     setProfile(p);
                     setProfileConfirmed(false);
                   }}
-                  onBack={() => setStep("chat")}
+                  onOpenConversation={() => setStep("chat")}
                   onConfirm={() => {
                     setProfileConfirmed(true);
                     setStep("tree");

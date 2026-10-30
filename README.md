@@ -19,7 +19,7 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 
 1. **Bienvenida:** título, aviso de demo y un anillo por el que giran las fotos de los clubes con estela de movimiento (botón para pausarlo).
 2. **Conversación:** tres preguntas fijas (intereses, objetivos y disponibilidad), con respuestas sugeridas, texto libre o dictado por micrófono. Cada pregunta puede escucharse en voz alta. Ver [Chat y audio](#chat-y-audio).
-3. **Perfil:** intereses y objetivos como etiquetas editables y disponibilidad como texto. Hay que confirmarlo para seguir.
+3. **Perfil:** nombre, carrera, hasta cuatro intereses como etiquetas editables, objetivos y disponibilidad. Hay que confirmarlo para seguir.
 4. **Ramas:** árbol con conexiones SVG desde «Tu perfil». Las ramas relacionadas con el perfil aparecen marcadas.
 5. **Clubes:** hasta tres paneles por rama. Al abrir uno, el panel se expande y muestra por qué aparece, los datos del catálogo, el contacto (si existe) y la fuente.
 6. **Navegación:** «Volver a las ramas», «Explorar otra rama», «Ver otras organizaciones de esta rama» y los pasos de la barra superior.
@@ -77,7 +77,7 @@ scripts/csv-a-json.mjs    regenera data/catalogo-clubes.json desde el CSV
 La interfaz solo habla con la interfaz `DiscoveryEngine` (`lib/engine/types.ts`):
 
 - `reply(history)`: siguiente turno del asistente y sugerencias.
-- `proposeProfile(history)`: perfil propuesto (intereses, objetivos, disponibilidad).
+- `proposeProfile(history)`: perfil propuesto (nombre, carrera, hasta cuatro intereses, objetivos y disponibilidad).
 - `recommend({ profile, branchId, candidates, exclude })`: hasta tres `{ clubId, reasons }`.
 
 Pasos sugeridos:
