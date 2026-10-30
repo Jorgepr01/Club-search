@@ -40,6 +40,10 @@ interface ConversationProps {
   canReview: boolean;
   onSend: (text: string) => Promise<void>;
   onReviewProfile: () => void;
+  /** En el panel del perfil se puede seguir respondiendo aunque el borrador ya esté listo. */
+  allowReplies?: boolean;
+  /** Si se pasa, el encabezado muestra un botón para cerrar el panel. */
+  onClose?: () => void;
 }
 
 // Los mensajes siguen viviendo en Experience; assistant-ui solo los presenta.
@@ -83,8 +87,10 @@ export function Conversation({
   canReview,
   onSend,
   onReviewProfile,
+  allowReplies = false,
+  onClose,
 }: ConversationProps) {
-  const done = turn?.readyForProfile ?? false;
+  const done = (turn?.readyForProfile ?? false) && !allowReplies;
   const dictationSupported = useBrowserSupport(BrowserDictationAdapter.isSupported);
   const speechSupported = useBrowserSupport(SpanishSpeechAdapter.isSupported);
   const [speechFailed, setSpeechFailed] = useState(false);
@@ -150,6 +156,11 @@ export function Conversation({
             <h2 id="chat-title" className="chat__title" tabIndex={-1} data-step-heading>
               Cuéntanos de ti
             </h2>
+            {onClose && (
+              <button type="button" className="chat__close" onClick={onClose} aria-label="Cerrar conversación">
+                <span aria-hidden="true">×</span>
+              </button>
+            )}
             <p className="chat__lede">Responde con tus palabras, con una sugerencia o dictando con el micrófono.</p>
           </header>
 

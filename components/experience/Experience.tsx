@@ -22,6 +22,7 @@ const newId = () => `m${++messageCounter}`;
 
 export function Experience() {
   const [step, setStep] = useState<Step>("welcome");
+  const [conversationOpen, setConversationOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [turn, setTurn] = useState<AssistantTurn | null>(null);
   const [thinking, setThinking] = useState(false);
@@ -61,7 +62,8 @@ export function Experience() {
 
   const send = async (text: string) => {
     const value = text.trim();
-    if (!value || sendingRef.current || turn?.readyForProfile) return;
+    // Desde el panel del perfil se puede seguir conversando aunque el borrador ya esté listo.
+    if (!value || sendingRef.current || (turn?.readyForProfile && step !== "profile")) return;
     sendingRef.current = true;
     const history: ChatMessage[] = [...messages, { id: newId(), role: "user", text: value }];
     setMessages(history);
@@ -73,11 +75,14 @@ export function Experience() {
       setTurn(next);
       if (next.readyForProfile) {
         const proposed = await engine.proposeProfile(history);
-        // Conserva lo que la persona ya escribió a mano en el perfil (nombre y carrera).
+        // Conserva lo que la persona ya escribió o editó a mano en el perfil.
         setProfile((current) => ({
           ...proposed,
           name: current?.name || proposed.name,
           career: current?.career || proposed.career,
+          interests: current?.interests.length ? current.interests : proposed.interests,
+          goals: current?.goals.length ? current.goals : proposed.goals,
+          availability: current?.availability ?? proposed.availability,
         }));
         setProfileConfirmed(false);
       }
@@ -120,8 +125,14 @@ export function Experience() {
     void loadRecommendations(id, profile, []);
   };
 
+  const showProfile = () => {
+    setConversationOpen(false);
+    setStep("profile");
+  };
+
   const goTo = (target: Step) => {
     if (target === "chat" && messages.length === 0) return startConversation();
+    if (target === "profile") return showProfile();
     setStep(target);
   };
 
@@ -166,26 +177,62 @@ export function Experience() {
                   thinking={thinking}
                   error={error}
                   onSend={send}
-                  onReviewProfile={() => setStep("profile")}
+                  onReviewProfile={() => showProfile()}
                   canReview={profile !== null}
                 />
               )}
               {step === "profile" && profile && (
-                <ProfileEditor
-                  profile={profile}
-                  onChange={(p) => {
-                    setProfile(p);
-                    setProfileConfirmed(false);
-                  }}
-                  onOpenConversation={() => setStep("chat")}
-                  onConfirm={() => {
-                    setProfileConfirmed(true);
-                    setStep("tree");
-                  }}
-                />
+                <div className="profile-workspace" data-conversation-open={conversationOpen}>
+                  {!conversationOpen && (
+                    <button
+                      type="button"
+                      className="btn btn--ghost profile-conversation-toggle"
+                      aria-expanded={false}
+                      aria-controls="conversation-drawer"
+                      onClick={() => setConversationOpen(true)}
+                    >
+                      Abrir conversación
+                    </button>
+                  )}
+                  <ProfileEditor
+                    profile={profile}
+                    onChange={(p) => {
+                      setProfile(p);
+                      setProfileConfirmed(false);
+                    }}
+                    onOpenConversation={() => setConversationOpen(true)}
+                    onConfirm={() => {
+                      setProfileConfirmed(true);
+                      setStep("tree");
+                    }}
+                  />
+                  <motion.aside
+                    id="conversation-drawer"
+                    className="conversation-drawer"
+                    data-open={conversationOpen}
+                    aria-label="Conversación"
+                    aria-hidden={!conversationOpen}
+                    inert={!conversationOpen}
+                    initial={false}
+                    animate={{ opacity: conversationOpen ? 1 : 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Conversation
+                      messages={messages}
+                      turn={turn}
+                      thinking={thinking}
+                      error={error}
+                      onSend={send}
+                      onReviewProfile={() => setConversationOpen(false)}
+                      onClose={() => setConversationOpen(false)}
+                      canReview
+                      allowReplies
+                    />
+                  </motion.aside>
+                </div>
               )}
               {step === "tree" && profile && (
-                <InterestTree profile={profile} onChoose={chooseBranch} onEditProfile={() => setStep("profile")} />
+                <InterestTree profile={profile} onChoose={chooseBranch} onEditProfile={() => showProfile()} />
               )}
               {step === "clubs" && profile && branchId && (
                 <ClubResults
@@ -196,7 +243,7 @@ export function Experience() {
                   onShowOthers={() => void loadRecommendations(branchId, profile, seenIds)}
                   totalInBranch={clubsInBranch(branchId).length}
                   onBackToTree={() => setStep("tree")}
-                  onEditProfile={() => setStep("profile")}
+                  onEditProfile={() => showProfile()}
                 />
               )}
             </motion.div>

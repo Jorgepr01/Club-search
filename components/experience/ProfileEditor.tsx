@@ -97,7 +97,7 @@ export function ProfileEditor({ profile, onChange, onOpenConversation, onConfirm
 
       <div className="actions">
         <button type="button" className="btn btn--ghost" onClick={onOpenConversation}>
-          Volver a la conversación
+          Abrir conversación
         </button>
         <button type="button" className="btn btn--primary btn--large" onClick={onConfirm} disabled={empty}>
           Confirmar perfil

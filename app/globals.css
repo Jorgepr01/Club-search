@@ -894,6 +894,128 @@ a {
   margin: 0 auto;
 }
 
+.profile-workspace {
+  display: grid;
+  grid-template-areas:
+    "toggle toggle"
+    "profile conversation";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
+  gap: 0;
+  align-items: start;
+  transition:
+    grid-template-columns 0.32s var(--ease),
+    column-gap 0.32s var(--ease);
+}
+
+.profile-workspace[data-conversation-open="true"] {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, min(440px, 38vw));
+  column-gap: 24px;
+}
+
+.profile-conversation-toggle {
+  grid-column: 1 / -1;
+  grid-area: toggle;
+  margin-bottom: 16px;
+}
+
+.conversation-drawer {
+  grid-area: conversation;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 0 solid var(--line);
+  border-radius: 20px;
+  background: var(--wall);
+  box-shadow: none;
+  visibility: hidden;
+  transition:
+    padding 0.32s var(--ease),
+    border-width 0.32s var(--ease),
+    box-shadow 0.32s var(--ease),
+    visibility 0s linear 0.32s;
+}
+
+.conversation-drawer[data-open="true"] {
+  align-self: stretch;
+  overflow: visible;
+  padding: 24px;
+  border: 1px solid var(--line);
+  box-shadow: var(--depth-2);
+  visibility: visible;
+  transition:
+    padding 0.32s var(--ease),
+    border-width 0.32s var(--ease),
+    box-shadow 0.32s var(--ease),
+    visibility 0s;
+}
+
+.conversation-drawer:not([data-open="true"]) {
+  pointer-events: none;
+}
+
+.profile-workspace .profile {
+  grid-area: profile;
+  min-width: 0;
+}
+
+.conversation-drawer .chat {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+}
+
+.chat__close {
+  display: grid;
+  flex: 0 0 48px;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-top: -6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--plaque);
+  color: var(--ink);
+  font: 400 1.9rem/1 var(--font-body);
+  cursor: pointer;
+}
+
+.chat__close:hover {
+  background: #fff;
+}
+
+/* Mi chat dentro del panel: sin altura propia no tendría dónde desplazarse. */
+.conversation-drawer .chat {
+  display: flex;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  flex-direction: column;
+}
+
+.conversation-drawer .chat__intro {
+  position: relative;
+  margin: 0 0 12px;
+  padding-right: 56px;
+}
+
+.conversation-drawer .chat__lede {
+  display: none;
+}
+
+.conversation-drawer .chat__panel {
+  flex: none;
+  height: min(70dvh, 640px);
+}
+
+.chat__intro .chat__close {
+  position: absolute;
+  top: -4px;
+  right: 0;
+}
+
 .chat__intro {
   display: flex;
   flex-wrap: wrap;
@@ -2153,6 +2275,40 @@ a {
    Pantallas angostas: lectura vertical
    ------------------------------------------------------------------ */
 @media (max-width: 879px) {
+  .profile-workspace {
+    grid-template-areas:
+      "toggle"
+      "profile";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profile-workspace[data-conversation-open="true"] {
+    grid-template-areas:
+      "toggle"
+      "profile"
+      "conversation";
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .conversation-drawer:not([data-open="true"]) {
+    display: none;
+  }
+
+  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
+    display: block;
+    align-self: start;
+    overflow: hidden;
+  }
+
+  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
+    margin-top: 20px;
+  }
+
+  .conversation-drawer .chat__panel {
+    height: min(70dvh, 520px);
+  }
+
   .topbar {
     flex-wrap: wrap;
     gap: 8px 12px;
