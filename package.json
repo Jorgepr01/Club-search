@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "catalogo": "node scripts/construir-catalogo.mjs",
+    "logos": "node scripts/descargar-logos.mjs"
   },
   "dependencies": {
     "motion": "^14.8.0",

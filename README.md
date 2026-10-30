@@ -28,7 +28,7 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 
 | Parte | Estado |
 | --- | --- |
-| Catálogo de clubes | **Real**: 31 organizaciones de `data/catalogo-clubes.csv`, extraídas el 29-10-2026 de los directorios públicos de ESPOL. |
+| Catálogo de clubes | **Real**: 43 organizaciones (40 de la plataforma de clubes, entregada el 30-10-2026, más 3 del directorio de Bienestar de ESPOL extraído el 29-10-2026) y 194 eventos. |
 | Conversación | **Simulada**: preguntas fijas en `lib/demo/engine.ts`. |
 | Perfil propuesto | **Reglas**: detección de palabras clave (`lib/demo/vocabulary.ts`). Si no reconoce nada, conserva el texto del estudiante para que lo corrija. |
 | Ramas | **Agrupación editorial** del equipo (`lib/catalog/branches.ts`), basada en el campo `categoria`. No es un dato oficial. |
@@ -42,24 +42,34 @@ Los datos ausentes (actividades, requisitos, horario y, a veces, contacto) se mu
 ```
 app/                      layout, página y estilos globales (tokens y componentes)
 components/experience/    pasos del recorrido, paneles, árbol y conexiones SVG
-data/                     catálogo fuente (CSV) y su versión JSON
+data/                     catálogo fusionado, eventos y fuentes (data/fuentes/)
 lib/types.ts              tipos compartidos (Club, Profile, Recommendation…)
 lib/catalog/              carga y normalización del catálogo, ramas
 lib/engine/               contrato DiscoveryEngine y validación de recomendaciones
 lib/demo/                 motor de demostración por reglas
-scripts/csv-a-json.mjs    regenera data/catalogo-clubes.json desde el CSV
+scripts/                  construir-catalogo, descargar-logos y csv-a-json
 ```
 
 ## Actualizar el catálogo
 
-1. Edita o reemplaza `data/catalogo-clubes.csv` conservando las columnas.
-2. Ejecuta `node scripts/csv-a-json.mjs`.
-3. Si aparece una `categoria` nueva, asígnale ramas en `CATEGORY_BRANCHES` (`lib/catalog/branches.ts`). Mientras no tenga, el club cae en «Otras organizaciones».
-4. Cuando existan logos, fotos, actividades, requisitos u horarios, añádelos como columnas y mapea los campos en `normalize()` (`lib/catalog/index.ts`). La interfaz ya los muestra cuando no son `null`.
+Las fuentes están en `data/fuentes/`:
+
+| Archivo | Papel |
+| --- | --- |
+| `clubes-plataforma.json` | **Fuente principal** (40 clubes de la plataforma de clubes): nombre, sigla, descripción, ubicación, facultad, áreas de interés, redes, documentos públicos, miembros y estado. |
+| `directorio-oe.csv` / `.json` | Directorio de Bienestar (31 organizaciones). Aporta `tipo`, `categoria`, `contacto` y `fuente_url` a los clubes que también están en la plataforma. |
+| `cruce-directorio.json` | Cruce manual entre ids del directorio y de la plataforma. Las 3 organizaciones con `null` (asociaciones de facultad) solo existen en el directorio y se conservan. |
+| `eventos-plataforma.json` | Eventos de los clubes. |
+
+1. Reemplaza o edita los archivos de `data/fuentes/` (si cambias el CSV, ejecuta `node scripts/csv-a-json.mjs`).
+2. Ejecuta `npm run catalogo`: fusiona las fuentes, valida (ids únicos, eventos con club existente, URLs y fechas válidas) y escribe `data/catalogo-clubes.json` y `data/eventos-clubes.json`. Falla si hay errores y lista como avisos los clubes sin descripción o sin categoría.
+3. La plataforma no trae `categoria`: los clubes sin categoría caen en «Otras organizaciones» hasta que se asigne en `CATEGORY_BRANCHES` (`lib/catalog/branches.ts`) y se complete en el cruce o en el directorio.
+4. Los eventos se filtran al abrir la página (`upcomingEvents`), no al compilar.
 
 ## Añadir fotos y logos de clubes
 
-1. Copia los archivos a `public/clubes/` (por ejemplo `public/clubes/22.jpg` y `public/clubes/22-logo.png`). Usa solo imágenes con permiso.
+0. `npm run logos` descarga los logos de la plataforma a `public/clubes/` y los registra solo (necesita acceso a los sitios de ESPOL).
+1. O copia los archivos a `public/clubes/` (por ejemplo `public/clubes/22.jpg` y `public/clubes/22-logo.png`). Usa solo imágenes con permiso.
 2. Regístralos en `data/medios-clubes.json` con el `id` del catálogo:
 
    ```json

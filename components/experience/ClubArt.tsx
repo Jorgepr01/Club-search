@@ -29,7 +29,7 @@ export function monogram(name: string): string {
 }
 
 export function ClubMark({ club, className }: { club: Club; className?: string }) {
-  const text = monogram(club.name);
+  const text = club.acronym ?? monogram(club.name);
   return (
     <span className={className} data-long={text.length > 5 || undefined} aria-hidden="true">
       {club.logoUrl ? (

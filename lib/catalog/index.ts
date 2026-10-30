@@ -1,9 +1,11 @@
 import records from "@/data/catalogo-clubes.json";
+import eventRecords from "@/data/eventos-clubes.json";
 import media from "@/data/medios-clubes.json";
-import type { BranchId, CatalogRecord, Club, ClubContact } from "@/lib/types";
+import type { BranchId, CatalogRecord, Club, ClubContact, ClubEvent, EventRecord } from "@/lib/types";
 import { BRANCHES, CATEGORY_BRANCHES } from "./branches";
 
-// Fotos y logos autorizados, por `id` del catálogo: { "22": { "foto": "/clubes/22.jpg", "logo": "/clubes/22-logo.png" } }.
+// Fotos y logos autorizados, por `id` del catálogo: { "38": { "foto": "/clubes/38.jpg", "logo": "/clubes/38-logo.png" } }.
+// `npm run logos` descarga los logos de la plataforma y los registra aquí.
 // Los archivos van en public/clubes/. Sin entrada, la interfaz usa un gráfico provisional.
 const MEDIA = media as Record<string, { foto?: string; logo?: string }>;
 
@@ -54,6 +56,15 @@ function normalize(record: CatalogRecord): Club {
     sourceUrl: record.fuente_url,
     extractedAt: record.fecha_extraccion,
     branches,
+    acronym: record.sigla,
+    location: record.ubicacion,
+    facultyName: record.facultad_nombre,
+    interestAreas: record.areas_interes,
+    socialLinks: record.redes.map((r) => ({ label: r.red, href: r.url })),
+    documents: record.documentos.map((d) => ({ label: d.titulo, href: d.url })),
+    membersCount: record.miembros,
+    statusLabel: record.estado === "Active" ? null : record.estado_etiqueta,
+    hasLeader: record.estado !== "Pending Leader",
     activities: null,
     requirements: null,
     schedule: null,
@@ -74,3 +85,20 @@ export function clubsInBranch(branchId: BranchId): Club[] {
 }
 
 export const CATALOG_EXTRACTED_AT = CLUBS.map((c) => c.extractedAt).find(Boolean) ?? null;
+
+const EVENTS: ClubEvent[] = (eventRecords as EventRecord[]).map((e) => ({
+  id: e.id,
+  clubId: `club-${e.club_id}`,
+  name: e.nombre,
+  mode: e.modalidad,
+  start: e.inicio,
+  end: e.fin,
+  place: e.lugar,
+  membersOnly: e.solo_miembros,
+  registrationOpen: e.inscripcion_abierta,
+}));
+
+/** Eventos que aún no terminaron, del más próximo al más lejano. Se evalúa al llamar, no al compilar. */
+export function upcomingEvents(clubId: string, now: Date = new Date()): ClubEvent[] {
+  return EVENTS.filter((e) => e.clubId === clubId && Date.parse(e.end) >= now.getTime());
+}
