@@ -148,8 +148,8 @@ export function ClubResults(props: ClubResultsProps) {
       </div>
 
       <p className="source-note">
-        Datos del catálogo inicial del equipo, tomados de los directorios públicos de ESPOL. La actividad de cada
-        organización puede haber cambiado; confirma con ella antes de asistir. El orden y las explicaciones salen de
+        Datos de la plataforma de clubes de ESPOL (entregados el 30-10-2026) y del directorio de Bienestar Politécnico. La
+        actividad de cada organización puede haber cambiado; confirma con ella antes de asistir. El orden y las explicaciones salen de
         reglas de palabras clave, no de un modelo de inteligencia artificial.
       </p>
     </section>

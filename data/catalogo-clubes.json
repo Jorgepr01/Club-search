@@ -1,342 +1,1864 @@
 [
   {
-    "id": "1",
+    "id": "77",
+    "origen": "plataforma",
     "nombre": "Acción Cultural Politécnica",
+    "sigla": "ACP",
+    "descripcion": null,
+    "ubicacion": "Campus Gustavo Galindo",
+    "facultad": "Central",
+    "facultad_nombre": null,
+    "areas_interes": [
+      "Cultura",
+      "Arte"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2021/10/Logo_ACP_negro-e1633622108994.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://acp.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/acp_club"
+      }
+    ],
+    "documentos": [],
+    "miembros": 0,
+    "estado": "Pending Leader",
+    "estado_etiqueta": "Sin líder",
     "tipo": "agrupacion_cultural",
-    "facultad": "Central",
     "categoria": "cultura",
-    "descripcion": "Agrupación cultural registrada en el directorio de Bienestar Politécnico",
     "contacto": null,
     "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "2",
+    "id": "55",
+    "origen": "plataforma",
     "nombre": "Acción Universitaria",
-    "tipo": "club",
+    "sigla": "ACUP",
+    "descripcion": "Promovemos Líderes Jóvenes comprometidos con el cambio del mundo desde una perspectiva católica.",
+    "ubicacion": "Campus Gustavo Galindo",
     "facultad": "Central",
+    "facultad_nombre": null,
+    "areas_interes": [
+      "Cultura",
+      "Social"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2014/09/accion.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://accionuniversitaria.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/accionistaespol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ACUP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/acup_brochuredepresentacion_9MkxGOi.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ACUP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/acup_convocatoriademembresia_JLkDBBV.pdf"
+      }
+    ],
+    "miembros": 17,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
     "categoria": "social_religioso",
-    "descripcion": "Promueve líderes jóvenes comprometidos con el cambio desde una perspectiva católica",
     "contacto": null,
     "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "3",
-    "nombre": "Argumentum",
-    "tipo": "club",
-    "facultad": "Central",
-    "categoria": "debate_oratoria",
-    "descripcion": "Forma líderes de opinión y pensamiento crítico mediante debate y oratoria",
-    "contacto": null,
-    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "4",
-    "nombre": "ASME ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FIMCP",
-    "categoria": "ingenieria_mecanica",
-    "descripcion": "Organiza cursos charlas y capacitaciones para futuros ingenieros",
-    "contacto": null,
-    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "5",
-    "nombre": "Capítulo Estudiantil IIE",
-    "tipo": "capitulo_profesional",
-    "facultad": "FIMCP",
-    "categoria": "ingenieria_industrial",
-    "descripcion": "Difunde conocimientos y aplicaciones de Ingeniería Industrial",
-    "contacto": null,
-    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "6",
-    "nombre": "TAWS",
-    "tipo": "grupo_investigacion",
-    "facultad": "FIEC",
-    "categoria": "software_web_movil_data_science",
-    "descripcion": "Fomenta investigación aplicada aprendizaje tecnológico y proyectos multidisciplinarios",
-    "contacto": "https://www.taws.espol.edu.ec/",
-    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "7",
-    "nombre": "ASCE ESPOL",
-    "tipo": "capitulo_profesional",
+    "id": "59",
+    "origen": "plataforma",
+    "nombre": "ACI ESPOL — American Concrete Institute",
+    "sigla": "ACI",
+    "descripcion": "La misión del capítulo estudiantil es capacitar a sus miembros en competencias técnicas del cemento y hormigón aprovechando los programas que ofrece el American Concrete Institute (ACI).",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
     "facultad": "FICT",
-    "categoria": "ingenieria_civil",
-    "descripcion": "Fomenta interacción académico profesional mediante investigación capacitaciones y visitas técnicas",
-    "contacto": "Instagram: asce.espol",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fict.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-07/ACI%20%281%29.png?itok=h9s7Bq56",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/aci_espol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/aciespol"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/ACI_ESPOL"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/in/aci-espol-student-chapter-093872174/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ACI",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aci_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ACI",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aci_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 8,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "cemento_hormigon",
+    "contacto": null,
     "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "8",
-    "nombre": "IFT ESPOL",
+    "id": "68",
+    "origen": "plataforma",
+    "nombre": "AIChE – ESPOL",
+    "sigla": "AICHE",
+    "descripcion": "Un capítulo de AIChE Global (American Institute of Chemical Engineers) que se enfoca en el desarrollo académico complementario a estudiantes de Ing. Química y carreras afines. Se realizan foros de industria, charlas con profesionales del área industrial y profesores, ayudantías para los alumnos sobre materias de la carrera, además de actividades sociales.",
+    "ubicacion": "FCNM, Campus Gustavo Galindo",
+    "facultad": "FCNM",
+    "facultad_nombre": "Facultad de Ciencias Naturales y Matemáticas",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fcnm.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/FCNM%20logo%20AIChE.webp?itok=wbqJk7Z-",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/aiche.espol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/AIChE.ESPOL1"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — AICHE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aiche_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — AICHE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aiche_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 18,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "71",
+    "origen": "plataforma",
+    "nombre": "ALUCINE — Club de Cine de ESPOL",
+    "sigla": "ALUCINE",
+    "descripcion": "Alucine es una familia de amigos unida por la experiencia colectiva de ver, vivir y compartir la pasión por el séptimo arte. Se realizan diferentes actividades dentro del club, como proyecciones, cine coloquios y cine ciclos de diferentes películas.",
+    "ubicacion": "FADCOM, Campus Gustavo Galindo",
+    "facultad": "FADCOM",
+    "facultad_nombre": "Facultad de Arte, Diseño y Comunicación Audiovisual",
+    "areas_interes": [
+      "Cultura",
+      "Arte"
+    ],
+    "logo_origen": "https://www.fadcom.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/logo%20club%20alucine%20218x160.webp?itok=v6Z3BOrR",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/alucineclub/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ALUCINE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/alucine_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ALUCINE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/alucine_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 17,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club_cultural",
+    "categoria": "cine",
+    "contacto": null,
+    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "49",
+    "origen": "plataforma",
+    "nombre": "American Association of Petroleum Geologists — Capítulo ESPOL",
+    "sigla": "AAPG",
+    "descripcion": "Proporcionar a las miembros habilidades que serán valiosas herramientas para su vida profesional, mediante conferencias, cursos y diferentes actividades con información actualizada acerca de la ciencia de la geología del petróleo.",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
+    "facultad": "FICT",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/10/AAPGN-e1602715475382.jpg",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://aapg.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/aapgespol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/AAPGESPOL"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/AAPGESPOL"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/company/aapgespol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — AAPG",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aapg_brochuredepresentacion_DEIXtxc.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — AAPG",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aapg_convocatoriademembresia_CrQTKDA.pdf"
+      }
+    ],
+    "miembros": 11,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
     "tipo": "capitulo_profesional",
+    "categoria": "geologia_petroleo",
+    "contacto": null,
+    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "45",
+    "origen": "plataforma",
+    "nombre": "American Society of Civil Engineers — Capítulo ESPOL",
+    "sigla": "ASCE",
+    "descripcion": "La American Society of Civil Engineers en ESPOL fomenta la interacción entre el ámbito académico y profesional de la Ingeniería Civil a través de investigaciones, ponencias, capacitaciones, visitas técnicas y más, en todas las ramas de la carrera, formando líderes y proactivos miembros en el campo laboral.",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
+    "facultad": "FICT",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/12/ASCE.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://asce.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/asce.espol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/asce.espol/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/asce_espol"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/in/asce-espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ASCE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/asce_brochuredepresentacion_pbSCAZa.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ASCE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/asce_convocatoriademembresia_eMPL7au.pdf"
+      }
+    ],
+    "miembros": 11,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_civil",
+    "contacto": null,
+    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "44",
+    "origen": "plataforma",
+    "nombre": "American Society of Mechanical Engineers — Capítulo ESPOL",
+    "sigla": "ASME",
+    "descripcion": "Es una sociedad sin fines de lucro que busca servir a los futuros ingenieros en su formación académica, mediante la organización de cursos, charlas, capacitaciones, y demás actividades que permitan obtener un crecimiento profesional.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
     "facultad": "FIMCP",
-    "categoria": "ingenieria_alimentos",
-    "descripcion": "Capítulo del Institute of Food Technologists enfocado en formación profesional e internacional",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2014/09/asme.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://asme.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/ASMEESPOL/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/asme_espol/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/ASME_ESPOL"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ASME",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/asme_brochuredepresentacion_RJays3t.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ASME",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/asme_convocatoriademembresia_PXT3f3w.pdf"
+      }
+    ],
+    "miembros": 12,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_mecanica",
     "contacto": null,
     "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "9",
-    "nombre": "CLIP",
+    "id": "51",
+    "origen": "plataforma",
+    "nombre": "Argumentum — Club de Debate y Oratoria",
+    "sigla": "ARGUMENTUM",
+    "descripcion": "Nuestro objetivo es crear líderes de opinión y pensamiento crítico que sean capaces de expandir la cultura del debate y la oratoria; mediante la creación de actividades formativas y evaluativas para sus miembros. Además de fomentar la participación en ambientes competitivos y de socialización a nivel nacional e internacional.",
+    "ubicacion": "Campus Gustavo Galindo",
+    "facultad": "Central",
+    "facultad_nombre": null,
+    "areas_interes": [
+      "Social",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/09/ARGUMENTUM.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://argumentum.oe.espol.edu.ec/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ARGUMENTUM",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/argumentum_brochuredepresentacion_vfCU4b2.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ARGUMENTUM",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/argumentum_convocatoriademembresia_As5kL2f.pdf"
+      }
+    ],
+    "miembros": 14,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
     "tipo": "club",
-    "facultad": "FIMCP",
-    "categoria": "logistica_transporte",
-    "descripcion": "Impulsa investigación y proyectos en logística y transporte",
+    "categoria": "debate_oratoria",
     "contacto": null,
     "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "10",
+    "id": "62",
+    "origen": "plataforma",
+    "nombre": "ASHRAE — Sociedad Americana de Ingenieros en Calefacción, Refrigeración y Aire Acondicionado",
+    "sigla": "ASHRAE",
+    "descripcion": "Es una organización diversa dedicada a promover las artes y las ciencias de calefacción, ventilación, aire acondicionado y refrigeración para servir a la humanidad y promover un mundo sostenible.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20ASHRAE.jpg?itok=-oQAKhqx",
+    "redes": [
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/ashrae.espol"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/ashrae_espol/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/ashrae_espol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ASHRAE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ashrae_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ASHRAE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ashrae_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 9,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "63",
+    "origen": "plataforma",
+    "nombre": "AWS — Sociedad Americana de Soldadura",
+    "sigla": "AWS",
+    "descripcion": "Dirigido a estudiantes de carreras pertenecientes a la FIMCP. La Sociedad Americana de Soldadura (AWS) reconoce la importancia de adquirir vasto conocimiento en el tema de fusionar materiales.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20AWS.jpg?itok=dOO0QMpw",
+    "redes": [
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/awsespol/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/awsespol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — AWS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aws_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — AWS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/aws_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 9,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "73",
+    "origen": "plataforma",
+    "nombre": "BREIK — Club de Cobertura y Comunicación Audiovisual",
+    "sigla": "BREIK",
+    "descripcion": "La principal función del club es la cobertura de eventos, donde todo se plasma en fotografías y cápsulas audiovisuales. Asimismo, se imparten talleres de fotografía, edición y se realizan concursos de fotografía.",
+    "ubicacion": "FADCOM, Campus Gustavo Galindo",
+    "facultad": "FADCOM",
+    "facultad_nombre": "Facultad de Arte, Diseño y Comunicación Audiovisual",
+    "areas_interes": [
+      "Cultura",
+      "Arte"
+    ],
+    "logo_origen": "https://www.fadcom.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/logo%20club%20breik%20218x160.webp?itok=35ckW1KM",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/breikgye/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — BREIK",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/breik_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — BREIK",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/breik_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 9,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
+    "categoria": "fotografia_audiovisual",
+    "contacto": null,
+    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "46",
+    "origen": "plataforma",
+    "nombre": "Capítulo Estudiantil Institute of Industrial Engineers",
+    "sigla": "IIE",
+    "descripcion": "Capítulo Estudiantil del Institute of Industrial Engineers dedicado a la difusión de los conocimientos y aplicaciones de Ing. Industrial.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Emprendimiento",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2014/09/iie.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://iie.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/IieEspol/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/iise_espol/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/iise_espol"
+      },
+      {
+        "red": "YouTube",
+        "url": "https://www.youtube.com/channel/UCadEFapRPARcNfOBfdcDcLg"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — IIE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/iie_brochuredepresentacion_ze9M6MZ.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — IIE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/iie_convocatoriademembresia_DAidrXg.pdf"
+      }
+    ],
+    "miembros": 11,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_industrial",
+    "contacto": null,
+    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "43",
+    "origen": "plataforma",
     "nombre": "Célula Estudiantil Microsoft ESPOL",
-    "tipo": "club",
+    "sigla": "MSP",
+    "descripcion": "Lideramos, investigamos y emprendemos, compartiendo nuestros conocimientos. Aquí ¡Impulsamos tu Potencial!",
+    "ubicacion": "FIEC, Bloque 11F, oficina 11F-O109",
     "facultad": "FIEC",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Emprendimiento"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/09/CELULA-ESTUDIANTIL.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://celula.oe.espol.edu.ec/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — MSP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/msp_brochuredepresentacion_bLMDk11.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — MSP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/msp_convocatoriademembresia_rLULYQf.pdf"
+      }
+    ],
+    "miembros": 11,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
     "categoria": "tecnologia",
-    "descripcion": "Investiga y emprende en software robótica e interacción humano máquina",
     "contacto": "https://celula.espol.edu.ec/",
     "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "11",
-    "nombre": "Club de Mecatrónica",
-    "tipo": "club",
+    "id": "64",
+    "origen": "plataforma",
+    "nombre": "CIMAT — Club de Ingeniería en Materiales",
+    "sigla": "CIMAT",
+    "descripcion": "Es un capítulo estudiantil dedicado a acercar a los estudiantes interesados en la ingeniería de los materiales y a conocer todo lo relacionado a estos.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
     "facultad": "FIMCP",
-    "categoria": "mecatronica_iot",
-    "descripcion": "Desarrolla competencias en mecatrónica IoT manufactura aditiva y automatización",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20CIMAT.jpg?itok=pyK98X6T",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/club_cimat/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/people/CIMATClub-de-Ciencia-e-Ingenier%C3%ADa-en-Materiales/100041334229219/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/CCimat"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/in/club-cimat-9528ba216/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — CIMAT",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/cimat_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — CIMAT",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/cimat_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 8,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
     "contacto": null,
-    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
-    "fecha_extraccion": "2026-10-29"
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
   },
   {
-    "id": "12",
-    "nombre": "Kokoa",
-    "tipo": "club",
-    "facultad": "FIEC",
-    "categoria": "software_hardware_libre",
-    "descripcion": "Comunidad de código abierto y tecnologías libres",
-    "contacto": "kokoa@espol.edu.ec",
-    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "13",
-    "nombre": "AAPG ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FICT",
-    "categoria": "geologia_petroleo",
-    "descripcion": "Ofrece conferencias cursos y actividades sobre geología del petróleo",
-    "contacto": "Instagram: aapgespol",
-    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "14",
-    "nombre": "NIoT",
-    "tipo": "club",
-    "facultad": "FIEC",
-    "categoria": "iot_web_movil",
-    "descripcion": "Desarrolla aplicaciones web y móviles integradas con IoT y TIC",
-    "contacto": "@ClubNiotEspol",
-    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "15",
-    "nombre": "FANPOL",
-    "tipo": "club_cultural",
-    "facultad": "Central",
-    "categoria": "cultura_asiatica",
-    "descripcion": "Difunde cultura asiática mediante manualidades gastronomía cultura y expresión artística",
-    "contacto": null,
-    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "16",
-    "nombre": "Tweening",
-    "tipo": "club_cultural",
-    "facultad": "FADCOM",
-    "categoria": "ilustracion_animacion_guion",
-    "descripcion": "Desarrolla habilidades en ilustración animación y guion",
-    "contacto": "Instagram: Club TWEENING",
-    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "17",
+    "id": "54",
+    "origen": "plataforma",
     "nombre": "Club de Arqueología Politécnico",
-    "tipo": "club_cultural",
+    "sigla": "ARQUEOLOGÍA",
+    "descripcion": "El Club de Arqueología Politécnico fomenta, promueve e incentiva el conocimiento de la arqueología y la antropología desde una nueva relación entre el ser humano y la historia; contribuyendo al redescubrimiento del pasado y la identidad cultural en la región.",
+    "ubicacion": "FCSH, Campus Gustavo Galindo",
     "facultad": "FCSH",
+    "facultad_nombre": "Facultad de Ciencias Sociales y Humanísticas",
+    "areas_interes": [
+      "Ciencia",
+      "Cultura"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2021/06/logo_club_arqueolog%C3%ADa2.jpg",
+    "redes": [
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/ClubArqueologia.ESPOL"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/clubarqueologia.espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ARQUEOLOGÍA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/arqueologia_brochuredepresentacion_t8wqjeC.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ARQUEOLOGÍA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/arqueologia_convocatoriademembresia_F5MMrt5.pdf"
+      }
+    ],
+    "miembros": 8,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club_cultural",
     "categoria": "arqueologia_antropologia",
-    "descripcion": "Fomenta el conocimiento arqueológico antropológico y la identidad cultural",
     "contacto": null,
     "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "18",
-    "nombre": "GISSC ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FICT",
-    "categoria": "sig_teledeteccion",
-    "descripcion": "Conecta estudiantes e investigadores en actividades con GIS y teledetección",
-    "contacto": "Instagram: gissc_espol",
-    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
+    "id": "76",
+    "origen": "plataforma",
+    "nombre": "Club de Desarrollo Sostenible",
+    "sigla": "CDS",
+    "descripcion": "El Club de Desarrollo Sostenible se constituye formalmente en 2020 con la visión de ser un referente en la promoción de los ODS en la comunidad ESPOL. A través de proyectos, visitas técnicas, capacitaciones, acciones de voluntariado en centros y áreas de conservación, entre otras actividades, el club fomenta una cultura de sostenibilidad activa y participativa.",
+    "ubicacion": "Campus Gustavo Galindo",
+    "facultad": null,
+    "facultad_nombre": null,
+    "areas_interes": [
+      "Ciencia",
+      "Social"
+    ],
+    "logo_origen": null,
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://cds.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/cds_espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — CDS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/cds_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — CDS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/cds_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 17,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
   },
   {
-    "id": "19",
-    "nombre": "Asociación de Estudiantes FIEC",
-    "tipo": "asociacion_estudiantil",
+    "id": "39",
+    "origen": "plataforma",
+    "nombre": "Club de Inteligencia Artificial Politécnico",
+    "sigla": "CIAP",
+    "descripcion": "Promovemos el aprendizaje e investigación, en inteligencia artificial y análisis de datos, ofreciendo talleres, conferencias y proyectos colaborativos para desarrollar habilidades aplicables en el entorno empresarial.",
+    "ubicacion": "FIEC, Bloque 11D",
     "facultad": "FIEC",
-    "categoria": "representacion_estudiantil",
-    "descripcion": "Promueve actividades culturales deportivas y profesionales",
-    "contacto": "aefiec@espol.edu.ec",
-    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "20",
-    "nombre": "Rama Estudiantil IEEE ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FIEC",
-    "categoria": "ingenieria_electrica_electronica",
-    "descripcion": "Promueve investigación y avances tecnológicos",
-    "contacto": "ieee@espol.edu.ec",
-    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "21",
-    "nombre": "CIAP",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fiec.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2025-06/logo_ciap_1.png?itok=fnPcneE9",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://ciap.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/ciap_espol"
+      },
+      {
+        "red": "GitHub",
+        "url": "https://github.com/CiapEspol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — CIAP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ciap_brochuredepresentacion_O4gVJqe.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — CIAP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ciap_convocatoriademembresia_mQmB6nz.pdf"
+      }
+    ],
+    "miembros": 18,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
     "tipo": "club",
-    "facultad": "FIEC",
     "categoria": "inteligencia_artificial_datos",
-    "descripcion": "Promueve IA y análisis de datos mediante talleres conferencias y proyectos",
     "contacto": "ciap@espol.edu.ec",
     "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "22",
-    "nombre": "PHYCOM",
+    "id": "41",
+    "origen": "plataforma",
+    "nombre": "Club de Mecatrónica",
+    "sigla": "MECATRÓNICA",
+    "descripcion": "El Club de Mecatrónica tiene por objeto impulsar el desarrollo de competencias en el ámbito tecnológico, particularmente en el desarrollo de sistemas mecatrónicas, IOT, manufactura aditiva, software y aplicaciones para el control y automatización de procesos.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20Club-de-mecatr%C3%B3nica.jpg?itok=TdEAfezL",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://clubmecatronica.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/Club-Mecatr%C3%B3nica-ESPOL-584070041803082/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/club_mecatronica_espol/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/club_espol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — MECATRÓNICA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/mecatronica_brochuredepresentacion_ViUgqV4.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — MECATRÓNICA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/mecatronica_convocatoriademembresia_TGINNlP.pdf"
+      }
+    ],
+    "miembros": 12,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
     "tipo": "club",
+    "categoria": "mecatronica_iot",
+    "contacto": null,
+    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "38",
+    "origen": "plataforma",
+    "nombre": "Club de Software Libre KOKOA",
+    "sigla": "KOKOA",
+    "descripcion": "KOKOA es una comunidad código abierto, software y hardware libre que se preocupa por la distribución, desarrollo, implementación y aprendizaje de software, hardware y tecnologías libres.",
+    "ubicacion": "FIEC, Bloque 11D, oficina 11D-O003",
     "facultad": "FIEC",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2014/11/kokoa.png",
+    "redes": [
+      {
+        "red": "Sitio web",
+        "url": "https://www.kokoa.club/"
+      },
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://kokoa.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/kokoa_espol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/kokoaespol/"
+      },
+      {
+        "red": "X",
+        "url": "https://twitter.com/kokoaespol"
+      },
+      {
+        "red": "GitHub",
+        "url": "https://github.com/kokoaespol"
+      },
+      {
+        "red": "YouTube",
+        "url": "https://www.youtube.com/@kokoaespol1"
+      },
+      {
+        "red": "Linktree",
+        "url": "https://linktr.ee/kokoaespol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — KOKOA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/kokoa_brochuredepresentacion_Bdcds2J.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — KOKOA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/kokoa_convocatoriademembresia_sSrZSul.pdf"
+      }
+    ],
+    "miembros": 25,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
+    "categoria": "software_hardware_libre",
+    "contacto": "kokoa@espol.edu.ec",
+    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "50",
+    "origen": "plataforma",
+    "nombre": "Club Estudiantil de Sistemas de Información Geográfica",
+    "sigla": "GISSC",
+    "descripcion": "El objetivo del Club Estudiantil GISSC es proporcionar nexos entre los miembros del Club e investigadores, para involucrarse en actividades multidisciplinares con el uso de los Sistemas de Información Geográfica (GIS) y teledetección a nivel regional.",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
+    "facultad": "FICT",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2021/06/Logo-GISSC-v01-1.png",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/gissc_espol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/GISSC1.ESPOL"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/gissc_espol"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/in/gissc-espol-025652244/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — GISSC",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/gissc_brochuredepresentacion_WLOnOiK.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — GISSC",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/gissc_convocatoriademembresia_Fa6O7s7.pdf"
+      }
+    ],
+    "miembros": 8,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "sig_teledeteccion",
+    "contacto": null,
+    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "48",
+    "origen": "plataforma",
+    "nombre": "Club Logístico Integral Politécnico",
+    "sigla": "CLIP",
+    "descripcion": "Impulsa la carrera de Ingeniería en Logística y Transporte mediante la investigación y desarrollo de proyectos multidisciplinarios que beneficien a la sociedad y a la comunidad politécnica, contribuyendo a la formación académica y profesional de los estudiantes.",
+    "ubicacion": "FCNM, Campus Gustavo Galindo",
+    "facultad": "FCNM",
+    "facultad_nombre": "Facultad de Ciencias Naturales y Matemáticas",
+    "areas_interes": [
+      "Emprendimiento",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/10/CLIP-LOGO-FIN--e1603724968841.png",
+    "redes": [
+      {
+        "red": "Sitio web",
+        "url": "https://clublogistico.wixsite.com/clipespol"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/clip_espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — CLIP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/clip_brochuredepresentacion_90KLQbw.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — CLIP",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/clip_convocatoriademembresia_v6S5CMv.pdf"
+      }
+    ],
+    "miembros": 12,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
+    "categoria": "logistica_transporte",
+    "contacto": null,
+    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "72",
+    "origen": "plataforma",
+    "nombre": "D-PRO — Club de Diseño de Productos",
+    "sigla": "D-PRO",
+    "descripcion": "Nuestro propósito es fomentar la creatividad, el pensamiento crítico y la innovación a través de actividades que integran teoría, práctica y trabajo colaborativo.",
+    "ubicacion": "FADCOM, Campus Gustavo Galindo",
+    "facultad": "FADCOM",
+    "facultad_nombre": "Facultad de Arte, Diseño y Comunicación Audiovisual",
+    "areas_interes": [
+      "Emprendimiento",
+      "Arte"
+    ],
+    "logo_origen": "https://www.fadcom.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2025-05/logo_dpro_218x160_wepg.webp?itok=VKhuOhJ6",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/clubdpro/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — D-PRO",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/d-pro_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — D-PRO",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/d-pro_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 8,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
+    "categoria": "diseno_productos",
+    "contacto": null,
+    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "69",
+    "origen": "plataforma",
+    "nombre": "D.A.T.A Club — Data Analysis Technology Algorithms Club",
+    "sigla": "D.A.T.A",
+    "descripcion": "Un club estudiantil que busca impulsar y promover el desarrollo de conocimientos estadísticos para la comunidad politécnica y la sociedad en general, brindando oportunidades para aprender y discutir la transversalidad de la estadística en distintas áreas, desarrollando habilidades profesionales.",
+    "ubicacion": "FCNM, Campus Gustavo Galindo",
+    "facultad": "FCNM",
+    "facultad_nombre": "Facultad de Ciencias Naturales y Matemáticas",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fcnm.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/FCNM%20logo%20DATA.webp?itok=SjMS4yPn",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/dataclubec/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — D.A.T.A",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/d.a.t.a_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — D.A.T.A",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/d.a.t.a_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 7,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "52",
+    "origen": "plataforma",
+    "nombre": "FANPOL — Club de Cultura Asiática",
+    "sigla": "FANPOL",
+    "descripcion": "Es un club cultural fundado por estudiantes de la ESPOL al decidir convertir sus intereses en la cultura y las tendencias de la sociedad asiática en actividades las cuales pueden compartir experiencias tanto didácticas como recreativas. El club se divide en áreas de especialización en las cuales los miembros pueden participar libremente: Manualidades Gastronomía Cultura, y; Expresión artística",
+    "ubicacion": "Campus Gustavo Galindo",
+    "facultad": "Central",
+    "facultad_nombre": null,
+    "areas_interes": [
+      "Cultura",
+      "Arte"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/09/FANPOL-e1598968477425.png",
+    "redes": [
+      {
+        "red": "Sitio web",
+        "url": "https://clubfanpol.wixsite.com/fanpol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — FANPOL",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/fanpol_brochuredepresentacion_1d2iGbi.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — FANPOL",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/fanpol_convocatoriademembresia_hdOmYwP.pdf"
+      }
+    ],
+    "miembros": 22,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club_cultural",
+    "categoria": "cultura_asiatica",
+    "contacto": null,
+    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "42",
+    "origen": "plataforma",
+    "nombre": "Grupo estudiantil NIoT",
+    "sigla": "NIOT",
+    "descripcion": "Cooperamos con la sociedad del conocimiento en el desarrollo de Aplicaciones web y móviles integrados con servicios telemáticos, internet de las Cosas, tecnologías de la Información y la Comunicación, para la formación académica de estudiantes e investigadores.",
+    "ubicacion": "FIEC, Bloque 11D, oficina 11D-O104",
+    "facultad": "FIEC",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/08/NIoT_logo-e1598887865900.png",
+    "redes": [],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — NIOT",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/niot_brochuredepresentacion_glKZF5d.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — NIOT",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/niot_convocatoriademembresia_2pQsziW.pdf"
+      }
+    ],
+    "miembros": 15,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
+    "categoria": "iot_web_movil",
+    "contacto": "@ClubNiotEspol",
+    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "61",
+    "origen": "plataforma",
+    "nombre": "IAHR ESPOL — International Association for Hydro-Environment Engineering and Research",
+    "sigla": "IAHR",
+    "descripcion": "El Capítulo Estudiantil IAHR-ESPOL tiene el compromiso de fomentar el interés en la trascendencia de los temas hidroambientales, a través de la conexión intelectual en las distintas disciplinas académicas que oferta la ESPOL.",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
+    "facultad": "FICT",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fict.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2024-02/logo_iahr-espol_oficial.png?itok=nCIjnEGt",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/iahrespol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/IAHRESPOL"
+      },
+      {
+        "red": "X",
+        "url": "https://twitter.com/IAHRESPOL"
+      },
+      {
+        "red": "YouTube",
+        "url": "https://www.youtube.com/@iahrespol1521"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — IAHR",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/iahr_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — IAHR",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/iahr_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 10,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_hidroambiental",
+    "contacto": null,
+    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "47",
+    "origen": "plataforma",
+    "nombre": "Institute of Food Technologists — Capítulo ESPOL",
+    "sigla": "IFT",
+    "descripcion": "Somos un capítulo estudiantil que representa a la institución internacional más importante de ingeniería en alimentos. Nuestro fin es contribuir con el perfil profesional desde los inicios, formando líderes y fomentando lazos internacionales.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2020/10/IFT-e1602768041326.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://ift.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/profile.php?id=100010197914639"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/ift_espol/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/IFT_ESPOL"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — IFT",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ift_brochuredepresentacion_uymBN5A.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — IFT",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ift_convocatoriademembresia_dIu2vpX.pdf"
+      }
+    ],
+    "miembros": 7,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_alimentos",
+    "contacto": null,
+    "fuente_url": "https://oe.espol.edu.ec/clubes-y-organizaciones/",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "65",
+    "origen": "plataforma",
+    "nombre": "MAEC — Mecánica Automotriz ESPOL Club",
+    "sigla": "MAEC",
+    "descripcion": "Integrado por estudiantes quienes motivan y propagan el conocimiento de la mecánica automotriz con la práctica en base a los conocimientos académicos recibidos, con el fin de desarrollar profesionales capaces de gestionar, dirigir e innovar proyectos asociados a la rama.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20maec.jpg?itok=oOO5hc3d",
+    "redes": [],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — MAEC",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/maec_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — MAEC",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/maec_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 9,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "70",
+    "origen": "plataforma",
+    "nombre": "MatEs",
+    "sigla": "MATES",
+    "descripcion": "Un club estudiantil que invita a conocer el mundo de las matemáticas por medio de actividades divulgativas y académicas, como conversatorios, sesiones de estudio y clases; entrenamientos y participación en olimpiadas de matemática, nacionales e internacionales; escuelas de matemáticas.",
+    "ubicacion": "FCNM, Campus Gustavo Galindo",
+    "facultad": "FCNM",
+    "facultad_nombre": "Facultad de Ciencias Naturales y Matemáticas",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fcnm.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2025-08/clubmates.png?itok=SPxT5M83",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/mates_espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — MATES",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/mates_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — MATES",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/mates_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 9,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "75",
+    "origen": "plataforma",
+    "nombre": "Okeanos",
+    "sigla": "OKEANOS",
+    "descripcion": "Club de desarrollo investigativo y planteamiento de proyectos oceanográficos/ambientales de la ESPOL",
+    "ubicacion": "FIMCM, Campus Gustavo Galindo",
+    "facultad": "FIMCM",
+    "facultad_nombre": "Facultad de Ingeniería Marítima y Ciencias del Mar",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fimcm.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/logo%20FIMCM%20-%20Okeanos_400x400.webp?itok=vrabr_pI",
+    "redes": [],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — OKEANOS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/okeanos_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — OKEANOS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/okeanos_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 7,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "56",
+    "origen": "plataforma",
+    "nombre": "PHYCOM",
+    "sigla": "PHYCOM",
+    "descripcion": "Impulsa el aprendizaje de electrónica, programación y robótica con proyectos creativos, inclusivos e interdisciplinarios; experimentando la tecnología de forma tangible, combinando ciencia, arte y resolución de problemas.",
+    "ubicacion": "FIEC, Campus Gustavo Galindo",
+    "facultad": "FIEC",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Arte"
+    ],
+    "logo_origen": "https://www.fiec.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2025-06/logo_phycom_0.png?itok=8vgIKYLL",
+    "redes": [
+      {
+        "red": "Linktree",
+        "url": "https://linktr.ee/phycom"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/phycom_espol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — PHYCOM",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/phycom_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — PHYCOM",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/phycom_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 9,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club",
     "categoria": "electronica_robotica",
-    "descripcion": "Impulsa electrónica programación y robótica con proyectos creativos",
     "contacto": "phycom@espol.edu.ec",
     "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "23",
-    "nombre": "AEFICT",
-    "tipo": "asociacion_estudiantil",
+    "id": "57",
+    "origen": "plataforma",
+    "nombre": "Rama Estudiantil IEEE – ESPOL",
+    "sigla": "IEEE",
+    "descripcion": "Organización sin fines de lucro, que fomenta y promueve la investigación, desarrollando así el interés de los futuros ingenieros en la consecución de avances tecnológicos.",
+    "ubicacion": "FIEC, Bloque 11D, oficina 11D-O002",
+    "facultad": "FIEC",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fiec.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/logo%20Ieee.png?itok=lV7Fql4h",
+    "redes": [
+      {
+        "red": "Sitio web",
+        "url": "https://site.ieee.org/sb-espol/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/ieee.espol/"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/company/ieee-espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — IEEE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ieee_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — IEEE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ieee_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 22,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_electrica_electronica",
+    "contacto": "ieee@espol.edu.ec",
+    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "66",
+    "origen": "plataforma",
+    "nombre": "RAS / IEEE — Sociedad de Robótica & Automatización",
+    "sigla": "RAS",
+    "descripcion": "Nuestro capítulo lucha por el avance de la teoría y práctica de la ingeniería, ciencia de la robótica y la automatización, las artes y ciencias afines, y por el mantenimiento de altos estándares profesionales entre sus miembros.",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20IEEEE.jpg?itok=TeP-druQ",
+    "redes": [
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/RASESPOL/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/ras_espol/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — RAS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ras_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — RAS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/ras_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 8,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "67",
+    "origen": "plataforma",
+    "nombre": "ROBOTA — Club de Robótica",
+    "sigla": "ROBOTA",
+    "descripcion": "El club se dedica a la construcción de prototipos de robótica de competición, así como a proyectos de investigación y desarrollo en diversos campos (social, médico, industrial, etc.).",
+    "ubicacion": "FIMCP, Campus Gustavo Galindo",
+    "facultad": "FIMCP",
+    "facultad_nombre": "Facultad de Ingeniería en Mecánica y Ciencias de la Producción",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fimcp.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-09/logo%20Robota.jpg?itok=0PpljKKs",
+    "redes": [
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/robotaespol"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/club_robotica_robota/"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/CLUB_ROBOTA"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — ROBOTA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/robota_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — ROBOTA",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/robota_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 13,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "60",
+    "origen": "plataforma",
+    "nombre": "SME ESPOL — Society for Mining, Metallurgy & Exploration",
+    "sigla": "SME",
+    "descripcion": "La misión de este capítulo es que sus miembros se encuentren entre los profesionales más formados, titulares y exitosos de la industria de los minerales.",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
     "facultad": "FICT",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fict.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-07/FICT-logoSME.png?itok=IJRdeDf7",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/smeespol/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/espolsme"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/SME_ESPOL"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — SME",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/sme_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — SME",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/sme_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 10,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "mineria",
+    "contacto": null,
+    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "74",
+    "origen": "plataforma",
+    "nombre": "SNAME",
+    "sigla": "SNAME",
+    "descripcion": "Su misión es avanzar en el arte, la ciencia y la práctica de la Arquitectura Naval, Ingeniería Naval, Ingeniería Oceánica y otras profesiones relacionadas con el mar.",
+    "ubicacion": "FIMCM, Campus Gustavo Galindo",
+    "facultad": "FIMCM",
+    "facultad_nombre": "Facultad de Ingeniería Marítima y Ciencias del Mar",
+    "areas_interes": [
+      "Tecnología",
+      "Ciencia"
+    ],
+    "logo_origen": "https://www.fimcm.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-08/logo%20FIMCM%20-%20SNAME.webp?itok=YAwySz24",
+    "redes": [],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — SNAME",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/sname_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — SNAME",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/sname_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 10,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": null,
+    "categoria": null,
+    "contacto": null,
+    "fuente_url": null,
+    "fecha_extraccion": "2026-10-30"
+  },
+  {
+    "id": "58",
+    "origen": "plataforma",
+    "nombre": "SPE ESPOL — Society of Petroleum Engineers",
+    "sigla": "SPE",
+    "descripcion": "El Capítulo Estudiantil de la Sociedad de Ingenieros de Petróleo, fundado en Ecuador el 1 de junio de 1994, enriquece el campo profesional con talleres y prácticas académicas.",
+    "ubicacion": "FICT, Campus Gustavo Galindo",
+    "facultad": "FICT",
+    "facultad_nombre": "Facultad de Ingeniería en Ciencias de la Tierra",
+    "areas_interes": [
+      "Ciencia",
+      "Académico"
+    ],
+    "logo_origen": "https://www.fict.espol.edu.ec/sites/default/files/styles/teacher_photo/public/2023-07/FICT-logoSPE.png?itok=MjcCjZJY",
+    "redes": [
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/espolspe/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/ESPOLSPE"
+      },
+      {
+        "red": "X",
+        "url": "https://x.com/ESPOLSPE"
+      },
+      {
+        "red": "LinkedIn",
+        "url": "https://www.linkedin.com/in/spe-espol-71953b204/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — SPE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/spe_brochuredepresentacion.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — SPE",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/spe_convocatoriademembresia.pdf"
+      }
+    ],
+    "miembros": 16,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "capitulo_profesional",
+    "categoria": "ingenieria_petroleos",
+    "contacto": null,
+    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "40",
+    "origen": "plataforma",
+    "nombre": "Tecnologías Web, Móviles y Data Science",
+    "sigla": "TAWS",
+    "descripcion": "El Grupo de Investigación de Tecnologías Web, Móviles y Data Science (TAWS) busca contribuir de forma integral en la formación de estudiantes de ESPOL, fomentando la investigación aplicada, el aprendizaje de nuevas tecnologías y el desarrollo de proyectos multidisciplinarios. #BeTAWS",
+    "ubicacion": "FIEC, Campus Gustavo Galindo",
+    "facultad": "FIEC",
+    "facultad_nombre": "Facultad de Ingeniería en Electricidad y Computación",
+    "areas_interes": [
+      "Tecnología",
+      "Académico"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2015/01/taws.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://taws.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Facebook",
+        "url": "https://www.facebook.com/tawsespol/"
+      },
+      {
+        "red": "X",
+        "url": "https://twitter.com/TawsEspol"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/taws_espol"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — TAWS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/taws_brochuredepresentacion_AlMZsje.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — TAWS",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/taws_convocatoriademembresia_LXG6XZh.pdf"
+      }
+    ],
+    "miembros": 22,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "grupo_investigacion",
+    "categoria": "software_web_movil_data_science",
+    "contacto": "https://www.taws.espol.edu.ec/",
+    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "53",
+    "origen": "plataforma",
+    "nombre": "Tweening — Club de Ilustración y Animación",
+    "sigla": "TWEENING",
+    "descripcion": "Club de ilustración, animación y guion. Dentro del club se desarrolla actividades que le permite a cada uno de los miembros mejorar sus habilidades estéticas y gramaticales. Cada uno de los proyectos realizados promueve la creatividad y la imaginación, de modo que creamos piezas originales con estilos diferentes.",
+    "ubicacion": "FADCOM, Campus Gustavo Galindo",
+    "facultad": "FADCOM",
+    "facultad_nombre": "Facultad de Arte, Diseño y Comunicación Audiovisual",
+    "areas_interes": [
+      "Cultura",
+      "Arte"
+    ],
+    "logo_origen": "https://oe.espol.edu.ec/wp-content/uploads/2021/06/LOGO-TWEENING-2-1.png",
+    "redes": [
+      {
+        "red": "Sitio ESPOL",
+        "url": "http://tweening.oe.espol.edu.ec/"
+      },
+      {
+        "red": "Instagram",
+        "url": "https://www.instagram.com/tweening_club/"
+      }
+    ],
+    "documentos": [
+      {
+        "titulo": "Brochure de Presentación — TWEENING",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/tweening_brochuredepresentacion_qbpoU6S.pdf"
+      },
+      {
+        "titulo": "Convocatoria de Membresía — TWEENING",
+        "url": "https://espol-club.alwaysdata.net/media/clubs/docs/tweening_convocatoriademembresia_HaKgEGA.pdf"
+      }
+    ],
+    "miembros": 17,
+    "estado": "Active",
+    "estado_etiqueta": "Activo",
+    "tipo": "club_cultural",
+    "categoria": "ilustracion_animacion_guion",
+    "contacto": null,
+    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "oe-19",
+    "origen": "directorio",
+    "nombre": "Asociación de Estudiantes FIEC",
+    "sigla": null,
+    "descripcion": "Promueve actividades culturales deportivas y profesionales",
+    "ubicacion": null,
+    "facultad": "FIEC",
+    "facultad_nombre": null,
+    "areas_interes": [],
+    "logo_origen": null,
+    "redes": [],
+    "documentos": [],
+    "miembros": null,
+    "estado": null,
+    "estado_etiqueta": null,
+    "tipo": "asociacion_estudiantil",
     "categoria": "representacion_estudiantil",
+    "contacto": "aefiec@espol.edu.ec",
+    "fuente_url": "https://www.fiec.espol.edu.ec/es/grupos-estudiantiles",
+    "fecha_extraccion": "2026-10-29"
+  },
+  {
+    "id": "oe-23",
+    "origen": "directorio",
+    "nombre": "AEFICT",
+    "sigla": null,
     "descripcion": "Fortalece formación de ingenieros civiles geólogos mineros y petroleros",
+    "ubicacion": null,
+    "facultad": "FICT",
+    "facultad_nombre": null,
+    "areas_interes": [],
+    "logo_origen": null,
+    "redes": [],
+    "documentos": [],
+    "miembros": null,
+    "estado": null,
+    "estado_etiqueta": null,
+    "tipo": "asociacion_estudiantil",
+    "categoria": "representacion_estudiantil",
     "contacto": "Instagram: aeficct.espol",
     "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
     "fecha_extraccion": "2026-10-29"
   },
   {
-    "id": "24",
-    "nombre": "SPE ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FICT",
-    "categoria": "ingenieria_petroleos",
-    "descripcion": "Capítulo de la Society of Petroleum Engineers con talleres y prácticas académicas",
-    "contacto": "Instagram: espolspe",
-    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "25",
-    "nombre": "ACI ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FICT",
-    "categoria": "cemento_hormigon",
-    "descripcion": "Capacita en competencias técnicas de cemento y hormigón",
-    "contacto": "Instagram: aci_espol",
-    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "26",
-    "nombre": "SME ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FICT",
-    "categoria": "mineria",
-    "descripcion": "Forma profesionales para la industria de los minerales",
-    "contacto": "Instagram: smeespol",
-    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "27",
-    "nombre": "IAHR ESPOL",
-    "tipo": "capitulo_profesional",
-    "facultad": "FICT",
-    "categoria": "ingenieria_hidroambiental",
-    "descripcion": "Fomenta interés por temas hidroambientales y conexión interdisciplinaria",
-    "contacto": "Facebook: IAHRESPOL",
-    "fuente_url": "https://www.fict.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "28",
+    "id": "oe-28",
+    "origen": "directorio",
     "nombre": "AEFADCOM",
-    "tipo": "asociacion_estudiantil",
-    "facultad": "FADCOM",
-    "categoria": "representacion_estudiantil",
+    "sigla": null,
     "descripcion": "Promueve actividades culturales académicas y desarrollo profesional",
+    "ubicacion": null,
+    "facultad": "FADCOM",
+    "facultad_nombre": null,
+    "areas_interes": [],
+    "logo_origen": null,
+    "redes": [],
+    "documentos": [],
+    "miembros": null,
+    "estado": null,
+    "estado_etiqueta": null,
+    "tipo": "asociacion_estudiantil",
+    "categoria": "representacion_estudiantil",
     "contacto": "Instagram: Asociación de Estudiantes de FADCOM",
-    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "29",
-    "nombre": "Alucine",
-    "tipo": "club_cultural",
-    "facultad": "FADCOM",
-    "categoria": "cine",
-    "descripcion": "Realiza proyecciones cine coloquios y ciclos de cine",
-    "contacto": "Instagram: Club Alucine",
-    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "30",
-    "nombre": "D-PRO",
-    "tipo": "club",
-    "facultad": "FADCOM",
-    "categoria": "diseno_productos",
-    "descripcion": "Fomenta creatividad pensamiento crítico e innovación en diseño de productos",
-    "contacto": "Instagram: Club DPRO",
-    "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
-    "fecha_extraccion": "2026-10-29"
-  },
-  {
-    "id": "31",
-    "nombre": "Breik",
-    "tipo": "club",
-    "facultad": "FADCOM",
-    "categoria": "fotografia_audiovisual",
-    "descripcion": "Cubre eventos con fotografía y cápsulas audiovisuales e imparte talleres",
-    "contacto": "Instagram: Club Breik",
     "fuente_url": "https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles",
     "fecha_extraccion": "2026-10-29"
   }

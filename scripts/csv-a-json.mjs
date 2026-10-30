@@ -1,9 +1,9 @@
-// Convierte data/catalogo-clubes.csv en data/catalogo-clubes.json sin alterar los valores.
+// Convierte data/fuentes/directorio-oe.csv en data/fuentes/directorio-oe.json sin alterar los valores.
 // Uso: node scripts/csv-a-json.mjs
 import { readFileSync, writeFileSync } from "node:fs";
 
 const root = new URL("../data/", import.meta.url);
-const text = readFileSync(new URL("catalogo-clubes.csv", root), "utf8").trim();
+const text = readFileSync(new URL("fuentes/directorio-oe.csv", root), "utf8").trim();
 
 // Parser CSV mínimo con soporte de comillas dobles.
 function parseLine(line) {
@@ -36,5 +36,5 @@ const records = rows.map((cells) => {
   return Object.fromEntries(header.map((key, i) => [key, cells[i].trim() === "" ? null : cells[i].trim()]));
 });
 
-writeFileSync(new URL("catalogo-clubes.json", root), JSON.stringify(records, null, 2) + "\n");
-console.log(`${records.length} registros escritos en data/catalogo-clubes.json`);
+writeFileSync(new URL("fuentes/directorio-oe.json", root), JSON.stringify(records, null, 2) + "\n");
+console.log(`${records.length} registros escritos en data/fuentes/directorio-oe.json`);

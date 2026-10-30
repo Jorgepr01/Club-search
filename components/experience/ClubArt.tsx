@@ -30,7 +30,7 @@ export function ClubArt({ club }: { club: Club }) {
   ].filter((m): m is { src: string; kind: "logo" | "photo" } => Boolean(m));
   const [failed, setFailed] = useState(0);
   const media = sources[failed];
-  const text = monogram(club.name);
+  const text = club.acronym ?? monogram(club.name);
 
   return (
     <div className="club-art" data-media={media?.kind ?? "text"}>

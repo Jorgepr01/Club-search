@@ -2303,3 +2303,61 @@ a {
     position: static;
   }
 }
+
+/* Detalle del club: estado, enlaces y eventos */
+.club__status {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.linklist,
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.linklist {
+  flex-flow: row wrap;
+  gap: 4px 14px;
+}
+
+.events {
+  gap: 10px;
+}
+
+.events__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.events__name {
+  font-weight: 700;
+}
+
+.events__when {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.events__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.events__tag {
+  padding: 1px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 650;
+}

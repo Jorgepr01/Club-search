@@ -96,7 +96,7 @@ export function patternsForTerm(term: string, entries: VocabEntry[]): string[] {
 export interface Evidence {
   /** Palabra tal como aparece en el catálogo, con tildes. */
   word: string;
-  field: "descripción" | "categoría";
+  field: "descripción" | "categoría" | "áreas de interés";
 }
 
 /** Busca la primera palabra del texto original que coincide con alguno de los patrones. */

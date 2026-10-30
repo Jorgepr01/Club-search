@@ -1,3 +1,4 @@
+import { upcomingEvents } from "@/lib/catalog";
 import { BRANCH_BY_ID } from "@/lib/catalog/branches";
 import type { DiscoveryEngine, AssistantTurn } from "@/lib/engine/types";
 import { validateRecommendations, MAX_RECOMMENDATIONS } from "@/lib/engine/validate";
@@ -69,7 +70,9 @@ function matchTerms(terms: string[], entries: VocabEntry[], club: Club): Match[]
   return terms.flatMap((term) => {
     const patterns = patternsForTerm(term, entries);
     const evidence =
-      findEvidence(club.description, patterns, "descripción") ?? findEvidence(club.category, patterns, "categoría");
+      findEvidence(club.description, patterns, "descripción") ??
+      findEvidence(club.category, patterns, "categoría") ??
+      findEvidence(club.interestAreas.join(" "), patterns, "áreas de interés");
     return evidence ? [{ term, evidence }] : [];
   });
 }
@@ -90,7 +93,14 @@ function describe(kind: "interés" | "objetivo", matches: Match[]): string[] {
   });
 }
 
-export function explainClub(club: Club, profile: Profile, branchId: BranchId) {
+/** Evento abierto al público con inscripción abierta: es un dato verificable, no una inferencia. */
+function nextOpenEvent(club: Club, now: Date) {
+  return upcomingEvents(club.id, now).find((e) => !e.membersOnly && e.registrationOpen) ?? null;
+}
+
+const EVENT_DATE = new Intl.DateTimeFormat("es-EC", { timeZone: "America/Guayaquil", day: "numeric", month: "long" });
+
+export function explainClub(club: Club, profile: Profile, branchId: BranchId, now: Date = new Date()) {
   const interests = matchTerms(profile.interests, INTERESTS, club);
   const goals = matchTerms(profile.goals, GOALS, club);
   const reasons = [...describe("interés", interests), ...describe("objetivo", goals)];
@@ -100,12 +110,18 @@ export function explainClub(club: Club, profile: Profile, branchId: BranchId) {
       `Aparece porque pertenece a la rama «${BRANCH_BY_ID[branchId].name}». Su descripción no menciona tus intereses ni tus objetivos de forma directa.`,
     );
   }
+  const event = nextOpenEvent(club, now);
+  if (event) {
+    reasons.push(
+      `Tiene un evento abierto con inscripción: «${shorten(event.name, 70)}», el ${EVENT_DATE.format(new Date(event.start))}.`,
+    );
+  }
   reasons.push(
     profile.availability
       ? `El catálogo no incluye horarios: confirma con el club si encaja con «${shorten(profile.availability, 60)}».`
       : "El catálogo no incluye horarios.",
   );
-  return { reasons, score: interests.length * 2 + goals.length };
+  return { reasons, score: interests.length * 2 + goals.length, hasOpenEvent: event !== null };
 }
 
 export function suggestedBranches(profile: Profile): BranchId[] {
@@ -163,7 +179,7 @@ export const demoEngine: DiscoveryEngine = {
     const ranked = candidates
       .filter((c) => !exclude.includes(c.id))
       .map((club, index) => ({ club, index, ...explainClub(club, profile, branchId) }))
-      .sort((a, b) => b.score - a.score || a.index - b.index)
+      .sort((a, b) => b.score - a.score || Number(b.hasOpenEvent) - Number(a.hasOpenEvent) || a.index - b.index)
       .slice(0, MAX_RECOMMENDATIONS);
 
     const result: Recommendation[] = ranked.map((r) => ({ clubId: r.club.id, reasons: r.reasons }));

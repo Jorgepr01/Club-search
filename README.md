@@ -21,14 +21,14 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 2. **Conversación:** tres preguntas fijas (intereses, objetivos y disponibilidad), con respuestas sugeridas, texto libre o dictado por micrófono. Cada pregunta puede escucharse en voz alta. Ver [Chat y audio](#chat-y-audio).
 3. **Perfil:** nombre, carrera, hasta cuatro intereses como etiquetas editables, objetivos y disponibilidad. Hay que confirmarlo para seguir.
 4. **Ramas:** árbol con conexiones SVG desde «Tu perfil». Las ramas relacionadas con el perfil aparecen marcadas.
-5. **Clubes:** hasta tres paneles por rama. Al abrir uno, el panel se expande y muestra por qué aparece, los datos del catálogo, el contacto (si existe) y la fuente.
+5. **Clubes:** hasta tres paneles por rama. Al abrir uno, el panel se expande y muestra por qué aparece, los datos del catálogo (facultad, ubicación, áreas, miembros), contacto, redes, documentos públicos, próximos eventos (calculados al abrir el panel) y la fuente. Si el club tiene un evento abierto con inscripción, también aparece como razón.
 6. **Navegación:** «Volver a las ramas», «Explorar otra rama», «Ver otras organizaciones de esta rama» y los pasos de la barra superior.
 
 ## Qué está simulado y qué es real
 
 | Parte | Estado |
 | --- | --- |
-| Catálogo de clubes | **Real**: 31 organizaciones de `data/catalogo-clubes.csv`, extraídas el 29-10-2026 de los directorios públicos de ESPOL. |
+| Catálogo de clubes | **Real**: 43 organizaciones (40 de la plataforma de clubes, entregada el 30-10-2026, más 3 del directorio de Bienestar de ESPOL extraído el 29-10-2026) y 194 eventos. |
 | Conversación | **Simulada**: preguntas fijas en `lib/demo/engine.ts`. La interfaz de chat usa assistant-ui, pero no hay ningún modelo detrás. |
 | Dictado y lectura en voz alta | **Del navegador**: Web Speech API. Ningún servicio de pago ni clave del proyecto. |
 | Perfil propuesto | **Reglas**: detección de palabras clave (`lib/demo/vocabulary.ts`). Si no reconoce nada, conserva el texto del estudiante para que lo corrija. |
@@ -43,25 +43,36 @@ Los datos ausentes (actividades, requisitos, horario y, a veces, contacto) se mu
 ```
 app/                      layout, página y estilos globales (tokens y componentes)
 components/experience/    pasos del recorrido, paneles, árbol y conexiones SVG
-data/                     catálogo fuente (CSV) y su versión JSON
+data/                     catálogo fusionado, eventos y fuentes (data/fuentes/)
 lib/types.ts              tipos compartidos (Club, Profile, Recommendation…)
 lib/catalog/              carga y normalización del catálogo, ramas
 lib/engine/               contrato DiscoveryEngine y validación de recomendaciones
 lib/demo/                 motor de demostración por reglas
 lib/speech/               adaptadores de dictado y lectura en voz alta (Web Speech API)
-scripts/csv-a-json.mjs    regenera data/catalogo-clubes.json desde el CSV
+scripts/                  construir-catalogo, descargar-logos y csv-a-json
 ```
 
 ## Actualizar el catálogo
 
-1. Edita o reemplaza `data/catalogo-clubes.csv` conservando las columnas.
-2. Ejecuta `node scripts/csv-a-json.mjs`.
-3. Si aparece una `categoria` nueva, asígnale ramas en `CATEGORY_BRANCHES` (`lib/catalog/branches.ts`). Mientras no tenga, el club cae en «Otras organizaciones».
-4. Cuando existan logos, fotos, actividades, requisitos u horarios, añádelos como columnas y mapea los campos en `normalize()` (`lib/catalog/index.ts`). La interfaz ya los muestra cuando no son `null`.
+Las fuentes están en `data/fuentes/`:
+
+| Archivo | Papel |
+| --- | --- |
+| `clubes-plataforma.json` | **Fuente principal** (40 clubes de la plataforma de clubes): nombre, sigla, descripción, ubicación, facultad, áreas de interés, redes, documentos públicos, miembros y estado. |
+| `directorio-oe.csv` / `.json` | Directorio de Bienestar (31 organizaciones). Aporta `tipo`, `categoria`, `contacto` y `fuente_url` a los clubes que también están en la plataforma. |
+| `cruce-directorio.json` | Cruce manual entre ids del directorio y de la plataforma. Las 3 organizaciones con `null` (asociaciones de facultad) solo existen en el directorio y se conservan. |
+| `categorias-clubes.json` | Categoría por id de la plataforma (tiene prioridad sobre la del directorio). Aquí se asignan las categorías de los clubes que no estaban en el directorio. |
+| `eventos-plataforma.json` | Eventos de los clubes. |
+
+1. Reemplaza o edita los archivos de `data/fuentes/` (si cambias el CSV, ejecuta `node scripts/csv-a-json.mjs`).
+2. Ejecuta `npm run catalogo`: fusiona las fuentes, valida (ids únicos, eventos con club existente, URLs y fechas válidas) y escribe `data/catalogo-clubes.json` y `data/eventos-clubes.json`. Falla si hay errores y lista como avisos los clubes sin descripción o sin categoría.
+3. La plataforma no trae `categoria`: los clubes sin categoría caen en «Otras organizaciones» hasta que se asigne en `categorias-clubes.json` y su valor exista en `CATEGORY_BRANCHES` (`lib/catalog/branches.ts`). `npm run catalogo` lista los pendientes.
+4. Los eventos se filtran al abrir la página (`upcomingEvents`), no al compilar.
 
 ## Añadir fotos y logos de clubes
 
-1. Copia los archivos a `public/clubes/` (por ejemplo `public/clubes/22.jpg` y `public/clubes/22-logo.png`). Usa solo imágenes con permiso.
+0. `npm run logos` descarga los logos de la plataforma a `public/clubes/` y los registra solo (necesita acceso a los sitios de ESPOL).
+1. O copia los archivos a `public/clubes/` (por ejemplo `public/clubes/22.jpg` y `public/clubes/22-logo.png`). Usa solo imágenes con permiso.
 2. Regístralos en `data/medios-clubes.json` con el `id` del catálogo:
 
    ```json
