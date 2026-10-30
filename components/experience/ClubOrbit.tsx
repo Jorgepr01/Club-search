@@ -98,6 +98,11 @@ function placeItem(l: Layout, m: Motion, slot: number, item: HTMLLIElement) {
   item.style.setProperty("--s", scale.toFixed(4));
   item.style.setProperty("--trail-a", `${Math.atan2(behind.y - p.y, behind.x - p.x).toFixed(4)}rad`);
   item.style.setProperty("--trail-o", m.velocity.toFixed(3));
+  const label = item.querySelector<HTMLElement>(".orbit__label");
+  if (label) {
+    const labelBottom = p.y + (l.bubble * scale) / 2 + 9 + label.offsetHeight;
+    item.toggleAttribute("data-label-above", labelBottom > l.h - 4);
+  }
   // Solo las burbujas completamente dentro del encuadre reciben el foco del teclado.
   const half = (l.bubble * scale) / 2;
   const onScreen = inPath && p.x - half >= 0 && p.x + half <= l.w && p.y - half >= 0 && p.y + half <= l.h;

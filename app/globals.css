@@ -645,20 +645,24 @@ a {
   left: 50%;
   top: calc(var(--bubble) * (0.5 + var(--s) / 2) + 9px);
   translate: -50% 0;
-  display: -webkit-box;
+  display: block;
   width: max-content;
   max-width: var(--label-w);
   padding: 5px 11px 6px;
-  overflow: hidden;
   border-radius: 12px;
   background: rgb(255 255 255 / 0.94);
   color: var(--ink);
   font: 700 0.86rem/1.2 var(--font-body);
   text-align: center;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
   box-shadow: 0 0 0 1px rgb(70 71 95 / 0.08), 0 4px 12px -8px rgb(70 71 95 / 0.35);
   transition: background-color 0.2s, color 0.2s;
+}
+
+.orbit__item[data-label-above] .orbit__label {
+  top: auto;
+  bottom: calc(var(--bubble) * (0.5 + var(--s) / 2) + 9px);
+  translate: -50% -100%;
 }
 
 .orbit__item[data-active] .orbit__label {
