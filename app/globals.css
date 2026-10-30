@@ -1,26 +1,1525 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Tokens
+   Pared de galería clara, tinta índigo y lacas de guitarra por rama.
+   ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --wall: #edeaf2;
+  --wall-deep: #e1dcea;
+  --plaque: #fbfafd;
+  --ink: #1c1a3a;
+  --ink-soft: #55517a;
+  --line: rgb(28 26 58 / 0.14);
+
+
+  --depth-1: 0 1px 0 rgb(255 255 255 / 0.7) inset, 0 1px 2px rgb(28 26 58 / 0.08),
+    0 12px 28px -14px rgb(28 26 58 / 0.32);
+  --depth-2: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 2px 4px rgb(28 26 58 / 0.08),
+    0 28px 48px -22px rgb(28 26 58 / 0.45);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: clamp(16px, 4vw, 48px);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+html {
+  background: var(--wall);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--wall);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+[data-step-heading]:focus {
+  outline: none;
+}
+
+[data-step-heading]:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 50;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--wall);
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ------------------------------------------------------------------
+   Controles
+   ------------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: 700 1rem/1.2 var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.18s, color 0.18s, transform 0.18s var(--ease);
+}
+
+.btn:hover:not(:disabled) {
+  background: rgb(28 26 58 / 0.07);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--ink);
+  color: var(--wall);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #2e2b5a;
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.btn--small {
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 0.92rem;
+}
+
+.btn--large {
+  min-height: 54px;
+  padding: 0 28px;
+  font-size: 1.06rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  border-radius: 999px;
+  font-size: 0.97rem;
+}
+
+.chip--suggest {
+  padding: 0 16px;
+  border: 1.5px solid var(--ink);
+  background: var(--plaque);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(28 26 58 / 0.08);
+}
+
+.chip--suggest:hover {
+  background: #fff;
+}
+
+.chip--term {
+  gap: 2px;
+  padding: 0 4px 0 14px;
+  background: var(--wall);
+  border: 1px solid var(--line);
+}
+
+.chip__remove {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.chip__remove:hover {
+  background: rgb(28 26 58 / 0.1);
+  color: var(--ink);
+}
+
+.chip__remove svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.field {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.field:focus-visible {
+  outline-offset: 1px;
+  border-color: var(--ink);
+}
+
+.field--area {
+  resize: vertical;
+}
+
+.notice {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgb(28 26 58 / 0.06);
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+}
+
+.alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 14px 18px;
+  border: 1.5px solid #c93a2c;
+  border-radius: 14px;
+  background: #fff4f2;
+  color: #6b1d15;
+  font-size: 0.95rem;
+}
+
+.alert p {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* ------------------------------------------------------------------
+   Estructura
+   ------------------------------------------------------------------ */
+.app {
+  min-height: 100dvh;
+  overflow-x: clip;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px var(--gutter);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 800 1.02rem/1 var(--font-display);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.brand__mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #2e5bd6 0 25%, #c93a2c 25% 50%, #f0a030 50% 75%, #7fd3c0 75%);
+}
+
+.steps {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.steps ol {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  border-radius: 999px;
+  background: rgb(28 26 58 / 0.06);
+}
+
+.steps__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px 0 6px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: 600 0.92rem/1 var(--font-body);
+  cursor: pointer;
+}
+
+.steps__item:hover:not(:disabled) {
+  background: rgb(28 26 58 / 0.08);
+}
+
+.steps__item:disabled {
+  color: var(--ink-soft);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.steps__item[aria-current="step"] {
+  background: var(--ink);
+  color: var(--wall);
+}
+
+.steps__num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.7);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.demo-tag {
+  margin: 0 0 0 auto;
+  padding: 6px 12px;
+  border: 1.5px dashed var(--ink-soft);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stage {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 8px var(--gutter) 64px;
+}
+
+.section-head {
+  max-width: 68ch;
+  margin: 24px 0 28px;
+}
+
+.section-head__title {
+  margin: 0 0 12px;
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+  font-weight: 800;
+  font-variation-settings: "wdth" 88;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.section-head__lede {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+}
+
+/* ------------------------------------------------------------------
+   Bienvenida
+   ------------------------------------------------------------------ */
+.welcome {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 72px);
+  min-height: calc(100dvh - 120px);
+}
+
+.welcome__title {
+  margin: 0 0 24px;
+  font-size: clamp(3.1rem, 7.2vw, 6.9rem);
+  font-weight: 800;
+  font-variation-settings: "wdth" 80, "opsz" 96;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+}
+
+.welcome__lede {
+  max-width: 34ch;
+  margin: 0 0 32px;
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  line-height: 1.5;
+}
+
+.welcome__notes {
+  max-width: 52ch;
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.welcome__notes p {
+  margin: 0 0 8px;
+}
+
+/* Órbita: anillo con fotos de clubes que lo recorren dejando estela. */
+.orbit {
+  --R: min(410px, 52vh);
+  --T: 54px;
+  --badge: 78px;
+  --cx: calc(100% + 24px);
+  --cy: 58%;
+  --period: 7.5s;
+  position: relative;
+  align-self: stretch;
+  min-height: min(78vh, 680px);
+  margin-right: calc(-1 * var(--gutter));
+  /* Recorta arriba, abajo y a la derecha; a la izquierda el anillo puede asomar sobre el texto. */
+  clip-path: inset(0 0 0 -60vw);
+}
+
+.orbit__ring {
+  position: absolute;
+  left: var(--cx);
+  top: var(--cy);
+  width: calc(2 * (var(--R) + var(--T)));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    transparent calc(100% - 2 * var(--T)),
+    rgb(28 26 58 / 0.09) calc(100% - 2 * var(--T) + 1px),
+    #f3f1f7 calc(100% - 1.55 * var(--T)),
+    #ffffff calc(100% - 1 * var(--T)),
+    #ebe8f0 calc(100% - 0.35 * var(--T)),
+    rgb(213 208 224 / 0) 100%
+  );
+  filter: drop-shadow(0 26px 34px rgb(28 26 58 / 0.13));
+}
+
+.orbit__track {
+  position: absolute;
+  left: var(--cx);
+  top: var(--cy);
+}
+
+/* Cada brazo recorre solo el arco visible: entra por arriba (--from) y sale por abajo (--to).
+   La curva arranca rápido, se frena frente al texto y acelera un poco al salir. */
+.orbit__arm {
+  --from: 18deg;
+  --to: -208deg;
+  --ease: cubic-bezier(0.3, 0.5, 0.7, 0.62);
+  position: absolute;
+  transform: rotate(var(--rest));
+  animation: orbit-arc var(--period) var(--ease) var(--delay) infinite;
+}
+
+.orbit__trail {
+  position: absolute;
+  top: calc(-1 * var(--R) - var(--badge) * 0.34);
+  left: 0;
+  width: calc(var(--badge) * 2.2);
+  height: calc(var(--badge) * 0.68);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--lacquer) 45%, var(--ink)) 25%,
+    transparent
+  );
+  filter: blur(12px);
+  opacity: 0.12;
+  animation: orbit-trail var(--period) linear var(--delay) infinite;
+}
+
+.orbit__badge {
+  position: absolute;
+  top: calc(-1 * var(--R) - var(--badge) / 2);
+  left: calc(var(--badge) / -2);
+  display: grid;
+  place-items: center;
+  width: var(--badge);
+  height: var(--badge);
+  overflow: hidden;
+  border-radius: 50%;
+  background:
+    linear-gradient(160deg, rgb(255 255 255 / 0.3), transparent 50%),
+    var(--lacquer);
+  color: var(--lacquer-ink);
+  box-shadow: 0 0 0 3px #fff, 0 6px 14px -8px rgb(28 26 58 / 0.28);
+  transform: rotate(calc(-1 * var(--rest)));
+  animation: orbit-arc-counter var(--period) var(--ease) var(--delay) infinite;
+}
+
+.orbit__badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.orbit__mark {
+  font: 800 0.95rem/1 var(--font-display);
+  font-variation-settings: "wdth" 80;
+  letter-spacing: -0.01em;
+}
+
+.orbit__mark[data-long],
+.club-art__monogram[data-long] {
+  font-size: 0.78rem;
+}
+
+.orbit__mark img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+}
+
+.orbit[data-paused] .orbit__arm,
+.orbit[data-paused] .orbit__trail,
+.orbit[data-paused] .orbit__badge {
+  animation-play-state: paused;
+}
+
+.orbit__pause {
+  position: absolute;
+  right: calc(var(--gutter) + 4px);
+  bottom: 18px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(251 250 253 / 0.9);
+  color: var(--ink);
+  font: 600 0.85rem/1 var(--font-body);
+  cursor: pointer;
+}
+
+@keyframes orbit-arc {
+  from {
+    transform: rotate(var(--from));
+  }
+  to {
+    transform: rotate(var(--to));
+  }
+}
+
+@keyframes orbit-arc-counter {
+  from {
+    transform: rotate(calc(-1 * var(--from)));
+  }
+  to {
+    transform: rotate(calc(-1 * var(--to)));
+  }
+}
+
+/* La estela acompaña a la velocidad: marcada al entrar, casi nula en el tramo lento. */
+@keyframes orbit-trail {
+  0% {
+    opacity: 0.32;
+  }
+  28%,
+  72% {
+    opacity: 0.08;
+  }
+  100% {
+    opacity: 0.22;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Conversación
+   ------------------------------------------------------------------ */
+.chat {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.chat__log {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.bubble {
+  max-width: min(82%, 560px);
+  padding: 12px 18px 14px;
+}
+
+.bubble p {
+  margin: 0;
+}
+
+.bubble__who {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0.72;
+}
+
+.bubble--assistant {
+  align-self: flex-start;
+  border-radius: 22px 22px 22px 6px;
+  background: var(--plaque);
+  box-shadow: var(--depth-1);
+}
+
+.bubble--user {
+  align-self: flex-end;
+  border-radius: 22px 22px 6px 22px;
+  background: var(--ink);
+  color: var(--wall);
+}
+
+.dots {
+  display: inline-flex;
+  gap: 5px;
+  padding: 6px 0;
+}
+
+.dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--ink-soft);
+  animation: dot 1s infinite ease-in-out;
+}
+
+.dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes dot {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.chat .chips {
+  margin-bottom: 14px;
+}
+
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 22px;
+  background: var(--plaque);
+  box-shadow: var(--depth-1);
+}
+
+.composer__input {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  resize: none;
+}
+
+.composer__input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 0;
+  border-radius: 12px;
+}
+
+.chat__done {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ------------------------------------------------------------------
+   Perfil: placas de museo
+   ------------------------------------------------------------------ */
+.placards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.placard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+  border-radius: 18px;
+  background: var(--plaque);
+  box-shadow: var(--depth-2);
+}
+
+.placard__title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+.placard__hint,
+.placard__empty {
+  margin: -6px 0 2px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.placard__empty {
+  margin: 0;
+}
+
+.inline-add {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ------------------------------------------------------------------
+   Árbol de intereses
+   ------------------------------------------------------------------ */
+.tree__canvas,
+.results__canvas {
+  position: relative;
+}
+
+.connectors {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tree__crown {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tree__slot {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.branch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-height: 188px;
+  padding: 18px 14px 16px;
+  border: 0;
+  border-radius: 22px;
+  background:
+    linear-gradient(165deg, rgb(255 255 255 / 0.3), transparent 42%),
+    var(--lacquer);
+  color: var(--lacquer-ink);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--depth-2);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.branch:hover {
+  transform: translateY(-4px);
+}
+
+.branch[data-suggested] {
+  box-shadow: 0 0 0 3px var(--wall), 0 0 0 6px var(--ink), var(--depth-2);
+}
+
+.branch__glyph {
+  width: 30px;
+  height: 30px;
+}
+
+.branch__name {
+  font: 750 clamp(1rem, 1.3vw, 1.18rem) / 1.08 var(--font-display);
+  font-variation-settings: "wdth" 75;
+  letter-spacing: -0.005em;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+.branch__meta {
+  margin-top: auto;
+  font-size: 0.86rem;
+  opacity: 0.88;
+}
+
+.branch__flag {
+  padding: 3px 10px;
+  white-space: nowrap;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.9);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.tree__root {
+  position: relative;
+  z-index: 1;
+  width: min(440px, 100%);
+  margin: 96px auto 0;
+  padding: 18px 22px;
+  border-radius: 22px;
+  background: var(--plaque);
+  box-shadow: var(--depth-2);
+  text-align: center;
+}
+
+.tree__root-title {
+  margin: 0;
+  font: 800 1.3rem/1.1 var(--font-display);
+}
+
+.tree__root-terms {
+  margin: 6px 0 12px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------------------------
+   Resultados: paneles de clubes
+   ------------------------------------------------------------------ */
+.results__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 24px;
+}
+
+.results__branch {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px 28px 16px 20px;
+  border-radius: 999px;
+  background:
+    linear-gradient(165deg, rgb(255 255 255 / 0.3), transparent 45%),
+    var(--lacquer);
+  color: var(--lacquer-ink);
+  box-shadow: var(--depth-2);
+}
+
+.results__glyph {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+
+.results__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  font-variation-settings: "wdth" 88;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.results__count {
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  opacity: 0.9;
+}
+
+.panels {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  margin: 96px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.club {
+  --tone: var(--lacquer);
+  --radius: 26px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 560px;
+  perspective: 1800px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: flex-grow 0.55s var(--ease), min-height 0.45s var(--ease);
+}
+
+/* La tarjeta principal ocupa más ancho que las dos complementarias. */
+.club[data-active] {
+  flex-grow: 2.5;
+}
+
+.club[data-tone="1"] {
+  --tone: color-mix(in oklab, var(--lacquer) 86%, var(--ink));
+}
+
+.club[data-tone="2"] {
+  --tone: color-mix(in oklab, var(--lacquer) 74%, var(--ink));
+}
+
+/* Giro 3D: las dos caras comparten caja y el reverso empieza volteado. */
+.club__flipper {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  transform-style: preserve-3d;
+  transition: transform 0.75s var(--ease);
+}
+
+.club[data-flipped] .club__flipper {
+  transform: rotateY(180deg);
+}
+
+/* La principal se inclina al pasar el mouse para insinuar el giro; las complementarias se elevan. */
+@media (hover: hover) {
+  .club:not([data-active]):hover .club__flipper {
+    transform: translateY(-6px);
+  }
+
+  .club[data-active]:not([data-flipped]):hover .club__flipper {
+    transform: rotateY(-7deg);
+  }
+
+  .club[data-flipped]:hover .club__flipper {
+    transform: rotateY(187deg);
+  }
+}
+
+.club__face {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--depth-2);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.club__face--front {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--tone);
+  color: var(--lacquer-ink);
+}
+
+.club__face--back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--plaque);
+  color: var(--ink);
+  cursor: auto;
+  transform: rotateY(180deg);
+}
+
+.club-art {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 200px;
+  overflow: hidden;
+  background:
+    linear-gradient(165deg, rgb(255 255 255 / 0.28), transparent 45%),
+    var(--tone);
+  color: var(--lacquer-ink);
+}
+
+.club-art__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.club-art__monogram img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.club-art__field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.club-art__glyph {
+  position: absolute;
+  right: -12%;
+  bottom: -14%;
+  width: min(78%, 300px);
+  aspect-ratio: 1;
+  opacity: 0.9;
+}
+
+.club-art__glyph svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 0.9;
+}
+
+.club-art__monogram {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  place-items: center;
+  min-width: 58px;
+  height: 58px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--plaque);
+  color: var(--ink);
+  font: 800 1rem/1 var(--font-display);
+  letter-spacing: -0.01em;
+  box-shadow: var(--depth-1);
+}
+
+.club__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px 24px;
+}
+
+.club__name {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  font-variation-settings: "wdth" 90;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+
+.club__meta {
+  margin: 0;
+  font-size: 0.92rem;
+  opacity: 0.85;
+}
+
+.club__teaser {
+  display: -webkit-box;
+  margin: 2px 0 0;
+  overflow: hidden;
+  font-size: 0.95rem;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Indicador de giro en la esquina superior derecha de cada cara. */
+.club__flip {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 16px 0 12px;
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: 999px;
+  background: rgb(251 250 253 / 0.78);
+  color: var(--ink);
+  font: 700 0.86rem/1 var(--font-body);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: var(--depth-1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+  transition: background-color 0.25s, transform 0.25s var(--ease);
+}
+
+.club__flip:hover {
+  background: var(--plaque);
+}
+
+.club__flip:active {
+  transform: scale(0.96);
+}
+
+.club__flip:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.club__flip-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.6s var(--ease);
+}
+
+.club[data-active]:hover .club__flip-icon,
+.club[data-active] .club__flip:focus-visible .club__flip-icon {
+  transform: rotate(180deg);
+}
+
+.club__flip--open {
+  width: 44px;
+  padding: 0;
+  justify-content: center;
+}
+
+.club:not([data-active]):hover .club__flip--open {
+  background: var(--plaque);
+  transform: scale(1.08);
+}
+
+/* Al volverse principal, el icono da una vuelta para sugerir que la tarjeta gira. */
+.club[data-active] .club__face--front .club__flip-icon {
+  animation: flip-hint 1.4s 0.5s var(--ease) both;
+}
+
+@keyframes flip-hint {
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.club:hover .club__face--front .club__flip-icon {
+  animation: none;
+}
+
+.club__flip--back {
+  position: static;
+  flex: none;
+  border-color: transparent;
+  background: var(--ink);
+  color: var(--wall);
+  box-shadow: none;
+}
+
+.club__flip--back:hover {
+  background: color-mix(in oklab, var(--ink) 85%, var(--lacquer));
+}
+
+.club__back-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 16px 22px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(165deg, rgb(255 255 255 / 0.5), transparent 60%),
+    color-mix(in oklab, var(--tone) 16%, var(--plaque));
+}
+
+.club__back-title {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.club__back-meta {
+  margin: 0 0 4px;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.club__back-name {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-variation-settings: "wdth" 90;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.club__back-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 2px 22px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.club__subhead {
+  margin: 18px 0 10px;
+  font-size: 1.08rem;
+  font-weight: 750;
+}
+
+.club__reasons {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.club__reasons li {
+  margin-bottom: 6px;
+}
+
+.club__reasons li::marker {
+  color: var(--lacquer);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
+  margin: 0;
+}
+
+.facts__row--wide {
+  grid-column: 1 / -1;
+}
+
+.facts dt {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.facts__missing {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.facts__aside {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.results__note {
+  margin: 20px 0 0;
+  color: var(--ink-soft);
+}
+
+.source-note {
+  max-width: 76ch;
+  margin: 36px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+/* ------------------------------------------------------------------
+   Pantallas angostas: lectura vertical
+   ------------------------------------------------------------------ */
+@media (max-width: 879px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .steps {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .steps ol {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .steps__item {
+    padding: 0 6px;
+  }
+
+  .steps__item:not([aria-current="step"]) .steps__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .welcome {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 32px;
+    min-height: 0;
+    padding-top: 12px;
+  }
+
+  .orbit {
+    --R: 250px;
+    --T: 34px;
+    --badge: 54px;
+    --cx: calc(100% + 30px);
+    --cy: 62%;
+    order: -1;
+    min-height: 260px;
+    margin-left: calc(-1 * var(--gutter));
+  }
+
+  .orbit__pause {
+    bottom: 10px;
+  }
+
+  .placards {
+    grid-template-columns: 1fr;
+  }
+
+  .tree__canvas {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tree__root {
+    order: -1;
+    width: auto;
+    margin: 0 0 28px;
+    text-align: left;
+  }
+
+  .tree__crown {
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 52px;
+  }
+
+  .tree__slot {
+    width: 100%;
+  }
+
+  .branch {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 2px;
+    padding: 14px 16px;
+  }
+
+  .branch__glyph {
+    grid-row: span 3;
+  }
+
+  .branch__flag {
+    justify-self: start;
+    margin-top: 6px;
+  }
+
+  .results__branch {
+    margin: 0;
+    border-radius: 22px;
+    padding: 14px 18px;
+  }
+
+  .results__glyph {
+    width: 34px;
+    height: 34px;
+  }
+
+  .panels {
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 28px;
+    padding-left: 52px;
+  }
+
+  .club {
+    flex: none;
+    min-height: 330px;
+  }
+
+  .club[data-active] {
+    min-height: 480px;
+  }
+
+  .club-art {
+    min-height: 170px;
+  }
+
+  .facts {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions .btn {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .tree__crown,
+  .panels {
+    padding-left: 36px;
+  }
+
+  .demo-tag {
+    font-size: 0.78rem;
+    padding: 5px 10px;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Movimiento reducido
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .dots i {
+    opacity: 0.7;
+  }
+
+  .branch:hover {
+    transform: none;
+  }
+
+  .club:not([data-active]):hover .club__flipper,
+  .club[data-active]:not([data-flipped]):hover .club__flipper {
+    transform: none;
+  }
+
+  .club[data-flipped] .club__flipper,
+  .club[data-flipped]:hover .club__flipper {
+    transform: rotateY(180deg);
+  }
+
+  .orbit__arm,
+  .orbit__trail,
+  .orbit__badge {
+    animation: none !important;
+  }
+
+  .orbit__trail,
+  .orbit__pause {
+    display: none;
+  }
 }

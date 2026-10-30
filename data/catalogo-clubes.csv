@@ -1,0 +1,32 @@
+id,nombre,tipo,facultad,categoria,descripcion,contacto,fuente_url,fecha_extraccion
+1,Acción Cultural Politécnica,agrupacion_cultural,Central,cultura,Agrupación cultural registrada en el directorio de Bienestar Politécnico,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+2,Acción Universitaria,club,Central,social_religioso,Promueve líderes jóvenes comprometidos con el cambio desde una perspectiva católica,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+3,Argumentum,club,Central,debate_oratoria,Forma líderes de opinión y pensamiento crítico mediante debate y oratoria,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+4,ASME ESPOL,capitulo_profesional,FIMCP,ingenieria_mecanica,Organiza cursos charlas y capacitaciones para futuros ingenieros,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+5,Capítulo Estudiantil IIE,capitulo_profesional,FIMCP,ingenieria_industrial,Difunde conocimientos y aplicaciones de Ingeniería Industrial,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+6,TAWS,grupo_investigacion,FIEC,software_web_movil_data_science,Fomenta investigación aplicada aprendizaje tecnológico y proyectos multidisciplinarios,https://www.taws.espol.edu.ec/,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+7,ASCE ESPOL,capitulo_profesional,FICT,ingenieria_civil,Fomenta interacción académico profesional mediante investigación capacitaciones y visitas técnicas,Instagram: asce.espol,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+8,IFT ESPOL,capitulo_profesional,FIMCP,ingenieria_alimentos,Capítulo del Institute of Food Technologists enfocado en formación profesional e internacional,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+9,CLIP,club,FIMCP,logistica_transporte,Impulsa investigación y proyectos en logística y transporte,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+10,Célula Estudiantil Microsoft ESPOL,club,FIEC,tecnologia,Investiga y emprende en software robótica e interacción humano máquina,https://celula.espol.edu.ec/,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+11,Club de Mecatrónica,club,FIMCP,mecatronica_iot,Desarrolla competencias en mecatrónica IoT manufactura aditiva y automatización,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+12,Kokoa,club,FIEC,software_hardware_libre,Comunidad de código abierto y tecnologías libres,kokoa@espol.edu.ec,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+13,AAPG ESPOL,capitulo_profesional,FICT,geologia_petroleo,Ofrece conferencias cursos y actividades sobre geología del petróleo,Instagram: aapgespol,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+14,NIoT,club,FIEC,iot_web_movil,Desarrolla aplicaciones web y móviles integradas con IoT y TIC,@ClubNiotEspol,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+15,FANPOL,club_cultural,Central,cultura_asiatica,Difunde cultura asiática mediante manualidades gastronomía cultura y expresión artística,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+16,Tweening,club_cultural,FADCOM,ilustracion_animacion_guion,Desarrolla habilidades en ilustración animación y guion,Instagram: Club TWEENING,https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+17,Club de Arqueología Politécnico,club_cultural,FCSH,arqueologia_antropologia,Fomenta el conocimiento arqueológico antropológico y la identidad cultural,,https://oe.espol.edu.ec/clubes-y-organizaciones/,2026-10-29
+18,GISSC ESPOL,capitulo_profesional,FICT,sig_teledeteccion,Conecta estudiantes e investigadores en actividades con GIS y teledetección,Instagram: gissc_espol,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+19,Asociación de Estudiantes FIEC,asociacion_estudiantil,FIEC,representacion_estudiantil,Promueve actividades culturales deportivas y profesionales,aefiec@espol.edu.ec,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+20,Rama Estudiantil IEEE ESPOL,capitulo_profesional,FIEC,ingenieria_electrica_electronica,Promueve investigación y avances tecnológicos,ieee@espol.edu.ec,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+21,CIAP,club,FIEC,inteligencia_artificial_datos,Promueve IA y análisis de datos mediante talleres conferencias y proyectos,ciap@espol.edu.ec,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+22,PHYCOM,club,FIEC,electronica_robotica,Impulsa electrónica programación y robótica con proyectos creativos,phycom@espol.edu.ec,https://www.fiec.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+23,AEFICT,asociacion_estudiantil,FICT,representacion_estudiantil,Fortalece formación de ingenieros civiles geólogos mineros y petroleros,Instagram: aeficct.espol,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+24,SPE ESPOL,capitulo_profesional,FICT,ingenieria_petroleos,Capítulo de la Society of Petroleum Engineers con talleres y prácticas académicas,Instagram: espolspe,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+25,ACI ESPOL,capitulo_profesional,FICT,cemento_hormigon,Capacita en competencias técnicas de cemento y hormigón,Instagram: aci_espol,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+26,SME ESPOL,capitulo_profesional,FICT,mineria,Forma profesionales para la industria de los minerales,Instagram: smeespol,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+27,IAHR ESPOL,capitulo_profesional,FICT,ingenieria_hidroambiental,Fomenta interés por temas hidroambientales y conexión interdisciplinaria,Facebook: IAHRESPOL,https://www.fict.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+28,AEFADCOM,asociacion_estudiantil,FADCOM,representacion_estudiantil,Promueve actividades culturales académicas y desarrollo profesional,Instagram: Asociación de Estudiantes de FADCOM,https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+29,Alucine,club_cultural,FADCOM,cine,Realiza proyecciones cine coloquios y ciclos de cine,Instagram: Club Alucine,https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+30,D-PRO,club,FADCOM,diseno_productos,Fomenta creatividad pensamiento crítico e innovación en diseño de productos,Instagram: Club DPRO,https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
+31,Breik,club,FADCOM,fotografia_audiovisual,Cubre eventos con fotografía y cápsulas audiovisuales e imparte talleres,Instagram: Club Breik,https://www.fadcom.espol.edu.ec/es/grupos-estudiantiles,2026-10-29
