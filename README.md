@@ -2,7 +2,7 @@
 
 Demo navegable para que estudiantes de ESPOL descubran hasta tres clubes u organizaciones afines a partir de una conversación, un perfil editable y un árbol de intereses.
 
-> **Estado:** demo para presentar el concepto. La conversación es simulada y **no usa inteligencia artificial**. Gemma todavía no está conectado.
+> **Estado:** con `NEXT_PUBLIC_ENGINE=ia`, la conversación, el perfil y las recomendaciones los genera **Gemma 4** (`gemma-4-26b-a4b-it`, Gemini API) desde el servidor. Sin esa variable se usa la demo por reglas, sin IA, y la interfaz lo indica. Ver [Conectar Gemma](#conectar-gemma).
 
 ## Ejecutar
 
@@ -14,6 +14,8 @@ npm run dev
 ```
 
 Abre <http://localhost:3000>. Para una versión de producción: `npm run build && npm start`.
+
+Para usar Gemma, crea `.env.local` (ver [Conectar Gemma](#conectar-gemma)). Sin él, la página funciona con la demo por reglas.
 
 ## Recorrido
 
@@ -29,11 +31,11 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 | Parte | Estado |
 | --- | --- |
 | Catálogo de clubes | **Real**: 43 organizaciones (40 de la plataforma de clubes, entregada el 30-10-2026, más 3 del directorio de Bienestar de ESPOL extraído el 29-10-2026) y 194 eventos. |
-| Conversación | **Simulada**: preguntas fijas en `lib/demo/engine.ts`. La interfaz de chat usa assistant-ui, pero no hay ningún modelo detrás. |
+| Conversación | **Gemma 4** con `NEXT_PUBLIC_ENGINE=ia` (`/api/chat`). En modo demo: preguntas fijas en `lib/demo/engine.ts`. |
 | Dictado y lectura en voz alta | **Del navegador**: Web Speech API. Ningún servicio de pago ni clave del proyecto. |
-| Perfil propuesto | **Reglas**: detección de palabras clave (`lib/demo/vocabulary.ts`). Si no reconoce nada, conserva el texto del estudiante para que lo corrija. |
+| Perfil propuesto | **Gemma 4** (`/api/perfil`), validado en el servidor: nombre y carrera solo si el estudiante los escribió. En modo demo: palabras clave (`lib/demo/vocabulary.ts`). |
 | Ramas | **Agrupación editorial** del equipo (`lib/catalog/branches.ts`), basada en el campo `categoria`. No es un dato oficial. |
-| Orden y explicaciones | **Reglas**: cuentan las coincidencias entre el perfil y la descripción o categoría del catálogo. Cada explicación cita la palabra exacta del catálogo que coincidió. No se muestran puntajes. |
+| Orden y explicaciones | **Gemma 4** (`/api/recomendar`): elige solo entre los clubes de la rama y cita el catálogo entre «». El servidor valida IDs y longitudes; la veracidad requiere revisión manual. En modo demo: reglas de coincidencia. No se muestran puntajes. |
 | Logos e imágenes | **Gráficos provisionales** (sigla sobre el color de la rama) hasta que se registren fotos en `data/medios-clubes.json`. |
 
 Los datos ausentes (actividades, requisitos, horario y, a veces, contacto) se muestran como «Información no disponible». Los usuarios de Instagram y Facebook se muestran como texto y se marcan como «sin verificar»: solo se enlazan las URL y los correos que vienen explícitos en el catálogo.
@@ -46,7 +48,9 @@ components/experience/    pasos del recorrido, paneles, árbol y conexiones SVG
 data/                     catálogo fusionado, eventos y fuentes (data/fuentes/)
 lib/types.ts              tipos compartidos (Club, Profile, Recommendation…)
 lib/catalog/              carga y normalización del catálogo, ramas
-lib/engine/               contrato DiscoveryEngine y validación de recomendaciones
+app/api/                  rutas de IA: chat, perfil y recomendar (servidor)
+lib/ai/                   llamada a Gemma, instrucciones y lectura de solicitudes (server-only)
+lib/engine/               contrato DiscoveryEngine, motor remoto, selección de motor y validación
 lib/demo/                 motor de demostración por reglas
 lib/speech/               adaptadores de dictado y lectura en voz alta (Web Speech API)
 scripts/                  construir-catalogo, descargar-logos y csv-a-json
@@ -85,22 +89,42 @@ Las fuentes están en `data/fuentes/`:
 
 ## Conectar Gemma
 
-> La guía completa para conectar modelos (contrato HTTP, esquemas, instrucciones y pasos) está en [`docs/integracion-ia/`](docs/integracion-ia/README.md). Este apartado es el resumen original.
+Contrato, esquemas e instrucciones completos en [`docs/integracion-ia/`](docs/integracion-ia/README.md).
 
-La interfaz solo habla con la interfaz `DiscoveryEngine` (`lib/engine/types.ts`):
+1. Crea una clave en [Google AI Studio](https://aistudio.google.com/apikey).
+2. Crea `.env.local` en la raíz (está en `.gitignore`; nunca lo subas):
 
-- `reply(history)`: siguiente turno del asistente y sugerencias.
-- `proposeProfile(history)`: perfil propuesto (nombre, carrera, hasta cuatro intereses, objetivos y disponibilidad).
-- `recommend({ profile, branchId, candidates, exclude })`: hasta tres `{ clubId, reasons }`.
+   ```dotenv
+   # "ia" activa Gemma; sin esta variable se usa la demo por reglas.
+   NEXT_PUBLIC_ENGINE=ia
+   # Solo en el servidor: nunca con prefijo NEXT_PUBLIC_.
+   AI_API_KEY=tu_clave
+   AI_MODEL=gemma-4-26b-a4b-it
+   ```
 
-Pasos sugeridos:
+3. `npm run dev`. La etiqueta de la cabecera cambia de «Demo sin IA» a «Con IA».
 
-1. Crea rutas del servidor (por ejemplo `app/api/chat/route.ts` y `app/api/recomendar/route.ts`) que llamen a Gemma con la clave en una variable de entorno (`GEMINI_API_KEY`) y el modelo en otra (`GEMMA_MODEL`, candidato: `gemma-4-26b-a4b-it`, pendiente de probar con la cuenta del equipo). La clave nunca debe llegar al cliente.
-2. En `recommend`, envía solo el perfil y los clubes de la rama elegida. Pide IDs existentes y justificaciones ligadas a datos del catálogo.
-3. Valida la respuesta en el servidor con `validateRecommendations` (`lib/engine/validate.ts`): JSON válido, IDs existentes y únicos, máximo tres y texto no vacío. Reintenta una vez; si falla, lanza `EngineError` para que la interfaz muestre el error recuperable sin perder el perfil.
-4. Crea un `gemmaEngine` con `mode: "gemma"` que llame a esas rutas y cámbialo por `demoEngine` en `components/experience/Experience.tsx`. Actualiza los avisos de «Demo sin IA».
+Cómo funciona: el navegador usa `remoteEngine` (`lib/engine/remote.ts`), que llama a `POST /api/chat`, `/api/perfil` y `/api/recomendar`. Esas rutas llaman a Gemini API con la clave del servidor (`lib/ai/model.ts`), validan la respuesta (`lib/engine/validate.ts`) y reintentan una vez si no es válida. Si el modelo falla, la interfaz muestra un error recuperable; nunca cae en silencio a la demo.
 
-Que el formato sea válido no garantiza que la explicación sea verdadera: las explicaciones requieren revisión manual.
+**Modelo probado (30-10-2026):** `gemma-4-26b-a4b-it` con `responseMimeType: "application/json"` y `thinkingLevel: "minimal"`. Acepta `systemInstruction` y un historial que empieza con el asistente. Las partes de razonamiento (`thought: true`) se descartan.
+
+| Ruta | Latencia observada |
+| --- | --- |
+| `/api/chat` | 1,6–3,3 s |
+| `/api/perfil` | 2,2–2,7 s |
+| `/api/recomendar` | 7,3–9,3 s |
+
+Mientras llegan las recomendaciones, el paso Clubes muestra «Preparando recomendaciones…». `gemma-4-31b-it` respondió `500` en una prueba y no se usa. Las cuotas dependen del proyecto: revísalas en AI Studio; con cuota agotada la ruta responde `429` y la interfaz pide esperar.
+
+**Privacidad:** al modelo solo llegan la conversación (últimos 20 mensajes), las respuestas del estudiante para el perfil y, al recomendar, intereses, objetivos, disponibilidad y los clubes de la rama. Nunca nombre ni carrera al recomendar, ni audio. Los registros del servidor solo guardan ruta, estado, duración y modelo. Falta definir con el equipo el aviso al estudiante de que sus respuestas se envían a Google.
+
+Pruebas rápidas (con el servidor en marcha):
+
+```bash
+curl -s localhost:3000/api/recomendar -H 'Content-Type: application/json' -d '{"branchId":"programacion","profile":{"interests":["programación"],"goals":["crear proyectos"],"availability":null},"exclude":[]}'
+```
+
+Que el formato sea válido no garantiza que la explicación sea verdadera: revisa que cada cita entre «» exista en el catálogo.
 
 ## Chat y audio
 
@@ -149,8 +173,9 @@ Se verificaron en el navegador integrado: el recorrido completo hasta Clubes, el
 ## Pendientes
 
 - Cargar las fotos de los clubes.
-- Conectar Gemma y registrar el modelo realmente probado y sus límites. Al conectarlo, `isRunning` y `onNew` del adaptador de assistant-ui ya están listos; habría que añadir `onCancel` solo si el motor permite cancelar.
-- Probar dictado y lectura con micrófono y altavoces reales en Chrome, Edge, Safari (macOS e iOS) y Chrome para Android.
+- Definir y mostrar el aviso de que las respuestas se envían a Google (Gemini API) antes de conversar.
+- Revisar a mano al menos una recomendación de Gemma por rama.
+- Probar dictado y lectura con micrófono y altavoces reales en Google Chrome (la voz se hace solo con la Web Speech API del navegador; no hay modelo de voz local). En Linux, Chromium no trae el servicio de reconocimiento de Google: usar Google Chrome.
 - Revisar contactos y vigencia de cada organización. Conseguir logos y fotos con permiso.
 - Elegir licencia.
 

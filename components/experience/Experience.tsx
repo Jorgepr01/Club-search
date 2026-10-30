@@ -3,8 +3,8 @@
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CLUB_BY_ID, clubsInBranch } from "@/lib/catalog";
-import { demoEngine } from "@/lib/demo/engine";
-import type { AssistantTurn, DiscoveryEngine } from "@/lib/engine/types";
+import { engine, usesModel } from "@/lib/engine/current";
+import { EngineError, type AssistantTurn } from "@/lib/engine/types";
 import type { BranchId, ChatMessage, Profile, Recommendation } from "@/lib/types";
 import { ClubResults, type ClubResultsControls } from "./ClubResults";
 import { Conversation } from "./Conversation";
@@ -15,9 +15,8 @@ import type { Step } from "./steps";
 import { Welcome } from "./Welcome";
 import { VoiceGuide } from "./VoiceGuide";
 
-// Para conectar Gemma, sustituye este motor por uno que implemente DiscoveryEngine
-// llamando a rutas del servidor (ver lib/engine/types.ts y el README).
-const engine: DiscoveryEngine = demoEngine;
+const QUOTA_MESSAGE = "Se alcanzó el límite de uso del modelo. Espera un momento e intenta de nuevo; tu conversación sigue aquí.";
+const isQuota = (error: unknown) => error instanceof EngineError && error.kind === "quota";
 
 let messageCounter = 0;
 const newId = () => `m${++messageCounter}`;
@@ -34,6 +33,7 @@ export function Experience() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [seenIds, setSeenIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loadingClubs, setLoadingClubs] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const clubsRef = useRef<ClubResultsControls>(null);
   const firstRender = useRef(true);
@@ -89,17 +89,27 @@ export function Experience() {
         }));
         setProfileConfirmed(false);
       }
-    } catch {
-      setError("No se pudo obtener la respuesta. Tu conversación sigue aquí; intenta enviar de nuevo.");
+    } catch (e) {
+      setError(
+        isQuota(e)
+          ? QUOTA_MESSAGE
+          : "No se pudo obtener la respuesta. Tu conversación sigue aquí; intenta enviar de nuevo.",
+      );
     } finally {
       sendingRef.current = false;
       setThinking(false);
     }
   };
 
+  // Solo la última solicitud de recomendaciones actualiza la pantalla, aunque otra anterior llegue después.
+  const recommendRequest = useRef(0);
+
   const loadRecommendations = useCallback(
     async (branch: BranchId, currentProfile: Profile, exclude: string[]) => {
+      const request = ++recommendRequest.current;
       setError(null);
+      setRecommendations([]);
+      setLoadingClubs(true);
       const candidates = clubsInBranch(branch);
       // Si ya se mostraron todas, se vuelve a empezar por las más relacionadas.
       const pending = candidates.filter((c) => !exclude.includes(c.id));
@@ -111,11 +121,18 @@ export function Experience() {
           candidates,
           exclude: effectiveExclude,
         });
+        if (request !== recommendRequest.current) return;
         setRecommendations(result);
         setSeenIds([...effectiveExclude, ...result.map((r) => r.clubId)]);
-      } catch {
-        setRecommendations([]);
-        setError("No se pudieron preparar las recomendaciones. Tu perfil se conserva; intenta de nuevo.");
+      } catch (e) {
+        if (request !== recommendRequest.current) return;
+        setError(
+          isQuota(e)
+            ? QUOTA_MESSAGE
+            : "No se pudieron preparar las recomendaciones. Tu perfil se conserva; intenta de nuevo.",
+        );
+      } finally {
+        if (request === recommendRequest.current) setLoadingClubs(false);
       }
     },
     [],
@@ -167,7 +184,7 @@ export function Experience() {
             Comunidad ESPOL
           </button>
           {step !== "welcome" && <StepNav current={step} reachable={reachable} onSelect={goTo} />}
-          <p className="demo-tag">Demo sin IA</p>
+          <p className="demo-tag">{usesModel ? "Con IA" : "Demo sin IA"}</p>
         </header>
 
         <main id="contenido" ref={mainRef} className="stage">
@@ -246,6 +263,7 @@ export function Experience() {
                 <ClubResults
                   branchId={branchId}
                   recommendations={recommendations}
+                  loading={loadingClubs}
                   error={error}
                   onRetry={() => void loadRecommendations(branchId, profile, [])}
                   onShowOthers={() => void loadRecommendations(branchId, profile, seenIds)}

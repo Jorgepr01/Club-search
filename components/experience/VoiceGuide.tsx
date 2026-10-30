@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { BrowserDictationAdapter, type DictationProblem } from "@/lib/speech/dictation";
+import { usesModel } from "@/lib/engine/current";
 import { SpanishSpeechAdapter } from "@/lib/speech/synthesis";
 import { STEPS, type Step } from "./steps";
 import { actionsFor, type VoiceContext } from "./voiceActions";
@@ -465,7 +466,11 @@ export function VoiceGuide({ step, voice, reachable, onNavigate, chatMessage, ca
               </div>
             </div>
 
-            <p className="guide__foot">Guía por pasos, sin IA. Usa las voces y el reconocimiento de voz del navegador.</p>
+            <p className="guide__foot">
+              {usesModel
+                ? "La guía funciona por pasos; las respuestas del chat las genera un modelo de IA. Usa las voces y el reconocimiento de voz del navegador."
+                : "Guía por pasos, sin IA. Usa las voces y el reconocimiento de voz del navegador."}
+            </p>
           </section>
         )}
 

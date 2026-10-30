@@ -3,6 +3,7 @@
 import { useImperativeHandle, useRef, useState, type Ref } from "react";
 import { CLUB_BY_ID } from "@/lib/catalog";
 import { BRANCH_BY_ID } from "@/lib/catalog/branches";
+import { usesModel } from "@/lib/engine/current";
 import type { BranchId, Recommendation } from "@/lib/types";
 import { BranchGlyph } from "./BranchGlyph";
 import { ClubPanel } from "./ClubPanel";
@@ -13,6 +14,8 @@ import { useMediaQuery, WIDE_LAYOUT } from "./hooks";
 interface ClubResultsProps {
   branchId: BranchId;
   recommendations: Recommendation[];
+  /** El motor aún prepara las recomendaciones (con IA tarda unos segundos). */
+  loading?: boolean;
   totalInBranch: number;
   error: string | null;
   onRetry: () => void;
@@ -34,7 +37,7 @@ const narrowFrom: Anchor = (r) => ({ x: r.x + 18, y: r.y + r.height });
 const narrowTo: Anchor = (r) => ({ x: r.x, y: r.y + 44 });
 
 export function ClubResults(props: ClubResultsProps) {
-  const { branchId, recommendations, totalInBranch, error, onRetry, onShowOthers, onBackToTree, onEditProfile, controls } =
+  const { branchId, recommendations, loading, totalInBranch, error, onRetry, onShowOthers, onBackToTree, onEditProfile, controls } =
     props;
   const branch = BRANCH_BY_ID[branchId];
   const wide = useMediaQuery(WIDE_LAYOUT, true);
@@ -132,7 +135,12 @@ export function ClubResults(props: ClubResultsProps) {
           Esta rama solo tiene {plural(totalInBranch, "organización", "organizaciones")} en el catálogo actual.
         </p>
       )}
-      {!error && totalInBranch >= 3 && shown.length < 3 && (
+      {loading && (
+        <p className="results__note" role="status">
+          Preparando recomendaciones a partir de tu perfil…
+        </p>
+      )}
+      {!error && !loading && totalInBranch >= 3 && shown.length < 3 && (
         <p className="results__note">Estas son las últimas de la rama. Si pides otras, vuelves a las primeras.</p>
       )}
 
@@ -149,8 +157,10 @@ export function ClubResults(props: ClubResultsProps) {
 
       <p className="source-note">
         Datos de la plataforma de clubes de ESPOL (entregados el 30-10-2026) y del directorio de Bienestar Politécnico. La
-        actividad de cada organización puede haber cambiado; confirma con ella antes de asistir. El orden y las explicaciones salen de
-        reglas de palabras clave, no de un modelo de inteligencia artificial.
+        actividad de cada organización puede haber cambiado; confirma con ella antes de asistir.{" "}
+        {usesModel
+          ? "El orden y las explicaciones los propone un modelo de IA a partir del catálogo y pueden contener errores."
+          : "El orden y las explicaciones salen de reglas de palabras clave, no de un modelo de inteligencia artificial."}
       </p>
     </section>
   );
