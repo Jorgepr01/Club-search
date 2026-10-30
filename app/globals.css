@@ -1930,68 +1930,69 @@ a {
   transform: rotateY(180deg);
 }
 
+/* Área visual: el logo, la foto o la sigla del club al centro, sobre el color de la rama.
+   El margen interior deja libre la franja de la pegatina para que no tape el logo ni la
+   sigla: arriba y abajo en las tarjetas altas, a los lados en las anchas. */
 .club-art {
+  --art-pad-x: 20px;
+  --art-pad-y: 60px;
   position: relative;
+  display: grid;
+  place-items: center;
   flex: 1 1 auto;
   min-height: 200px;
+  padding: var(--art-pad-y) var(--art-pad-x);
   overflow: hidden;
   background:
-    linear-gradient(165deg, rgb(255 255 255 / 0.28), transparent 45%),
+    radial-gradient(closest-side, rgb(255 255 255 / 0.2), transparent),
     var(--tone);
   color: var(--lacquer-ink);
+  container-type: inline-size;
 }
 
-.club-art__photo {
+.club[data-active] .club-art {
+  --art-pad-x: 124px;
+  --art-pad-y: 24px;
+}
+
+.club-art__media {
   position: absolute;
+  inset: var(--art-pad-y) var(--art-pad-x);
+  width: calc(100% - 2 * var(--art-pad-x));
+  height: calc(100% - 2 * var(--art-pad-y));
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgb(28 26 58 / 0.18));
+}
+
+.club-art[data-media="photo"] .club-art__media {
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  filter: none;
 }
 
-.club-art__monogram img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.club-art__field {
+/* Funde el borde inferior de la foto con el bloque de texto. */
+.club-art[data-media="photo"]::after {
+  content: "";
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  background: linear-gradient(to bottom, transparent 72%, color-mix(in oklab, var(--tone) 40%, transparent));
+  pointer-events: none;
 }
 
-.club-art__glyph {
-  position: absolute;
-  right: -12%;
-  bottom: -14%;
-  width: min(78%, 300px);
-  aspect-ratio: 1;
-  opacity: 0.9;
-}
-
-.club-art__glyph svg {
-  width: 100%;
-  height: 100%;
-  stroke-width: 0.9;
-}
-
-.club-art__monogram {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  display: grid;
-  place-items: center;
-  min-width: 58px;
-  height: 58px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: var(--plaque);
-  color: var(--ink);
-  font: 800 1rem/1 var(--font-display);
-  letter-spacing: -0.01em;
-  box-shadow: var(--depth-1);
+/* La sigla ocupa el ancho disponible según su número de letras. */
+.club-art__mono {
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, calc(100cqi / (var(--chars) * 0.64)), 5.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  font-variation-settings: "wdth" 88;
+  letter-spacing: -0.02em;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .club__body {
@@ -2025,44 +2026,113 @@ a {
   -webkit-box-orient: vertical;
 }
 
-/* Indicador de giro en la esquina superior derecha de cada cara. */
+/* Pegatina de giro en la esquina superior derecha de cada cara: papel sólido con la
+   esquina inferior izquierda doblada. --fold crece al pasar el mouse o al enfocarla,
+   como si se despegara. El botón transparente alrededor da el área táctil de 44 px. */
+@property --fold {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 11px;
+}
+
 .club__flip {
+  --sticker-paper: #fffcf4;
+  --sticker-ink: var(--ink);
+  --sticker-back: #ddd7c8;
+  --fold: 11px;
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 10px;
+  right: 10px;
   z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
   min-height: 44px;
-  padding: 0 16px 0 12px;
-  border: 1px solid rgb(255 255 255 / 0.6);
-  border-radius: 999px;
-  background: rgb(251 250 253 / 0.78);
-  color: var(--ink);
-  font: 700 0.86rem/1 var(--font-body);
-  letter-spacing: 0.01em;
+  padding: 2px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--sticker-ink);
+  font: 800 0.86rem/1 var(--font-body);
+  letter-spacing: 0.02em;
   cursor: pointer;
-  box-shadow: var(--depth-1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.4);
-  backdrop-filter: blur(10px) saturate(1.4);
-  transition: background-color 0.25s, transform 0.25s var(--ease);
-}
-
-.club__flip:hover {
-  background: var(--plaque);
-}
-
-.club__flip:active {
-  transform: scale(0.96);
+  transition: --fold 0.3s var(--ease);
 }
 
 .club__flip:focus-visible {
+  --fold: 17px;
   outline: 3px solid var(--ink);
-  outline-offset: 3px;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 7px var(--plaque);
+}
+
+.club__flip:active {
+  --fold: 7px;
+}
+
+@media (hover: hover) {
+  .club:hover .club__flip {
+    --fold: 15px;
+  }
+
+  .club .club__flip:hover {
+    --fold: 18px;
+  }
+}
+
+.sticker {
+  position: relative;
+  display: block;
+  rotate: 3deg;
+  filter: drop-shadow(0 1px 0.5px rgb(28 26 58 / 0.25)) drop-shadow(0 3px 5px rgb(28 26 58 / 0.12));
+  transition: translate 0.3s var(--ease), scale 0.2s var(--ease);
+}
+
+.club__flip:hover .sticker,
+.club__flip:focus-visible .sticker {
+  translate: 0 -1px;
+}
+
+.club__flip:active .sticker {
+  scale: 0.97;
+}
+
+.sticker__paper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px 0 12px;
+  border-radius: 8px;
+  background: var(--sticker-paper);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, var(--fold) 100%, 0 calc(100% - var(--fold)));
+}
+
+/* La esquina doblada muestra el dorso del papel y proyecta su sombra sobre él. */
+.sticker__fold {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: var(--fold);
+  height: var(--fold);
+  filter: drop-shadow(1px -1px 1.5px rgb(28 26 58 / 0.38));
+}
+
+.sticker__fold::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-top-right-radius: 3px;
+  background: linear-gradient(
+    to top right,
+    var(--sticker-back) 50%,
+    color-mix(in oklab, var(--sticker-back) 45%, white)
+  );
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
 
 .club__flip-icon {
+  flex: none;
   width: 18px;
   height: 18px;
   fill: none;
@@ -2078,15 +2148,10 @@ a {
   transform: rotate(180deg);
 }
 
-.club__flip--open {
-  width: 44px;
-  padding: 0;
+.club__flip--open .sticker__paper {
   justify-content: center;
-}
-
-.club:not([data-active]):hover .club__flip--open {
-  background: var(--plaque);
-  transform: scale(1.08);
+  width: 40px;
+  padding: 0;
 }
 
 /* Al volverse principal, el icono da una vuelta para sugerir que la tarjeta gira. */
@@ -2104,17 +2169,17 @@ a {
   animation: none;
 }
 
+/* En el reverso la pegatina va en la cabecera, impresa en tinta. */
 .club__flip--back {
+  --sticker-paper: var(--ink);
+  --sticker-ink: var(--wall);
+  --sticker-back: #c9c5d8;
   position: static;
   flex: none;
-  border-color: transparent;
-  background: var(--ink);
-  color: var(--wall);
-  box-shadow: none;
 }
 
 .club__flip--back:hover {
-  background: color-mix(in oklab, var(--ink) 85%, var(--lacquer));
+  --sticker-paper: color-mix(in oklab, var(--ink) 85%, var(--lacquer));
 }
 
 .club__back-head {
@@ -2397,7 +2462,16 @@ a {
   }
 
   .club-art {
+    --art-pad-x: 64px;
+    --art-pad-y: 16px;
     min-height: 170px;
+  }
+
+  /* En la principal la pegatina es más ancha: se reserva su franja arriba y abajo. */
+  .club[data-active] .club-art {
+    --art-pad-x: 24px;
+    --art-pad-y: 62px;
+    min-height: 240px;
   }
 
   .facts {

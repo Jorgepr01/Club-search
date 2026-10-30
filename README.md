@@ -70,7 +70,7 @@ scripts/csv-a-json.mjs    regenera data/catalogo-clubes.json desde el CSV
    }
    ```
 
-3. Las fotos aparecen en el anillo de la portada (primero los clubes con foto) y en el panel del club. El logo reemplaza a la sigla. Recomendado: fotos cuadradas de al menos 400 × 400 px.
+3. Las fotos aparecen en el anillo de la portada (primero los clubes con foto) y en el panel del club. En el panel, el logo tiene prioridad sobre la foto; si no hay ninguno o no cargan, se muestra la sigla del club. Recomendado: fotos cuadradas de al menos 400 × 400 px y logos con fondo transparente.
 
 ## Conectar Gemma
 
