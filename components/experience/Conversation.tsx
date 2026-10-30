@@ -152,26 +152,18 @@ export function Conversation({
     <AssistantRuntimeProvider runtime={runtime}>
       <ChatUiContext.Provider value={ui}>
         <section className="chat" aria-labelledby="chat-title">
-          <header className="chat__intro">
-            <h2 id="chat-title" className="chat__title" tabIndex={-1} data-step-heading>
-              Cuéntanos de ti
-            </h2>
-            {onClose && (
-              <button type="button" className="chat__close" onClick={onClose} aria-label="Cerrar conversación">
-                <span aria-hidden="true">×</span>
-              </button>
-            )}
-            <p className="chat__lede">Responde con tus palabras, con una sugerencia o dictando con el micrófono.</p>
-          </header>
-
           <ThreadPrimitive.Root className="chat__panel">
-            <div className="chat__bar">
+            <header className="chat__bar">
               <span className="chat__avatar" aria-hidden="true" />
-              <div className="chat__who">
-                <p className="chat__name">{ASSISTANT_NAME}</p>
-                <p className="chat__purpose">Tres preguntas para armar un borrador de tu perfil.</p>
-              </div>
-            </div>
+              <h2 id="chat-title" className="chat__title" tabIndex={-1} data-step-heading>
+                Cuéntanos de ti
+              </h2>
+              {onClose && (
+                <button type="button" className="chat__close" onClick={onClose} aria-label="Cerrar conversación">
+                  <span aria-hidden="true">×</span>
+                </button>
+              )}
+            </header>
 
             <ThreadPrimitive.Viewport
               className="chat__viewport"

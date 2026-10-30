@@ -2,13 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import { categoryLabel, typeLabel } from "@/lib/catalog";
-import type { BranchId, Club, ClubContact } from "@/lib/types";
+import type { Club, ClubContact } from "@/lib/types";
 import { ClubArt } from "./ClubArt";
 import { formatDate } from "./format";
 
 interface ClubPanelProps {
   club: Club;
-  branchId: BranchId;
   reasons: string[];
   tone: number;
   /** Tarjeta principal (más ancha); las otras dos son complementarias. */
@@ -21,10 +20,10 @@ interface ClubPanelProps {
 const UNAVAILABLE = "Información no disponible";
 
 // Tarjeta de dos caras: el frente presenta al club y el reverso trae los detalles.
-// Tocar una complementaria la vuelve principal; tocar la principal la gira. El botón
+// Tocar una complementaria la vuelve principal; tocar la principal la gira. La pegatina
 // de la esquina hace lo mismo y es el control accesible por teclado. La cara oculta
 // queda `inert`.
-export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSelect }: ClubPanelProps) {
+export function ClubPanel({ club, reasons, tone, active, flipped, onSelect }: ClubPanelProps) {
   const detailsId = `detalles-${club.id}`;
   const meta = [typeLabel(club.type), club.faculty].filter(Boolean).join(", ");
   const frontButton = useRef<HTMLButtonElement>(null);
@@ -38,7 +37,9 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
     (flipped ? backButton : frontButton).current?.focus({ preventScroll: true });
   }, [flipped]);
 
-  function selectFromButton() {
+  function selectFromButton(event: React.MouseEvent) {
+    // La tarjeta también escucha el clic; sin esto la acción se ejecutaría dos veces.
+    event.stopPropagation();
     focusAfterFlip.current = active;
     onSelect();
   }
@@ -62,7 +63,7 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
     >
       <div className="club__flipper">
         <div className="club__face club__face--front" inert={flipped}>
-          <ClubArt club={club} branchId={branchId} />
+          <ClubArt club={club} />
           {active ? (
             <button
               ref={frontButton}
@@ -72,13 +73,17 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
               aria-controls={detailsId}
               onClick={selectFromButton}
             >
-              <FlipIcon />
-              <span className="club__flip-label">Girar</span>
+              <Sticker>
+                <FlipIcon />
+                Girar
+              </Sticker>
               <span className="sr-only"> para ver los detalles de {club.name}</span>
             </button>
           ) : (
             <button ref={frontButton} type="button" className="club__flip club__flip--open" onClick={selectFromButton}>
-              <OpenIcon />
+              <Sticker>
+                <OpenIcon />
+              </Sticker>
               <span className="sr-only">Abrir {club.name}</span>
             </button>
           )}
@@ -97,8 +102,10 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
               <h3 className="club__back-name">{club.name}</h3>
             </div>
             <button ref={backButton} type="button" className="club__flip club__flip--back" onClick={selectFromButton}>
-              <FlipIcon />
-              Volver
+              <Sticker>
+                <FlipIcon />
+                Volver
+              </Sticker>
               <span className="sr-only"> al frente de {club.name}</span>
             </button>
           </div>
@@ -145,6 +152,16 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
         </div>
       </div>
     </li>
+  );
+}
+
+/** Etiqueta adhesiva con la esquina inferior izquierda doblada sobre sí misma. */
+function Sticker({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="sticker">
+      <span className="sticker__paper">{children}</span>
+      <span className="sticker__fold" aria-hidden="true" />
+    </span>
   );
 }
 

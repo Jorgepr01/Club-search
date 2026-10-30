@@ -97,7 +97,6 @@ export function ClubResults(props: ClubResultsProps) {
               <ClubPanel
                 key={r.clubId}
                 club={CLUB_BY_ID.get(r.clubId)!}
-                branchId={branchId}
                 reasons={r.reasons}
                 tone={i}
                 active={activeId === r.clubId}

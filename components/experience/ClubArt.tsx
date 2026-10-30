@@ -1,14 +1,8 @@
-import type { BranchId, Club } from "@/lib/types";
-import { BranchGlyph } from "./BranchGlyph";
+import { useState } from "react";
+import type { Club } from "@/lib/types";
 
-// Foto y logo del club cuando existen (data/medios-clubes.json); si no, un gráfico
-// provisional generado a partir del ID del club.
-
-function seedFrom(text: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
-  return h >>> 0;
-}
+// Logo o foto del club cuando existen (data/medios-clubes.json); si no hay o no cargan,
+// su sigla sobre el color de la rama.
 
 const STOPWORDS = new Set(["de", "del", "la", "el", "en", "y"]);
 
@@ -28,65 +22,42 @@ export function monogram(name: string): string {
     .join("");
 }
 
-export function ClubMark({ club, className }: { club: Club; className?: string }) {
+/** El logo tiene prioridad sobre la foto; si uno falla al cargar se pasa al siguiente. */
+export function ClubArt({ club }: { club: Club }) {
+  const sources = [
+    club.logoUrl && { src: club.logoUrl, kind: "logo" as const },
+    club.imageUrl && { src: club.imageUrl, kind: "photo" as const },
+  ].filter((m): m is { src: string; kind: "logo" | "photo" } => Boolean(m));
+  const [failed, setFailed] = useState(0);
+  const media = sources[failed];
   const text = monogram(club.name);
+
   return (
-    <span className={className} data-long={text.length > 5 || undefined} aria-hidden="true">
-      {club.logoUrl ? (
+    <div className="club-art" data-media={media?.kind ?? "text"}>
+      {media ? (
         // eslint-disable-next-line @next/next/no-img-element -- archivos locales de tamaño variable
-        <img src={club.logoUrl} alt="" />
+        <img
+          key={media.src}
+          className="club-art__media"
+          src={media.src}
+          alt=""
+          decoding="async"
+          draggable={false}
+          onError={() => setFailed((n) => n + 1)}
+          ref={(img) => {
+            // Un error anterior a la hidratación no dispara onError.
+            if (img?.complete && img.naturalWidth === 0) setFailed((n) => n + 1);
+          }}
+        />
       ) : (
-        text
+        <span
+          className="club-art__mono"
+          style={{ "--chars": Math.max(text.length, 2) } as React.CSSProperties}
+          aria-hidden="true"
+        >
+          {text}
+        </span>
       )}
-    </span>
-  );
-}
-
-export function ClubArt({ club, branchId }: { club: Club; branchId: BranchId }) {
-  if (club.imageUrl) {
-    return (
-      <div className="club-art club-art--photo">
-        {/* eslint-disable-next-line @next/next/no-img-element -- archivos locales de tamaño variable */}
-        <img className="club-art__photo" src={club.imageUrl} alt="" />
-        <ClubMark club={club} className="club-art__monogram" />
-      </div>
-    );
-  }
-
-  const seed = seedFrom(club.id);
-  const rotate = (seed % 50) - 25;
-  const rings = 3 + (seed % 3);
-  const cx = 30 + (seed % 40);
-  const cy = 35 + ((seed >> 4) % 30);
-  const stripeAngle = ((seed >> 8) % 4) * 22.5;
-  const patternId = `stripes-${club.id}`;
-
-  return (
-    <div className="club-art">
-      <svg className="club-art__field" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-        <defs>
-          <pattern id={patternId} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform={`rotate(${stripeAngle})`}>
-            <rect width="2" height="6" fill="currentColor" opacity="0.12" />
-          </pattern>
-        </defs>
-        <rect width="100" height="100" fill={`url(#${patternId})`} />
-        {Array.from({ length: rings }, (_, i) => (
-          <circle
-            key={i}
-            cx={cx}
-            cy={cy}
-            r={14 + i * 11}
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity={0.22 - i * 0.03}
-            strokeWidth={0.8}
-          />
-        ))}
-      </svg>
-      <span className="club-art__glyph" style={{ transform: `rotate(${rotate}deg)` }} aria-hidden="true">
-        <BranchGlyph id={branchId} />
-      </span>
-      <ClubMark club={club} className="club-art__monogram" />
     </div>
   );
 }

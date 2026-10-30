@@ -302,9 +302,9 @@ a {
 }
 
 .brand {
-  display: inline-grid;
-  justify-items: start;
-  gap: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   padding: 6px 4px;
   border: 0;
   background: none;
@@ -315,22 +315,9 @@ a {
   white-space: nowrap;
 }
 
-.brand__identity {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand__mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #2e5bd6 0 25%, #c93a2c 25% 50%, #f0a030 50% 75%, #7fd3c0 75%);
-}
-
 .brand__kokoa {
-  width: 52px;
-  height: 24px;
+  width: 62px;
+  height: 28px;
   object-fit: contain;
 }
 
@@ -885,6 +872,7 @@ a {
 }
 
 .chat {
+  container: chat / inline-size;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -940,9 +928,7 @@ a {
   top: 16px;
   align-self: start;
   overflow: visible;
-  padding: 24px;
-  border: 1px solid var(--line);
-  box-shadow: var(--depth-2);
+  background: transparent;
   visibility: visible;
   transition:
     padding 0.32s var(--ease),
@@ -971,11 +957,11 @@ a {
 
 .chat__close {
   display: grid;
-  flex: 0 0 48px;
+  flex: 0 0 44px;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  margin-top: -6px;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--plaque);
@@ -997,53 +983,15 @@ a {
   flex-direction: column;
 }
 
-.conversation-drawer .chat__intro {
-  position: relative;
-  margin: 0 0 12px;
-  padding-right: 56px;
-}
-
-.conversation-drawer .chat__lede {
-  display: none;
-}
-
 .conversation-drawer .chat__panel {
   flex: none;
-  height: min(70dvh, 640px);
-}
-
-.chat__intro .chat__close {
-  position: absolute;
-  top: -4px;
-  right: 0;
-}
-
-.chat__intro {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 4px 16px;
-  margin: 8px 0 14px;
-}
-
-.chat__title {
-  margin: 0;
-  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-  font-weight: 800;
-  font-variation-settings: "wdth" 88;
-  line-height: 1;
-  letter-spacing: -0.025em;
-}
-
-.chat__lede {
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 0.97rem;
+  height: min(78dvh, 680px);
+  margin-top: 0;
 }
 
 .chat__panel {
   flex: 1;
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -1057,7 +1005,7 @@ a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 20px 12px;
+  padding: 14px 16px 12px 20px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1072,20 +1020,12 @@ a {
   box-shadow: inset 0 0 0 1px rgb(28 26 58 / 0.08);
 }
 
-.chat__who {
+.chat__title {
   min-width: 0;
-}
-
-.chat__name {
   margin: 0;
-  font: 750 1.02rem/1.2 var(--font-display);
-}
-
-.chat__purpose {
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 0.88rem;
-  line-height: 1.35;
+  font: 800 1.3rem/1.15 var(--font-display);
+  font-variation-settings: "wdth" 88;
+  letter-spacing: -0.015em;
 }
 
 .chat__viewport {
@@ -1512,6 +1452,10 @@ a {
   background: linear-gradient(135deg, rgb(123 97 209 / 0.13), rgb(127 211 192 / 0.22));
 }
 
+.chat__done > div {
+  flex: 1 1 15rem;
+}
+
 .chat__done-title {
   margin: 0;
   font: 750 1.15rem/1.2 var(--font-display);
@@ -1523,22 +1467,16 @@ a {
   font-size: 0.93rem;
 }
 
-/* Teléfono y ventanas estrechas: menos marco, más espacio para leer. */
-@media (max-width: 879px) {
-  .chat__intro {
-    margin: 2px 0 10px;
-  }
-
-  .chat__lede {
-    display: none;
-  }
-
+/* Chat angosto (teléfono, ventana estrecha o el lateral del perfil): menos marco,
+   más espacio para leer. Depende del ancho del chat, no de la ventana. */
+@container chat (max-width: 640px) {
   .chat__panel {
     border-radius: 20px;
   }
 
   .chat__bar {
-    padding: 10px 14px;
+    gap: 10px;
+    padding: 10px 10px 10px 14px;
   }
 
   .chat__avatar {
@@ -1547,8 +1485,20 @@ a {
     border-radius: 10px;
   }
 
+  .chat__title {
+    font-size: 1.12rem;
+  }
+
   .chat__viewport {
-    padding: 16px 12px;
+    padding: 16px 14px;
+  }
+
+  .chat__messages {
+    gap: 14px;
+  }
+
+  .msg__bubble {
+    padding: 10px 14px 11px;
   }
 
   .msg__avatar {
@@ -1580,6 +1530,14 @@ a {
     flex: none;
   }
 
+  .chat__done {
+    padding: 14px;
+  }
+
+}
+
+/* En el chat más angosto el botón final ocupa todo el ancho para tocarlo fácil. */
+@container chat (max-width: 480px) {
   .chat__review {
     flex: 1 1 100%;
   }
@@ -1594,14 +1552,10 @@ a {
 
 /* Poca altura (teléfono horizontal o teclado virtual abierto): la página se desplaza
    en lugar de aplastar el panel, y el historial conserva una altura legible. */
-@media (max-height: 600px) {
+@media (max-height: 660px) {
   .app[data-step="chat"] {
     height: auto;
     min-height: 100dvh;
-  }
-
-  .chat__purpose {
-    display: none;
   }
 
   .chat__viewport {
