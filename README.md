@@ -18,7 +18,7 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 ## Recorrido
 
 1. **Bienvenida:** título, aviso de demo y un anillo por el que giran las fotos de los clubes con estela de movimiento (botón para pausarlo).
-2. **Conversación:** tres preguntas fijas (intereses, objetivos y disponibilidad), con respuestas sugeridas o texto libre.
+2. **Conversación:** tres preguntas fijas (intereses, objetivos y disponibilidad), con respuestas sugeridas, texto libre o dictado por micrófono. Cada pregunta puede escucharse en voz alta. Ver [Chat y audio](#chat-y-audio).
 3. **Perfil:** intereses y objetivos como etiquetas editables y disponibilidad como texto. Hay que confirmarlo para seguir.
 4. **Ramas:** árbol con conexiones SVG desde «Tu perfil». Las ramas relacionadas con el perfil aparecen marcadas.
 5. **Clubes:** hasta tres paneles por rama. Al abrir uno, el panel se expande y muestra por qué aparece, los datos del catálogo, el contacto (si existe) y la fuente.
@@ -29,7 +29,8 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 | Parte | Estado |
 | --- | --- |
 | Catálogo de clubes | **Real**: 31 organizaciones de `data/catalogo-clubes.csv`, extraídas el 29-10-2026 de los directorios públicos de ESPOL. |
-| Conversación | **Simulada**: preguntas fijas en `lib/demo/engine.ts`. |
+| Conversación | **Simulada**: preguntas fijas en `lib/demo/engine.ts`. La interfaz de chat usa assistant-ui, pero no hay ningún modelo detrás. |
+| Dictado y lectura en voz alta | **Del navegador**: Web Speech API. Ningún servicio de pago ni clave del proyecto. |
 | Perfil propuesto | **Reglas**: detección de palabras clave (`lib/demo/vocabulary.ts`). Si no reconoce nada, conserva el texto del estudiante para que lo corrija. |
 | Ramas | **Agrupación editorial** del equipo (`lib/catalog/branches.ts`), basada en el campo `categoria`. No es un dato oficial. |
 | Orden y explicaciones | **Reglas**: cuentan las coincidencias entre el perfil y la descripción o categoría del catálogo. Cada explicación cita la palabra exacta del catálogo que coincidió. No se muestran puntajes. |
@@ -47,6 +48,7 @@ lib/types.ts              tipos compartidos (Club, Profile, Recommendation…)
 lib/catalog/              carga y normalización del catálogo, ramas
 lib/engine/               contrato DiscoveryEngine y validación de recomendaciones
 lib/demo/                 motor de demostración por reglas
+lib/speech/               adaptadores de dictado y lectura en voz alta (Web Speech API)
 scripts/csv-a-json.mjs    regenera data/catalogo-clubes.json desde el CSV
 ```
 
@@ -87,9 +89,45 @@ Pasos sugeridos:
 
 Que el formato sea válido no garantiza que la explicación sea verdadera: las explicaciones requieren revisión manual.
 
+## Chat y audio
+
+La conversación usa [assistant-ui](https://www.assistant-ui.com) (`@assistant-ui/react` 0.15) con `useExternalStoreRuntime`: los mensajes siguen viviendo en `Experience.tsx` y el runtime solo los presenta, así que hay una sola fuente de verdad y el motor de demostración no cambió.
+
+- **Adaptador** (`components/experience/Conversation.tsx`): convierte cada `ChatMessage` conservando su ID y rol; `isRunning` refleja la espera de la siguiente pregunta; `isSendDisabled` bloquea el envío mientras llega la pregunta y al terminar; las sugerencias del turno se pasan como `suggestions` y se envían con un clic sin borrar lo que el estudiante ya había escrito.
+- **Sin funciones de modelo:** no se pasan `onEdit`, `onReload`, `onCancel` ni `setMessages`, por lo que no aparecen editar, regenerar, cancelar ni ramas.
+- **Composer:** crece con el texto, máximo 500 caracteres (también para el dictado). Enter envía, Shift + Enter agrega una línea y se respeta la composición IME. Mientras llega la pregunta se puede seguir escribiendo, pero no enviar.
+- **Historial:** se desplaza dentro del panel y solo sigue el final si el estudiante ya está abajo. Los lectores de pantalla escuchan cada pregunta nueva una sola vez.
+- **Cierre:** al terminar se ocultan el composer y las sugerencias, el micrófono se detiene y el foco pasa a «Revisar mi perfil».
+
+### Dictado (voz a texto)
+
+`lib/speech/dictation.ts` implementa el `DictationAdapter` de assistant-ui con el reconocimiento de voz del navegador. No usa `WebSpeechDictationAdapter` directamente porque hacía falta explicar cada error y probar varios idiomas.
+
+- Solo empieza al pulsar el micrófono; el mismo botón lo detiene. Nunca envía lo reconocido: el texto queda en el cuadro para revisarlo y editarlo.
+- Idioma: `es-EC`; si el navegador no lo admite, prueba `es-419` y luego `es-ES`.
+- Al composer solo llegan frases finales y se agregan después de lo que ya estaba escrito. El texto provisional se muestra aparte, así no se duplican transcripciones parciales y se puede seguir escribiendo mientras se dicta.
+- Mensajes para permiso denegado, falta de micrófono, falta de red, silencio, idioma no disponible y navegador sin soporte. Escribir siempre sigue disponible.
+- Se detiene al salir del chat, al terminar la conversación, al enviar desde el cuadro y al llegar a 500 caracteres.
+
+**Limitaciones según navegador.** Chrome y Edge envían el audio a un servicio de reconocimiento del propio navegador: necesitan conexión y el audio no se procesa solo en el dispositivo. Safari (macOS e iOS) también lo ofrece y puede depender de los servicios de dictado de Apple. Firefox no tiene reconocimiento de voz: allí el micrófono aparece como no disponible. La calidad del español y la disponibilidad de `es-EC` dependen del navegador. En Chrome para Android el modo continuo puede comportarse distinto.
+
+### Lectura en voz alta (texto a voz)
+
+`lib/speech/synthesis.ts` implementa el `SpeechSynthesisAdapter` con `speechSynthesis`. Cada mensaje de la guía tiene «Escuchar respuesta», que pasa a «Detener lectura» mientras suena.
+
+- Elige una voz en español: primero `es-EC`, luego otras de Latinoamérica, luego `es-ES`. Si el sistema no tiene voces en español, el navegador usa la que tenga.
+- Nunca se reproduce sola y nunca suenan dos lecturas a la vez. Se detiene al salir del chat y al empezar a dictar.
+- Si el navegador no tiene `speechSynthesis`, el botón no aparece y el texto sigue disponible.
+
+No hay conversación de voz en tiempo real.
+
+### Probado y pendiente
+
+Se verificaron en el navegador integrado: el recorrido completo hasta Clubes, el envío por texto y por sugerencias, el bloqueo durante la espera y al terminar, el diseño en escritorio y teléfono (incluida una altura reducida como la del teclado abierto), el error de permiso del micrófono y el caso sin soporte. La lógica de transcripción (texto previo, parciales, duplicados, idioma de respaldo, límite) y la de lectura (una sola a la vez, detener) se probaron con las API del navegador simuladas. **No se probó la captura real del micrófono ni la reproducción real de voz**: falta probar en Chrome, Edge, Safari y Android.
+
 ## Accesibilidad y diseño
 
-- Botones semánticos, foco visible, navegación completa con teclado y foco movido al título de cada paso.
+- Botones semánticos, foco visible, navegación completa con teclado y foco movido al título de cada paso. Los botones de micrófono y lectura cambian de etiqueta sin perder el foco.
 - `prefers-reduced-motion`: Motion usa `reducedMotion="user"` y el CSS desactiva transiciones. Las conexiones SVG se dibujan sin animación.
 - Las conexiones SVG son decorativas (`aria-hidden`): la relación rama → club también está en el texto.
 - Diseño para escritorio (paneles lado a lado que se expanden) y teléfono (lectura vertical).
@@ -98,6 +136,7 @@ Que el formato sea válido no garantiza que la explicación sea verdadera: las e
 ## Pendientes
 
 - Cargar las fotos de los clubes.
-- Conectar Gemma y registrar el modelo realmente probado y sus límites.
+- Conectar Gemma y registrar el modelo realmente probado y sus límites. Al conectarlo, `isRunning` y `onNew` del adaptador de assistant-ui ya están listos; habría que añadir `onCancel` solo si el motor permite cancelar.
+- Probar dictado y lectura con micrófono y altavoces reales en Chrome, Edge, Safari (macOS e iOS) y Chrome para Android.
 - Revisar contactos y vigencia de cada organización. Conseguir logos y fotos con permiso.
 - Elegir licencia.

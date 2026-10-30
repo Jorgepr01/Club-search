@@ -56,8 +56,14 @@ export function Experience() {
     setStep("chat");
   };
 
+  // Un envío a la vez y ninguno después de cerrar la conversación, aunque lleguen dos clics seguidos.
+  const sendingRef = useRef(false);
+
   const send = async (text: string) => {
-    const history: ChatMessage[] = [...messages, { id: newId(), role: "user", text }];
+    const value = text.trim();
+    if (!value || sendingRef.current || turn?.readyForProfile) return;
+    sendingRef.current = true;
+    const history: ChatMessage[] = [...messages, { id: newId(), role: "user", text: value }];
     setMessages(history);
     setThinking(true);
     setError(null);
@@ -72,6 +78,7 @@ export function Experience() {
     } catch {
       setError("No se pudo obtener la respuesta. Tu conversación sigue aquí; intenta enviar de nuevo.");
     } finally {
+      sendingRef.current = false;
       setThinking(false);
     }
   };
