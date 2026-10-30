@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { categoryLabel, typeLabel } from "@/lib/catalog";
-import type { BranchId, Club, ClubContact } from "@/lib/types";
+import { typeLabel, upcomingEvents } from "@/lib/catalog";
+import type { BranchId, Club, ClubContact, ClubEvent, ClubLink } from "@/lib/types";
 import { ClubArt } from "./ClubArt";
-import { formatDate } from "./format";
+import { formatDate, formatEventStart, plural } from "./format";
 
 interface ClubPanelProps {
   club: Club;
@@ -27,6 +27,8 @@ const UNAVAILABLE = "Información no disponible";
 export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSelect }: ClubPanelProps) {
   const detailsId = `detalles-${club.id}`;
   const meta = [typeLabel(club.type), club.faculty].filter(Boolean).join(", ");
+  // Solo se calcula con el reverso abierto; así "próximos" se evalúa al momento de mirarlo.
+  const events = flipped ? upcomingEvents(club.id) : [];
   const frontButton = useRef<HTMLButtonElement>(null);
   const backButton = useRef<HTMLButtonElement>(null);
   const focusAfterFlip = useRef(false);
@@ -95,6 +97,7 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
             <div className="club__back-title">
               {meta && <p className="club__back-meta">{meta}</p>}
               <h3 className="club__back-name">{club.name}</h3>
+              {club.statusLabel && <p className="club__status">{club.statusLabel}: la plataforma aún no lo registra con líder.</p>}
             </div>
             <button ref={backButton} type="button" className="club__flip club__flip--back" onClick={selectFromButton}>
               <FlipIcon />
@@ -114,9 +117,13 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
             <h4 className="club__subhead">Lo que dice el catálogo</h4>
             <dl className="facts">
               <Fact label="Descripción" value={club.description} wide />
-              <Fact label="Tipo" value={typeLabel(club.type)} />
-              <Fact label="Facultad" value={club.faculty} />
-              <Fact label="Categoría" value={categoryLabel(club.category)} />
+              <Fact label="Facultad" value={club.facultyName ?? club.faculty} />
+              <Fact label="Ubicación" value={club.location} />
+              <Fact label="Áreas" value={club.interestAreas.length > 0 ? club.interestAreas.join(", ") : null} />
+              <Fact
+                label="Miembros"
+                value={club.membersCount ? plural(club.membersCount, "miembro registrado", "miembros registrados") : null}
+              />
               <Fact label="Actividades" value={club.activities?.join(", ") ?? null} />
               <Fact label="Requisitos" value={club.requirements} />
               <Fact label="Horario" value={club.schedule} />
@@ -124,6 +131,24 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
                 <dt>Contacto</dt>
                 <dd>
                   <Contact contact={club.contact} />
+                </dd>
+              </div>
+              <div className="facts__row facts__row--wide">
+                <dt>Redes</dt>
+                <dd>
+                  <LinkList links={club.socialLinks} empty="No hay enlaces en la plataforma" />
+                </dd>
+              </div>
+              <div className="facts__row facts__row--wide">
+                <dt>Documentos</dt>
+                <dd>
+                  <LinkList links={club.documents} empty="No hay documentos públicos" />
+                </dd>
+              </div>
+              <div className="facts__row facts__row--wide">
+                <dt>Próximos eventos</dt>
+                <dd>
+                  <EventList events={events} />
                 </dd>
               </div>
               <div className="facts__row facts__row--wide">
@@ -135,7 +160,7 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
                       <span className="sr-only"> (se abre en otra pestaña)</span>
                     </a>
                   ) : (
-                    <span className="facts__missing">{UNAVAILABLE}</span>
+                    <span>Plataforma de clubes de ESPOL</span>
                   )}
                   {club.extractedAt && <span className="facts__aside">Consultado el {formatDate(club.extractedAt)}</span>}
                 </dd>
@@ -202,6 +227,50 @@ function Contact({ contact }: { contact: ClubContact | null }) {
         <span>{contact.raw}</span>
       )}
       {UNVERIFIED[contact.kind] && <span className="facts__aside">{UNVERIFIED[contact.kind]}</span>}
+    </>
+  );
+}
+
+function LinkList({ links, empty }: { links: ClubLink[]; empty: string }) {
+  if (links.length === 0) return <span className="facts__missing">{empty}</span>;
+  return (
+    <ul className="linklist">
+      {links.map((l) => (
+        <li key={l.href}>
+          <a href={l.href} target="_blank" rel="noopener noreferrer">
+            {l.label}
+            <span className="sr-only"> (se abre en otra pestaña)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const MAX_EVENTS_SHOWN = 3;
+
+function EventList({ events }: { events: ClubEvent[] }) {
+  if (events.length === 0) return <span className="facts__missing">No hay eventos próximos registrados</span>;
+  return (
+    <>
+      <ul className="events">
+        {events.slice(0, MAX_EVENTS_SHOWN).map((e) => (
+          <li key={e.id} className="events__item">
+            <span className="events__name">{e.name}</span>
+            <span className="events__when">
+              {formatEventStart(e.start)} · {e.mode}
+              {e.place ? ` · ${e.place}` : ""}
+            </span>
+            <span className="events__tags">
+              {e.membersOnly && <span className="events__tag">Solo miembros</span>}
+              <span className="events__tag">{e.registrationOpen ? "Inscripción abierta" : "Inscripción cerrada"}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      {events.length > MAX_EVENTS_SHOWN && (
+        <span className="facts__aside">y {events.length - MAX_EVENTS_SHOWN} más en la plataforma de clubes</span>
+      )}
     </>
   );
 }

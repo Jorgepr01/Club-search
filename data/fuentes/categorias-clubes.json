@@ -1,0 +1,4 @@
+{
+  "_nota": "Categoría por id de la plataforma. Tiene prioridad sobre la del directorio. Cada valor debe existir en CATEGORY_BRANCHES (lib/catalog/branches.ts). Ejemplo: \"67\": \"electronica_robotica\".",
+  "_pendientes": ["62", "63", "64", "65", "66", "67", "68", "69", "70", "74", "75", "76"]
+}

@@ -21,7 +21,7 @@ Abre <http://localhost:3000>. Para una versión de producción: `npm run build &
 2. **Conversación:** pantalla amplia con respuestas sugeridas, texto libre o dictado por voz si el navegador lo admite. El primer envío abre el perfil propuesto; desde allí se puede volver al chat y seguir respondiendo.
 3. **Perfil:** intereses y objetivos como etiquetas editables y disponibilidad como texto. Hay que confirmarlo para seguir.
 4. **Ramas:** árbol con conexiones SVG desde «Tu perfil». Las ramas relacionadas con el perfil aparecen marcadas.
-5. **Clubes:** hasta tres paneles por rama. Al abrir uno, el panel se expande y muestra por qué aparece, los datos del catálogo, el contacto (si existe) y la fuente.
+5. **Clubes:** hasta tres paneles por rama. Al abrir uno, el panel se expande y muestra por qué aparece, los datos del catálogo (facultad, ubicación, áreas, miembros), contacto, redes, documentos públicos, próximos eventos (calculados al abrir el panel) y la fuente. Si el club tiene un evento abierto con inscripción, también aparece como razón.
 6. **Navegación:** «Volver a las ramas», «Explorar otra rama», «Ver otras organizaciones de esta rama» y los pasos de la barra superior.
 
 ## Qué está simulado y qué es real
@@ -59,11 +59,12 @@ Las fuentes están en `data/fuentes/`:
 | `clubes-plataforma.json` | **Fuente principal** (40 clubes de la plataforma de clubes): nombre, sigla, descripción, ubicación, facultad, áreas de interés, redes, documentos públicos, miembros y estado. |
 | `directorio-oe.csv` / `.json` | Directorio de Bienestar (31 organizaciones). Aporta `tipo`, `categoria`, `contacto` y `fuente_url` a los clubes que también están en la plataforma. |
 | `cruce-directorio.json` | Cruce manual entre ids del directorio y de la plataforma. Las 3 organizaciones con `null` (asociaciones de facultad) solo existen en el directorio y se conservan. |
+| `categorias-clubes.json` | Categoría por id de la plataforma (tiene prioridad sobre la del directorio). Aquí se asignan las categorías de los clubes que no estaban en el directorio. |
 | `eventos-plataforma.json` | Eventos de los clubes. |
 
 1. Reemplaza o edita los archivos de `data/fuentes/` (si cambias el CSV, ejecuta `node scripts/csv-a-json.mjs`).
 2. Ejecuta `npm run catalogo`: fusiona las fuentes, valida (ids únicos, eventos con club existente, URLs y fechas válidas) y escribe `data/catalogo-clubes.json` y `data/eventos-clubes.json`. Falla si hay errores y lista como avisos los clubes sin descripción o sin categoría.
-3. La plataforma no trae `categoria`: los clubes sin categoría caen en «Otras organizaciones» hasta que se asigne en `CATEGORY_BRANCHES` (`lib/catalog/branches.ts`) y se complete en el cruce o en el directorio.
+3. La plataforma no trae `categoria`: los clubes sin categoría caen en «Otras organizaciones» hasta que se asigne en `categorias-clubes.json` y su valor exista en `CATEGORY_BRANCHES` (`lib/catalog/branches.ts`). `npm run catalogo` lista los pendientes.
 4. Los eventos se filtran al abrir la página (`upcomingEvents`), no al compilar.
 
 ## Añadir fotos y logos de clubes

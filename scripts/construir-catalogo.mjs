@@ -16,6 +16,9 @@ const directorio = leer("directorio-oe.json");
 const cruce = leer("cruce-directorio.json");
 delete cruce._nota;
 const eventosFuente = leer("eventos-plataforma.json");
+const categorias = leer("categorias-clubes.json");
+delete categorias._nota;
+delete categorias._pendientes;
 
 const errores = [];
 const avisos = [];
@@ -39,6 +42,10 @@ for (const d of directorio) if (!(d.id in cruce)) error(`cruce: falta el id ${d.
 const idsPlataforma = new Set(plataforma.map((p) => String(p.id)));
 for (const platId of dirDePlataforma.keys()) {
   if (!idsPlataforma.has(platId)) error(`cruce: el id ${platId} no existe en la plataforma`);
+}
+
+for (const id of Object.keys(categorias)) {
+  if (!idsPlataforma.has(id)) error(`categorias-clubes: el id ${id} no existe en la plataforma`);
 }
 
 // El contacto del directorio solo se conserva si aporta algo que la plataforma no trae.
@@ -76,10 +83,10 @@ const clubes = plataforma.map((p) => {
     estado: p.status,
     estado_etiqueta: p.status_label,
     tipo: dir?.tipo ?? null,
-    categoria: dir?.categoria ?? null,
+    categoria: categorias[id] ?? dir?.categoria ?? null,
     contacto: contactoUtil(dir?.contacto ?? null, redes),
     fuente_url: dir?.fuente_url ?? null,
-    fecha_extraccion: FECHA_PLATAFORMA,
+    fecha_extraccion: dir?.fecha_extraccion ?? FECHA_PLATAFORMA,
   };
 });
 
