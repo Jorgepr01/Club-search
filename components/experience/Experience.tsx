@@ -10,6 +10,7 @@ import { ClubResults, type ClubResultsControls } from "./ClubResults";
 import { Conversation } from "./Conversation";
 import { InterestTree } from "./InterestTree";
 import { ProfileEditor } from "./ProfileEditor";
+import { StepNav } from "./StepNav";
 import type { Step } from "./steps";
 import { Welcome } from "./Welcome";
 import { VoiceGuide } from "./VoiceGuide";
@@ -165,6 +166,7 @@ export function Experience() {
             <img className="brand__kokoa" src="/Kokoa.svg" alt="Kokoa" />
             Comunidad ESPOL
           </button>
+          {step !== "welcome" && <StepNav current={step} reachable={reachable} onSelect={goTo} />}
           <p className="demo-tag">Demo sin IA</p>
         </header>
 
