@@ -63,10 +63,14 @@ export interface Branch {
 }
 
 export interface Profile {
+  name: string;
+  career: string;
   interests: string[];
   goals: string[];
   availability: string | null;
 }
+
+export const MAX_PROFILE_INTERESTS = 4;
 
 export interface ChatMessage {
   id: string;

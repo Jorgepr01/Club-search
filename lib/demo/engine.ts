@@ -1,7 +1,14 @@
 import { BRANCH_BY_ID } from "@/lib/catalog/branches";
 import type { DiscoveryEngine, AssistantTurn } from "@/lib/engine/types";
 import { validateRecommendations, MAX_RECOMMENDATIONS } from "@/lib/engine/validate";
-import type { BranchId, ChatMessage, Club, Profile, Recommendation } from "@/lib/types";
+import {
+  MAX_PROFILE_INTERESTS,
+  type BranchId,
+  type ChatMessage,
+  type Club,
+  type Profile,
+  type Recommendation,
+} from "@/lib/types";
 import {
   GOALS,
   INTERESTS,
@@ -118,8 +125,13 @@ export function profileFromAnswers(answers: string[]): Profile {
   const [interestAnswer = "", goalAnswer = "", availabilityAnswer = ""] = answers;
 
   return {
+    name: "",
+    career: "",
     // Si no reconocemos nada, conservamos lo que escribió para que pueda corregirlo.
-    interests: interests.length > 0 ? interests : interestAnswer ? [shorten(interestAnswer, 60)] : [],
+    interests: (interests.length > 0 ? interests : interestAnswer ? [shorten(interestAnswer, 60)] : []).slice(
+      0,
+      MAX_PROFILE_INTERESTS,
+    ),
     goals: goals.length > 0 ? goals : goalAnswer ? [shorten(goalAnswer, 60)] : [],
     availability:
       availabilityAnswer && !UNKNOWN_AVAILABILITY.test(normalizeText(availabilityAnswer))
