@@ -84,7 +84,7 @@ Comportamiento esperado:
 - Cubrir los tres temas en el orden intereses → objetivos → disponibilidad, una pregunta a la vez. Si una respuesta ya cubre varios, saltar los cubiertos.
 - **Tope de turnos:** si el historial ya tiene 6 mensajes del estudiante, el servidor fuerza `readyForProfile: true` aunque falte información.
 - El turno con `readyForProfile: true` cierra la conversación con un texto como «Listo. Armé un borrador de tu perfil con lo que escribiste. Revísalo y corrige lo que no encaje antes de seguir.»
-- Después de ese cierre (panel del Perfil), responder con normalidad y volver a poner `readyForProfile: true` solo si el estudiante aportó un dato nuevo del perfil. En ese caso la interfaz llama otra vez a `/api/perfil`, pero **solo rellena campos que el estudiante dejó vacíos**: no pisa lo que ya editó.
+- Después de ese cierre (panel del Perfil), responder con normalidad y volver a poner `readyForProfile: true` solo si el estudiante aportó un dato nuevo del perfil. En ese caso la interfaz llama otra vez a `/api/perfil`: rellena nombre, carrera y disponibilidad solo si están vacíos, y a intereses y objetivos **les suma** las etiquetas nuevas (sin repetir, intereses hasta 4). Nunca quita ni pisa lo que el estudiante ya editó.
 - No recomendar clubes en el chat ni prometer resultados: eso ocurre en el paso Clubes.
 
 ---

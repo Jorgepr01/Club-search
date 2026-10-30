@@ -60,7 +60,7 @@ export const MAX_REASONS = 3;
 export function fold(text: string): string {
   return text
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
@@ -72,7 +72,16 @@ function plain(text: string): string {
 }
 
 function clip(text: string, max: number): string {
-  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+  if (text.length <= max) return text;
+  // Corta en la última palabra completa para que la tarjeta no muestre media palabra.
+  const cut = text.slice(0, max - 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[\s,;:.]+$/, "")}…`;
+}
+
+/** Gemma a veces envuelve el objeto pedido en una lista de un elemento. */
+function unwrap(value: unknown): unknown {
+  return Array.isArray(value) && value.length === 1 ? value[0] : value;
 }
 
 /** Lista de textos limpios, sin vacíos ni repetidos, recortada a `limit` elementos. */
@@ -92,7 +101,8 @@ function cleanList(value: unknown, maxLength: number, limit: number): string[] {
   return result;
 }
 
-export function validateTurn(value: unknown): Checked<AssistantTurn> {
+export function validateTurn(raw: unknown): Checked<AssistantTurn> {
+  const value = unwrap(raw);
   if (typeof value !== "object" || value === null) return { ok: false, error: "La respuesta no es un objeto JSON." };
   const { text, suggestions, readyForProfile } = value as Record<string, unknown>;
   if (typeof text !== "string" || !plain(text)) return { ok: false, error: "Falta «text»." };
@@ -108,10 +118,12 @@ export function validateTurn(value: unknown): Checked<AssistantTurn> {
 }
 
 /** `userTexts`: lo que escribió el estudiante, para comprobar que nombre y carrera son literales. */
-export function validateProfile(value: unknown, userTexts: string[]): Checked<Profile> {
+export function validateProfile(raw: unknown, userTexts: string[]): Checked<Profile> {
+  const value = unwrap(raw);
   if (typeof value !== "object" || value === null) return { ok: false, error: "La respuesta no es un objeto JSON." };
   const { name, career, interests, goals, availability } = value as Record<string, unknown>;
-  if (!Array.isArray(interests)) return { ok: false, error: "«interests» debe ser una lista." };
+  // Gemma a veces devuelve una etiqueta suelta en lugar de una lista: se acepta como lista de una.
+  const asList = (field: unknown) => (typeof field === "string" ? [field] : field);
 
   const said = userTexts.map(fold);
   const literal = (field: unknown, max: number) => {
@@ -120,7 +132,7 @@ export function validateProfile(value: unknown, userTexts: string[]): Checked<Pr
     return text && said.some((t) => t.includes(fold(text))) ? text : "";
   };
 
-  const cleanInterests = cleanList(interests, MAX_LABEL, MAX_PROFILE_INTERESTS);
+  const cleanInterests = cleanList(asList(interests), MAX_LABEL, MAX_PROFILE_INTERESTS);
   if (cleanInterests.length === 0) {
     const first = userTexts.find((t) => t.trim());
     if (first) cleanInterests.push(clip(first.trim(), MAX_LABEL));
@@ -134,30 +146,40 @@ export function validateProfile(value: unknown, userTexts: string[]): Checked<Pr
       name: literal(name, 60),
       career: literal(career, 80),
       interests: cleanInterests,
-      goals: cleanList(goals, MAX_LABEL, MAX_GOALS),
+      goals: cleanList(asList(goals), MAX_LABEL, MAX_GOALS),
       availability: cleanAvailability || null,
     },
   };
 }
 
-/** Ajusta una razón a su límite si se pasa por poco; si se pasa mucho, la rechaza. */
-function fitReason(reason: string, max: number): string | null {
-  const text = plain(reason);
-  if (text.length <= max) return text;
-  return text.length <= max * 1.25 ? clip(text, max) : null;
+/** Ajusta una razón a su límite cortando en la última palabra completa. */
+function fitReason(reason: string, max: number): string {
+  return clip(plain(reason), max);
 }
 
-/** Acepta `{ recommendations: [...] }` o la lista sola y exige exactamente `expected` clubes. */
+/**
+ * Saca la lista de clubes de las formas que Gemma devuelve: `{ recommendations: [...] }`, la lista sola,
+ * `[{ recommendations: [...] }]` o un objeto con otra clave cuyo valor es la lista.
+ */
+function recommendationList(value: unknown): unknown {
+  const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+  if (Array.isArray(value)) {
+    return value.length === 1 && isRecord(value[0]) && !("clubId" in value[0]) ? recommendationList(value[0]) : value;
+  }
+  if (!isRecord(value)) return value;
+  if (Array.isArray(value.recommendations)) return value.recommendations;
+  if ("clubId" in value) return [value];
+  const lists = Object.values(value).filter(Array.isArray);
+  return lists.length === 1 ? lists[0] : value;
+}
+
+/** Exige exactamente `expected` clubes válidos, con razones ajustadas a su límite. */
 export function checkRecommendations(
   value: unknown,
   allowedIds: ReadonlySet<string>,
   expected: number,
 ): Checked<Recommendation[]> {
-  const list =
-    typeof value === "object" && value !== null && !Array.isArray(value)
-      ? (value as Record<string, unknown>).recommendations
-      : value;
-  const base = validateRecommendations(list, allowedIds);
+  const base = validateRecommendations(recommendationList(value), allowedIds);
   if (!base.ok) return base;
   if (base.recommendations.length !== expected) {
     return { ok: false, error: `Se esperaban ${expected} clubes y llegaron ${base.recommendations.length}.` };
@@ -170,10 +192,6 @@ export function checkRecommendations(
     for (const reason of reasons) {
       if (fitted.length === MAX_REASONS) break;
       const text = fitReason(reason, fitted.length === 0 ? MAX_FIRST_REASON : MAX_OTHER_REASON);
-      if (text === null) {
-        const max = fitted.length === 0 ? MAX_FIRST_REASON : MAX_OTHER_REASON;
-        return { ok: false, error: `Una razón de ${clubId} supera ${max} caracteres.` };
-      }
       if (!text || seen.has(fold(text))) continue;
       seen.add(fold(text));
       fitted.push(text);

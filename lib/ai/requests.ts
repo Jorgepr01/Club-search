@@ -38,11 +38,15 @@ export interface RecommendRequest {
   exclude: string[];
 }
 
+/** El editor del perfil permite más objetivos de los que se envían: se toman los primeros `max`. */
 function stringList(value: unknown, max: number): string[] {
-  if (!Array.isArray(value) || value.length > max || !value.every((v) => typeof v === "string" && v.length <= 120)) {
+  if (!Array.isArray(value) || value.length > 20 || !value.every((v) => typeof v === "string" && v.length <= 120)) {
     throw new ApiError("bad_request", "Perfil inválido.");
   }
-  return value.map((v: string) => v.trim()).filter(Boolean);
+  return value
+    .map((v: string) => v.trim())
+    .filter(Boolean)
+    .slice(0, max);
 }
 
 export function parseRecommendRequest(body: unknown): RecommendRequest {

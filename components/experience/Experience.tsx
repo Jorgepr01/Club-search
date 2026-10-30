@@ -5,7 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CLUB_BY_ID, clubsInBranch } from "@/lib/catalog";
 import { engine, usesModel } from "@/lib/engine/current";
 import { EngineError, type AssistantTurn } from "@/lib/engine/types";
-import type { BranchId, ChatMessage, Profile, Recommendation } from "@/lib/types";
+import { fold } from "@/lib/engine/validate";
+import { MAX_PROFILE_INTERESTS, type BranchId, type ChatMessage, type Profile, type Recommendation } from "@/lib/types";
 import { ClubResults, type ClubResultsControls } from "./ClubResults";
 import { Conversation } from "./Conversation";
 import { InterestTree } from "./InterestTree";
@@ -17,6 +18,13 @@ import { VoiceGuide } from "./VoiceGuide";
 
 const QUOTA_MESSAGE = "Se alcanzó el límite de uso del modelo. Espera un momento e intenta de nuevo; tu conversación sigue aquí.";
 const isQuota = (error: unknown) => error instanceof EngineError && error.kind === "quota";
+
+/** Añade lo nuevo que propone el motor sin quitar ni repetir lo que ya está en el perfil. */
+function addNew(current: string[], proposed: string[], max: number): string[] {
+  const seen = new Set(current.map(fold));
+  const added = proposed.filter((item) => !seen.has(fold(item)));
+  return [...current, ...added].slice(0, Math.max(max, current.length));
+}
 
 let messageCounter = 0;
 const newId = () => `m${++messageCounter}`;
@@ -78,13 +86,13 @@ export function Experience() {
       setTurn(next);
       if (next.readyForProfile) {
         const proposed = await engine.proposeProfile(history);
-        // Conserva lo que la persona ya escribió o editó a mano en el perfil.
+        // Conserva lo que la persona ya escribió o editó a mano; de intereses y objetivos solo suma los nuevos.
         setProfile((current) => ({
           ...proposed,
           name: current?.name || proposed.name,
           career: current?.career || proposed.career,
-          interests: current?.interests.length ? current.interests : proposed.interests,
-          goals: current?.goals.length ? current.goals : proposed.goals,
+          interests: addNew(current?.interests ?? [], proposed.interests, MAX_PROFILE_INTERESTS),
+          goals: addNew(current?.goals ?? [], proposed.goals, MAX_PROFILE_INTERESTS),
           availability: current?.availability ?? proposed.availability,
         }));
         setProfileConfirmed(false);

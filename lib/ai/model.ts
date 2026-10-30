@@ -35,24 +35,30 @@ export async function callModel(
   const model = process.env.AI_MODEL;
   if (!key || !model) throw new ApiError("unavailable", "Falta AI_API_KEY o AI_MODEL.");
 
-  const res = await fetch(`${ENDPOINT}/${encodeURIComponent(model)}:generateContent`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: system }] },
-      contents: messages.map((m) => ({
-        role: m.role === "assistant" ? "model" : "user",
-        parts: [{ text: m.text }],
-      })),
-      generationConfig: {
-        temperature,
-        responseMimeType: "application/json",
-        thinkingConfig: { thinkingLevel: thinking },
-      },
-    }),
-    signal,
-    cache: "no-store",
+  const body = JSON.stringify({
+    systemInstruction: { parts: [{ text: system }] },
+    contents: messages.map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.text }],
+    })),
+    generationConfig: {
+      temperature,
+      responseMimeType: "application/json",
+      thinkingConfig: { thinkingLevel: thinking },
+    },
   });
+  const request = () =>
+    fetch(`${ENDPOINT}/${encodeURIComponent(model)}:generateContent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+      body,
+      signal,
+      cache: "no-store",
+    });
+
+  // Gemini API devuelve 500 de forma intermitente con Gemma: se reintenta una vez.
+  let res = await request();
+  if (res.status >= 500) res = await request();
   if (res.status === 429) throw new ApiError("quota", "El proveedor devolvió límite de cuota.");
   if (!res.ok) throw new ApiError("unavailable", `El proveedor respondió ${res.status}.`);
 
