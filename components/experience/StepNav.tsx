@@ -1,13 +1,6 @@
 "use client";
 
-export type Step = "welcome" | "conversation" | "profile" | "tree" | "clubs";
-
-const STEPS: { id: Exclude<Step, "welcome">; label: string }[] = [
-  { id: "conversation", label: "Conversación" },
-  { id: "profile", label: "Perfil" },
-  { id: "tree", label: "Ramas" },
-  { id: "clubs", label: "Clubes" },
-];
+import { STEPS, type Step } from "./steps";
 
 interface StepNavProps {
   current: Step;

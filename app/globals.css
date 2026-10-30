@@ -6,12 +6,17 @@
    ------------------------------------------------------------------ */
 :root {
   color-scheme: light;
-  --wall: #edeaf2;
-  --wall-deep: #e1dcea;
-  --plaque: #fbfafd;
+  --wall: #f7f6fa;
+  --wall-deep: #e9e7f0;
+  --plaque: #ffffff;
   --ink: #1c1a3a;
   --ink-soft: #55517a;
   --line: rgb(28 26 58 / 0.14);
+  /* Órbita de la portada: superficies claras y violeta moderado para la selección. */
+  --bubble-surface: #eceaf3;
+  --bubble-ink: #46475f;
+  --violet: #7b61d1;
+  --violet-deep: #5f48b4;
 
 
   --depth-1: 0 1px 0 rgb(255 255 255 / 0.7) inset, 0 1px 2px rgb(28 26 58 / 0.08),
@@ -21,6 +26,8 @@
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: clamp(16px, 4vw, 48px);
+  /* Alto de la guía fija al pie (ver VoiceGuide.css). */
+  --guide-h: 86px;
 }
 
 /* ------------------------------------------------------------------
@@ -177,20 +184,6 @@ a {
   font-size: 0.97rem;
 }
 
-.chip--suggest {
-  padding: 0 16px;
-  border: 1.5px solid var(--ink);
-  background: var(--plaque);
-  color: var(--ink);
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgb(28 26 58 / 0.08);
-}
-
-.chip--suggest:hover {
-  background: #fff;
-}
-
 .chip--term {
   gap: 2px;
   padding: 0 4px 0 14px;
@@ -297,9 +290,9 @@ a {
 }
 
 .brand {
-  display: inline-grid;
-  justify-items: start;
-  gap: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   padding: 6px 4px;
   border: 0;
   background: none;
@@ -310,22 +303,9 @@ a {
   white-space: nowrap;
 }
 
-.brand__identity {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand__mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #2e5bd6 0 25%, #c93a2c 25% 50%, #f0a030 50% 75%, #7fd3c0 75%);
-}
-
 .brand__kokoa {
-  width: 52px;
-  height: 24px;
+  width: 62px;
+  height: 28px;
   object-fit: contain;
 }
 
@@ -430,209 +410,466 @@ a {
    ------------------------------------------------------------------ */
 .welcome {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   align-items: center;
-  gap: clamp(24px, 5vw, 72px);
-  min-height: calc(100vh - 120px);
-  min-height: calc(100dvh - 120px);
+  gap: clamp(8px, 2vw, 32px);
+  min-height: calc(100dvh - 104px - var(--guide-h));
+}
+
+/* La portada cabe en una pantalla: poco aire bajo la órbita. */
+.app[data-step="welcome"] .stage {
+  padding-bottom: 24px;
+}
+
+/* El texto acompaña a la órbita: tamaño contenido y por encima de la banda si se cruzan. */
+.welcome__copy {
+  position: relative;
+  z-index: 2;
+  max-width: 30rem;
+  padding-bottom: 4vh;
 }
 
 .welcome__title {
-  margin: 0 0 24px;
-  font-size: clamp(3.1rem, 7.2vw, 6.9rem);
+  margin: 0 0 18px;
+  font-size: clamp(2.3rem, 3.5vw, 3.45rem);
   font-weight: 800;
-  font-variation-settings: "wdth" 80, "opsz" 96;
-  line-height: 0.88;
-  letter-spacing: -0.035em;
+  font-variation-settings: "wdth" 86, "opsz" 72;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
 }
 
 .welcome__lede {
   max-width: 34ch;
-  margin: 0 0 32px;
-  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
-  line-height: 1.5;
+  margin: 0 0 28px;
+  font-size: clamp(1.02rem, 1.2vw, 1.12rem);
+  line-height: 1.55;
 }
 
-.welcome__notes {
-  max-width: 52ch;
-  margin-top: 36px;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-}
-
-.welcome__notes p {
-  margin: 0 0 8px;
-}
-
-/* Órbita: anillo con fotos de clubes que lo recorren dejando estela. */
+/* ------------------------------------------------------------------
+   Órbita: cuadrante superior izquierdo de un anillo grande, recortado
+   por la sección. La geometría se calcula en ClubOrbit.tsx.
+   ------------------------------------------------------------------ */
 .orbit {
-  --R: min(410px, 52vh);
-  --T: 54px;
-  --badge: 78px;
-  --cx: calc(100% + 24px);
-  --cy: 58%;
-  --period: 7.5s;
+  --label-w: 160px;
   position: relative;
   align-self: stretch;
-  min-height: min(78vh, 680px);
-  margin-right: calc(-1 * var(--gutter) - max(0px, calc(50vw - 640px)));
-  /* Recorta arriba, abajo y a la derecha; a la izquierda el anillo puede asomar sobre el texto. */
-  clip-path: inset(0 0 0 -60vw);
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(540px, calc(100dvh - 104px - var(--guide-h)), 820px);
+  /* Llega hasta el borde derecho de la ventana: el anillo se recorta ahí. */
+  margin-right: calc(-1 * var(--gutter) - max(0px, (100vw - 1280px) / 2));
 }
 
-.orbit__ring {
+.orbit__stage {
+  position: relative;
+  flex: 1;
+  overflow: clip;
+}
+
+.orbit__band-shadow {
   position: absolute;
-  left: var(--cx);
-  top: var(--cy);
-  width: calc(2 * (var(--R) + var(--T)));
-  aspect-ratio: 1;
-  translate: -50% -50%;
+  inset: 0;
+  filter: drop-shadow(0 18px 26px rgb(70 71 95 / 0.1));
+  pointer-events: none;
+}
+
+/* Banda con volumen suave: bordes algo más oscuros y cresta clara hacia el interior. */
+.orbit__band {
+  position: absolute;
   border-radius: 50%;
   background: radial-gradient(
     circle closest-side,
-    transparent calc(100% - 2 * var(--T)),
-    rgb(28 26 58 / 0.09) calc(100% - 2 * var(--T) + 1px),
-    #f3f1f7 calc(100% - 1.55 * var(--T)),
-    #ffffff calc(100% - 1 * var(--T)),
-    #ebe8f0 calc(100% - 0.35 * var(--T)),
-    rgb(213 208 224 / 0) 100%
+    #d3cfe0 var(--ri),
+    #dedbe8 calc(var(--ri) + var(--bw) * 0.16),
+    #e9e7f1 calc(var(--ri) + var(--bw) * 0.42),
+    #e6e3ee calc(var(--ri) + var(--bw) * 0.62),
+    #e2dfeb calc(var(--ri) + var(--bw) * 0.84),
+    #d6d2e2 var(--ro)
   );
-  filter: drop-shadow(0 26px 34px rgb(28 26 58 / 0.13));
+  mask: radial-gradient(
+    circle closest-side,
+    transparent calc(var(--ri) - 0.75px),
+    #000 calc(var(--ri) + 0.75px),
+    #000 calc(var(--ro) - 0.75px),
+    transparent calc(var(--ro) + 0.75px)
+  );
+}
+
+.orbit[data-ready] .orbit__band-shadow {
+  animation: orbit-band-in 0.8s var(--ease) both;
 }
 
 .orbit__track {
   position: absolute;
-  left: var(--cx);
-  top: var(--cy);
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* Cada brazo recorre solo el arco visible: entra por arriba (--from) y sale por abajo (--to).
-   La curva arranca rápido, se frena frente al texto y acelera un poco al salir. */
-.orbit__arm {
-  --from: 18deg;
-  --to: -208deg;
-  --ease: cubic-bezier(0.3, 0.5, 0.7, 0.62);
+/* Cada club se ubica por su centro; ClubOrbit escribe transform, --s (profundidad) y la estela. */
+.orbit__item {
+  --s: 1;
   position: absolute;
-  transform: rotate(var(--rest));
-  animation: orbit-arc var(--period) var(--ease) var(--delay) infinite;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  will-change: transform;
+  transition: opacity 0.25s;
 }
 
+.orbit:not([data-ready]) .orbit__item {
+  visibility: hidden;
+}
+
+.orbit[data-active] .orbit__item:not([data-active]) {
+  opacity: 0.6;
+}
+
+/* Estela suave detrás de la burbuja; nunca cubre el logo. Desaparece al detenerse. */
 .orbit__trail {
   position: absolute;
-  top: calc(-1 * var(--R) - var(--badge) * 0.34);
   left: 0;
-  width: calc(var(--badge) * 2.2);
-  height: calc(var(--badge) * 0.68);
+  top: 0;
+  width: calc(var(--bubble) * 1.9);
+  height: calc(var(--bubble) * 0.9);
+  translate: 0 -50%;
+  rotate: var(--trail-a, 0rad);
+  scale: var(--s);
+  transform-origin: 0 50%;
   border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    color-mix(in oklab, var(--lacquer) 45%, var(--ink)) 25%,
-    transparent
-  );
-  filter: blur(12px);
-  opacity: 0.12;
-  animation: orbit-trail var(--period) linear var(--delay) infinite;
+  background: radial-gradient(ellipse 100% 50% at 0% 50%, rgb(123 97 209 / 0.26), rgb(123 97 209 / 0) 100%);
+  opacity: var(--trail-o, 0);
+  pointer-events: none;
 }
 
-.orbit__badge {
+.orbit__bubble {
+  --lift: 1;
   position: absolute;
-  top: calc(-1 * var(--R) - var(--badge) / 2);
-  left: calc(var(--badge) / -2);
-  display: grid;
-  place-items: center;
-  width: var(--badge);
-  height: var(--badge);
+  left: calc(var(--bubble) / -2);
+  top: calc(var(--bubble) / -2);
+  width: var(--bubble);
+  height: var(--bubble);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  scale: var(--lift);
+  transition: scale 0.3s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.orbit__item[data-active] .orbit__bubble {
+  --lift: 1.08;
+}
+
+.orbit__bubble:focus-visible {
+  outline: none;
+}
+
+.orbit__disc {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--bubble) * 0.03);
   overflow: hidden;
   border-radius: 50%;
-  background:
-    linear-gradient(160deg, rgb(255 255 255 / 0.3), transparent 50%),
-    var(--lacquer);
-  color: var(--lacquer-ink);
-  box-shadow: 0 0 0 3px #fff, 0 6px 14px -8px rgb(28 26 58 / 0.28);
-  transform: rotate(calc(-1 * var(--rest)));
-  animation: orbit-arc-counter var(--period) var(--ease) var(--delay) infinite;
+  background: radial-gradient(circle at 35% 28%, #f8f7fb 0%, var(--bubble-surface) 62%);
+  color: var(--bubble-ink);
+  box-shadow:
+    inset 0 0 0 1px rgb(70 71 95 / 0.1),
+    inset 0 2px 0 rgb(255 255 255 / 0.9),
+    0 10px 22px -12px rgb(70 71 95 / 0.38),
+    0 1px 3px rgb(70 71 95 / 0.12);
+  scale: var(--s);
+  transition: box-shadow 0.2s;
 }
 
-.orbit__badge img {
+.orbit__item[data-active] .orbit__disc {
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px var(--violet),
+    0 14px 28px -12px rgb(123 97 209 / 0.55);
+}
+
+.orbit__bubble:focus-visible .orbit__disc {
+  outline: 3px solid var(--ink);
+  outline-offset: 9px;
+}
+
+/* Logos: completos, centrados y con margen. Fotos: recorte circular que llena la burbuja. */
+.orbit__disc[data-media] {
+  background: #fff;
+}
+
+.orbit__disc img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.orbit__mark {
-  font: 800 0.95rem/1 var(--font-display);
-  font-variation-settings: "wdth" 80;
-  letter-spacing: -0.01em;
-}
-
-.orbit__mark[data-long],
-.club-art__monogram[data-long] {
-  font-size: 0.78rem;
-}
-
-.orbit__mark img {
-  width: 72%;
-  height: 72%;
+.orbit__disc[data-media="logo"] img {
+  width: 68%;
+  height: 68%;
   object-fit: contain;
 }
 
-.orbit[data-paused] .orbit__arm,
-.orbit[data-paused] .orbit__trail,
-.orbit[data-paused] .orbit__badge {
-  animation-play-state: paused;
+.orbit__glyph {
+  width: calc(var(--bubble) * 0.26);
+  height: calc(var(--bubble) * 0.26);
 }
 
-.orbit__pause {
+.orbit__mono {
+  max-width: 84%;
+  font: 800 calc(var(--bubble) * 0.2) / 1 var(--font-display);
+  font-variation-settings: "wdth" 80;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.orbit__mono[data-long] {
+  font-size: calc(var(--bubble) * 0.15);
+}
+
+/* El nombre va fuera de la imagen y no se escala: siempre legible. */
+.orbit__label {
   position: absolute;
-  right: calc(var(--gutter) + 4px);
-  bottom: 18px;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgb(251 250 253 / 0.9);
+  left: 50%;
+  top: calc(var(--bubble) * (0.5 + var(--s) / 2) + 9px);
+  translate: -50% 0;
+  display: -webkit-box;
+  width: max-content;
+  max-width: var(--label-w);
+  padding: 5px 11px 6px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.94);
   color: var(--ink);
-  font: 600 0.85rem/1 var(--font-body);
+  font: 700 0.86rem/1.2 var(--font-body);
+  text-align: center;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-shadow: 0 0 0 1px rgb(70 71 95 / 0.08), 0 4px 12px -8px rgb(70 71 95 / 0.35);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.orbit__item[data-active] .orbit__label {
+  background: var(--violet);
+  color: #fff;
+}
+
+/* Ficha del club: fuera del recorte de la órbita. En escritorio ClubOrbit la ubica junto al club. */
+.orbit__card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(320px, 80vw);
+  padding: 16px 18px 18px;
+  border-radius: 20px;
+  background: var(--plaque);
+  box-shadow: 0 0 0 1px rgb(70 71 95 / 0.06), 0 24px 44px -24px rgb(70 71 95 / 0.45);
+  animation: orbit-card-in 0.25s var(--ease);
+}
+
+.orbit__card[hidden] {
+  display: none;
+}
+
+.orbit__club p {
+  margin: 0;
+}
+
+.orbit__club-branch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.orbit__club-chip {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--lacquer);
+  color: var(--lacquer-ink);
+}
+
+.orbit__club-chip svg {
+  width: 16px;
+  height: 16px;
+}
+
+.orbit__club-name {
+  margin-top: 10px !important;
+  font: 800 1.4rem/1.05 var(--font-display);
+  font-variation-settings: "wdth" 88;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.orbit__club-kind {
+  margin-top: 4px !important;
+  color: var(--violet-deep);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.orbit__club-desc {
+  margin-top: 8px !important;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.orbit__close {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px 0 12px;
+  border: 1.5px solid var(--violet);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--violet-deep);
+  font: 700 0.9rem/1 var(--font-body);
   cursor: pointer;
 }
 
-@keyframes orbit-arc {
+.orbit__close:hover {
+  background: rgb(123 97 209 / 0.08);
+}
+
+.orbit__close-icon {
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  clip-path: polygon(8% 0, 100% 50%, 8% 100%);
+}
+
+/* Controles discretos, fuera del recorrido: en la zona interior del arco. */
+.orbit__controls {
+  position: absolute;
+  right: calc(var(--gutter) + max(0px, (100vw - 1280px) / 2));
+  bottom: 14px;
+  z-index: 4;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.7);
+  box-shadow: 0 0 0 1px rgb(70 71 95 / 0.08);
+}
+
+.orbit__control {
+  display: inline-grid;
+  grid-auto-flow: column;
+  place-items: center;
+  gap: 7px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--bubble-ink);
+  font: 700 0.84rem/1 var(--font-body);
+  cursor: pointer;
+}
+
+.orbit__control:hover {
+  background: rgb(70 71 95 / 0.08);
+  color: var(--ink);
+}
+
+.orbit__chevron {
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  rotate: 45deg;
+  translate: -2px 0;
+}
+
+.orbit__chevron[data-dir="back"] {
+  rotate: -135deg;
+  translate: 2px 0;
+}
+
+.orbit__pause-icon {
+  width: 10px;
+  height: 11px;
+  background: linear-gradient(90deg, currentColor 0 34%, transparent 34% 66%, currentColor 66%);
+}
+
+.orbit__pause-icon[data-state="play"] {
+  background: currentColor;
+  clip-path: polygon(8% 0, 100% 50%, 8% 100%);
+}
+
+@keyframes orbit-band-in {
   from {
-    transform: rotate(var(--from));
-  }
-  to {
-    transform: rotate(var(--to));
+    opacity: 0;
   }
 }
 
-@keyframes orbit-arc-counter {
+@keyframes orbit-card-in {
   from {
-    transform: rotate(calc(-1 * var(--from)));
-  }
-  to {
-    transform: rotate(calc(-1 * var(--to)));
-  }
-}
-
-/* La estela acompaña a la velocidad: marcada al entrar, casi nula en el tramo lento. */
-@keyframes orbit-trail {
-  0% {
-    opacity: 0.32;
-  }
-  28%,
-  72% {
-    opacity: 0.08;
-  }
-  100% {
-    opacity: 0.22;
+    opacity: 0;
   }
 }
 
 /* ------------------------------------------------------------------
-   Conversación
+   Conversación: panel de chat (assistant-ui) con historial desplazable
+   y composer fijo al pie del panel.
    ------------------------------------------------------------------ */
+
+/* En este paso la página ocupa la pantalla y solo se desplaza el historial. */
+.app[data-step="chat"] {
+  height: 100dvh;
+}
+
+.app[data-step="chat"] .stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: clamp(12px, 2.5vh, 28px);
+}
+
+.app[data-step="chat"] .stage__inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chat {
+  container: chat / inline-size;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
 .profile-workspace {
   display: grid;
   grid-template-areas:
@@ -675,11 +912,11 @@ a {
 }
 
 .conversation-drawer[data-open="true"] {
-  align-self: stretch;
+  position: sticky;
+  top: 16px;
+  align-self: start;
   overflow: visible;
-  padding: 24px;
-  border: 1px solid var(--line);
-  box-shadow: var(--depth-2);
+  background: transparent;
   visibility: visible;
   transition:
     padding 0.32s var(--ease),
@@ -706,42 +943,18 @@ a {
   margin: 0;
 }
 
-.conversation-drawer .section-head {
-  margin: 0 0 18px;
-}
-
-.conversation-drawer .section-head__title {
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-}
-
-.chat__head {
-  display: grid;
-  gap: 12px;
-}
-
-.chat__heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.chat__heading .section-head__title {
-  margin-bottom: 0;
-}
-
 .chat__close {
   display: grid;
-  flex: 0 0 48px;
+  flex: 0 0 44px;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  margin-top: -6px;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--plaque);
   color: var(--ink);
-  font: 400 2.5rem/1 var(--font-body);
+  font: 400 1.9rem/1 var(--font-body);
   cursor: pointer;
 }
 
@@ -749,90 +962,180 @@ a {
   background: #fff;
 }
 
-.chat {
-  max-width: 760px;
-  margin: 0 auto;
+/* Mi chat dentro del panel: sin altura propia no tendría dónde desplazarse. */
+.conversation-drawer .chat {
+  display: flex;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  flex-direction: column;
 }
 
-.conversation-page {
+.conversation-drawer .chat__panel {
+  flex: none;
+  height: min(78dvh, 680px);
+  margin-top: 0;
+}
+
+.chat__panel {
+  flex: 1;
+  margin-top: 8px;
   display: flex;
-  width: min(100%, 1120px);
-  min-height: clamp(360px, 68vh, 680px);
-  margin: 0 auto;
-  padding: clamp(24px, 4vw, 48px);
-  border: 1px solid var(--line);
-  border-radius: 24px;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 26px;
   background: var(--plaque);
   box-shadow: var(--depth-2);
 }
 
-.conversation-page .chat {
+.chat__bar {
   display: flex;
-  width: 100%;
-  max-width: none;
-  flex-direction: column;
-  margin: 0;
-}
-
-.conversation-page .chat__head {
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
   align-items: center;
-  gap: 24px;
-  max-width: none;
+  gap: 12px;
+  padding: 14px 16px 12px 20px;
+  border-bottom: 1px solid var(--line);
 }
 
-.conversation-page .chat__log {
+/* Marca del asistente: los cuatro colores de la marca en un cuadrado. */
+.chat__avatar,
+.msg__avatar {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: conic-gradient(#2e5bd6 0 25%, #c93a2c 0 50%, #f0a030 0 75%, #7fd3c0 0);
+  box-shadow: inset 0 0 0 1px rgb(28 26 58 / 0.08);
+}
+
+.chat__title {
+  min-width: 0;
+  margin: 0;
+  font: 800 1.3rem/1.15 var(--font-display);
+  font-variation-settings: "wdth" 88;
+  letter-spacing: -0.015em;
+}
+
+.chat__viewport {
   flex: 1;
-  min-height: 200px;
-  max-height: min(42vh, 360px);
+  min-height: 140px;
   overflow-y: auto;
   overscroll-behavior: contain;
+  padding: 22px 20px;
+  background: var(--wall);
 }
 
-.chat__log {
+.chat__viewport:focus-visible {
+  outline-offset: -3px;
+}
+
+.chat__messages {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 18px;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
-.conversation-drawer .chat__log {
-  flex: 1;
-  min-height: 180px;
-  max-height: none;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+.msg {
+  display: flex;
+  gap: 10px;
+  animation: msg-in 0.28s var(--ease) both;
 }
 
-.bubble {
-  max-width: min(82%, 560px);
-  padding: 12px 18px 14px;
+.msg--assistant {
+  align-self: flex-start;
+  max-width: min(90%, 600px);
 }
 
-.bubble p {
+.msg--user {
+  align-self: flex-end;
+  max-width: min(82%, 520px);
+}
+
+.msg__avatar {
+  width: 30px;
+  height: 30px;
+  margin-top: 22px;
+  border-radius: 9px;
+}
+
+.msg__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.msg__who {
+  margin: 0 0 0 2px;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.msg__bubble {
+  padding: 11px 16px 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.msg__bubble p {
   margin: 0;
 }
 
-.bubble__who {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  opacity: 0.72;
-}
-
-.bubble--assistant {
-  align-self: flex-start;
-  border-radius: 22px 22px 22px 6px;
+.msg--assistant .msg__bubble {
+  border-radius: 6px 20px 20px 20px;
   background: var(--plaque);
   box-shadow: var(--depth-1);
 }
 
-.bubble--user {
-  align-self: flex-end;
-  border-radius: 22px 22px 6px 22px;
+.msg--user .msg__bubble {
+  border-radius: 20px 20px 6px 20px;
   background: var(--ink);
   color: var(--wall);
+}
+
+.msg__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.msg__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px 0 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: 600 0.82rem/1 var(--font-body);
+  cursor: pointer;
+}
+
+.msg__action:hover {
+  background: rgb(28 26 58 / 0.07);
+  color: var(--ink);
+}
+
+.msg__action[data-active] {
+  background: var(--violet-deep);
+  color: #fff;
+}
+
+.msg__action .icon {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 .dots {
@@ -867,41 +1170,127 @@ a {
   }
 }
 
-.chat .chips {
-  margin-bottom: 14px;
+/* Pie del panel: estado, composer o cierre. */
+.chat__dock {
+  flex: none;
+  padding: 12px 16px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--plaque);
+}
+
+.chat__alert {
+  margin: 0 0 10px;
+}
+
+.chat__status-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgb(28 26 58 / 0.05);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.chat__status[data-tone="problem"] .chat__status-text {
+  border: 1px solid rgb(201 58 44 / 0.45);
+  background: #fff4f2;
+  color: #6b1d15;
 }
 
 .composer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  gap: 10px;
-  padding: 10px;
-  border-radius: 22px;
-  background: var(--plaque);
-  box-shadow: var(--depth-1);
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 5px 5px 5px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 24px;
+  background: #fff;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.composer:focus-within {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgb(28 26 58 / 0.12);
 }
 
 .composer__input {
-  width: 100%;
+  flex: 1;
   min-width: 0;
-  box-sizing: border-box;
-  min-height: 48px;
-  padding: 12px 12px;
+  min-height: 44px;
+  max-height: 40dvh;
+  padding: 10px 0;
   border: 0;
   background: transparent;
   color: var(--ink);
   font: inherit;
+  line-height: 1.45;
   resize: none;
 }
 
+/* El anillo de foco lo dibuja el contenedor (:focus-within). */
 .composer__input:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 0;
-  border-radius: 12px;
+  outline: none;
+}
+
+.composer__input::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
+.composer__tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.composer__send {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.18s, color 0.18s;
+}
+
+.composer__send {
+  background: var(--ink);
+  color: var(--wall);
+}
+
+.composer__send:hover:not(:disabled) {
+  background: #2e2b5a;
+}
+
+.composer__send:disabled {
+  background: rgb(28 26 58 / 0.12);
+  color: var(--ink-soft);
+  cursor: not-allowed;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.composer__hint {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 6px 0;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.composer__count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
 }
 
 .composer__actions {
@@ -957,7 +1346,112 @@ a {
 
 .chat__done {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgb(123 97 209 / 0.13), rgb(127 211 192 / 0.22));
+}
+
+.chat__done > div {
+  flex: 1 1 15rem;
+}
+
+.chat__done-title {
+  margin: 0;
+  font: 750 1.15rem/1.2 var(--font-display);
+}
+
+.chat__done-text {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+}
+
+/* Chat angosto (teléfono, ventana estrecha o el lateral del perfil): menos marco,
+   más espacio para leer. Depende del ancho del chat, no de la ventana. */
+@container chat (max-width: 640px) {
+  .chat__panel {
+    border-radius: 20px;
+  }
+
+  .chat__bar {
+    gap: 10px;
+    padding: 10px 10px 10px 14px;
+  }
+
+  .chat__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .chat__title {
+    font-size: 1.12rem;
+  }
+
+  .chat__viewport {
+    padding: 16px 14px;
+  }
+
+  .chat__messages {
+    gap: 14px;
+  }
+
+  .msg__bubble {
+    padding: 10px 14px 11px;
+  }
+
+  .msg__avatar {
+    display: none;
+  }
+
+  .msg--assistant {
+    max-width: 94%;
+  }
+
+  .msg--user {
+    max-width: 88%;
+  }
+
+  .chat__dock {
+    padding: 10px 10px 10px;
+  }
+
+  .chat__done {
+    padding: 14px;
+  }
+
+}
+
+/* En el chat más angosto el botón final ocupa todo el ancho para tocarlo fácil. */
+@container chat (max-width: 480px) {
+  .chat__review {
+    flex: 1 1 100%;
+  }
+}
+
+/* En pantallas táctiles el atajo de teclado no aplica. */
+@media (pointer: coarse) {
+  .composer__keys {
+    display: none;
+  }
+}
+
+/* Poca altura (teléfono horizontal o teclado virtual abierto): la página se desplaza
+   en lugar de aplastar el panel, y el historial conserva una altura legible. */
+@media (max-height: 660px) {
+  .app[data-step="chat"] {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .chat__viewport {
+    flex: none;
+    height: max(160px, 42dvh);
+  }
 }
 
 /* ------------------------------------------------------------------
@@ -1326,68 +1820,66 @@ a {
   transform: rotateY(180deg);
 }
 
+/* El logo, la foto o la sigla al centro; el margen deja libre el pequeño pliegue. */
 .club-art {
+  --art-pad-x: 24px;
+  --art-pad-y: 52px;
   position: relative;
+  display: grid;
+  place-items: center;
   flex: 1 1 auto;
   min-height: 200px;
+  padding: var(--art-pad-y) var(--art-pad-x);
   overflow: hidden;
   background:
-    linear-gradient(165deg, rgb(255 255 255 / 0.28), transparent 45%),
+    radial-gradient(closest-side, rgb(255 255 255 / 0.2), transparent),
     var(--tone);
   color: var(--lacquer-ink);
+  container-type: inline-size;
 }
 
-.club-art__photo {
+.club[data-active] .club-art {
+  --art-pad-x: 32px;
+}
+
+.club-art__media {
   position: absolute;
+  inset: var(--art-pad-y) var(--art-pad-x);
+  width: calc(100% - 2 * var(--art-pad-x));
+  height: calc(100% - 2 * var(--art-pad-y));
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgb(28 26 58 / 0.18));
+}
+
+.club-art[data-media="photo"] .club-art__media {
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  filter: none;
 }
 
-.club-art__monogram img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.club-art__field {
+/* Funde el borde inferior de la foto con el bloque de texto. */
+.club-art[data-media="photo"]::after {
+  content: "";
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  background: linear-gradient(to bottom, transparent 72%, color-mix(in oklab, var(--tone) 40%, transparent));
+  pointer-events: none;
 }
 
-.club-art__glyph {
-  position: absolute;
-  right: -12%;
-  bottom: -14%;
-  width: min(78%, 300px);
-  aspect-ratio: 1;
-  opacity: 0.9;
-}
-
-.club-art__glyph svg {
-  width: 100%;
-  height: 100%;
-  stroke-width: 0.9;
-}
-
-.club-art__monogram {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  display: grid;
-  place-items: center;
-  min-width: 58px;
-  height: 58px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: var(--plaque);
-  color: var(--ink);
-  font: 800 1rem/1 var(--font-display);
-  letter-spacing: -0.01em;
-  box-shadow: var(--depth-1);
+/* La sigla ocupa el ancho disponible según su número de letras. */
+.club-art__mono {
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, calc(100cqi / (var(--chars) * 0.64)), 5.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  font-variation-settings: "wdth" 88;
+  letter-spacing: -0.02em;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .club__body {
@@ -1421,104 +1913,12 @@ a {
   -webkit-box-orient: vertical;
 }
 
-/* Indicador de giro en la esquina superior derecha de cada cara. */
-.club__flip {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 44px;
-  padding: 0 16px 0 12px;
-  border: 1px solid rgb(255 255 255 / 0.6);
-  border-radius: 999px;
-  background: rgb(251 250 253 / 0.78);
-  color: var(--ink);
-  font: 700 0.86rem/1 var(--font-body);
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  box-shadow: var(--depth-1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.4);
-  backdrop-filter: blur(10px) saturate(1.4);
-  transition: background-color 0.25s, transform 0.25s var(--ease);
-}
-
-.club__flip:hover {
-  background: var(--plaque);
-}
-
-.club__flip:active {
-  transform: scale(0.96);
-}
-
-.club__flip:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: 3px;
-}
-
-.club__flip-icon {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.6s var(--ease);
-}
-
-.club[data-active]:hover .club__flip-icon,
-.club[data-active] .club__flip:focus-visible .club__flip-icon {
-  transform: rotate(180deg);
-}
-
-.club__flip--open {
-  width: 44px;
-  padding: 0;
-  justify-content: center;
-}
-
-.club:not([data-active]):hover .club__flip--open {
-  background: var(--plaque);
-  transform: scale(1.08);
-}
-
-/* Al volverse principal, el icono da una vuelta para sugerir que la tarjeta gira. */
-.club[data-active] .club__face--front .club__flip-icon {
-  animation: flip-hint 1.4s 0.5s var(--ease) both;
-}
-
-@keyframes flip-hint {
-  from {
-    transform: rotate(-360deg);
-  }
-}
-
-.club:hover .club__face--front .club__flip-icon {
-  animation: none;
-}
-
-.club__flip--back {
-  position: static;
-  flex: none;
-  border-color: transparent;
-  background: var(--ink);
-  color: var(--wall);
-  box-shadow: none;
-}
-
-.club__flip--back:hover {
-  background: color-mix(in oklab, var(--ink) 85%, var(--lacquer));
-}
-
 .club__back-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 16px 16px 22px;
+  padding: 20px 62px 18px 22px;
   border-bottom: 1px solid var(--line);
   background:
     linear-gradient(165deg, rgb(255 255 255 / 0.5), transparent 60%),
@@ -1627,59 +2027,6 @@ a {
    Pantallas angostas: lectura vertical
    ------------------------------------------------------------------ */
 @media (max-width: 879px) {
-  .conversation-page {
-    min-height: 0;
-    padding: 22px;
-  }
-
-  .conversation-page .chat__head {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-
-  .conversation-page .chat__log {
-    max-height: min(42dvh, 360px);
-  }
-
-  .profile-workspace {
-    grid-template-areas:
-      "toggle"
-      "profile";
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .profile-workspace[data-conversation-open="true"] {
-    grid-template-areas:
-      "toggle"
-      "profile"
-      "conversation";
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 0;
-  }
-
-  .conversation-drawer:not([data-open="true"]) {
-    display: none;
-  }
-
-  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
-    display: block;
-    align-self: start;
-    overflow: hidden;
-  }
-
-  .profile-workspace[data-conversation-open="true"] .conversation-drawer .chat {
-    height: auto;
-  }
-
-  .profile-workspace[data-conversation-open="true"] .conversation-drawer .chat__log {
-    flex: initial;
-    max-height: min(42dvh, 360px);
-  }
-
-  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
-    margin-top: 20px;
-  }
-
   .topbar {
     flex-wrap: wrap;
     gap: 8px 12px;
@@ -1707,27 +2054,66 @@ a {
     clip: rect(0, 0, 0, 0);
   }
 
+  /* Título breve, luego la órbita y después el resto del texto. */
   .welcome {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     align-content: start;
-    gap: 32px;
+    gap: 0;
     min-height: 0;
-    padding-top: 12px;
+    padding-top: 4px;
+  }
+
+  .welcome__copy {
+    display: contents;
+  }
+
+  .welcome__title {
+    margin: 0 0 4px;
+    font-size: clamp(2rem, 8.6vw, 2.75rem);
+  }
+
+  .welcome__lede {
+    order: 2;
+    margin: 18px 0 20px;
+  }
+
+  .welcome__copy > .btn {
+    order: 3;
+    justify-self: start;
   }
 
   .orbit {
-    --R: 250px;
-    --T: 34px;
-    --badge: 54px;
-    --cx: calc(100% + 30px);
-    --cy: 62%;
-    order: -1;
-    min-height: 260px;
-    margin-left: calc(-1 * var(--gutter));
+    --label-w: 128px;
+    order: 1;
+    min-height: 0;
+    margin-inline: calc(-1 * var(--gutter));
   }
 
-  .orbit__pause {
-    bottom: 10px;
+  .orbit__stage {
+    flex: none;
+    height: clamp(300px, 86vw, 420px);
+  }
+
+  /* Al tocar un club, la ficha se abre bajo el arco, sobre el texto, con su botón para cerrar. */
+  .orbit__card {
+    top: calc(100% - 12px);
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    max-width: 460px;
+  }
+
+  .orbit__club-name {
+    font-size: 1.25rem;
+  }
+
+  /* En móvil el interior del arco es estrecho: los controles van debajo del recorrido. */
+  .orbit__controls {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    align-self: flex-end;
+    margin: 6px var(--gutter) 0;
   }
 
   .placards {
@@ -1807,7 +2193,14 @@ a {
   }
 
   .club-art {
+    --art-pad-x: 24px;
+    --art-pad-y: 48px;
     min-height: 170px;
+  }
+
+  .club[data-active] .club-art {
+    --art-pad-x: 24px;
+    min-height: 240px;
   }
 
   .facts {
@@ -1865,15 +2258,49 @@ a {
     transform: rotateY(180deg);
   }
 
-  .orbit__arm,
-  .orbit__trail,
-  .orbit__badge {
-    animation: none !important;
+  .orbit__trail {
+    display: none;
+  }
+}
+
+/* Solo en pantallas muy angostas la conversación pasa debajo del perfil; en el resto queda a un lado. */
+@media (max-width: 639px) {
+  .profile-workspace {
+    grid-template-areas:
+      "toggle"
+      "profile";
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .orbit__trail,
-  .orbit__pause {
+  .profile-workspace[data-conversation-open="true"] {
+    grid-template-areas:
+      "toggle"
+      "profile"
+      "conversation";
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .conversation-drawer:not([data-open="true"]) {
     display: none;
+  }
+
+  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
+    display: block;
+    align-self: start;
+    overflow: hidden;
+  }
+
+  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
+    margin-top: 20px;
+  }
+
+  .conversation-drawer .chat__panel {
+    height: min(70dvh, 520px);
+  }
+
+  .conversation-drawer[data-open="true"] {
+    position: static;
   }
 }
 

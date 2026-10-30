@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { typeLabel, upcomingEvents } from "@/lib/catalog";
-import type { BranchId, Club, ClubContact, ClubEvent, ClubLink } from "@/lib/types";
+import type { Club, ClubContact, ClubEvent, ClubLink } from "@/lib/types";
 import { ClubArt } from "./ClubArt";
+import "./ClubPanel.css";
 import { formatDate, formatEventStart, plural } from "./format";
 
 interface ClubPanelProps {
   club: Club;
-  branchId: BranchId;
   reasons: string[];
   tone: number;
   /** Tarjeta principal (más ancha); las otras dos son complementarias. */
@@ -21,10 +21,10 @@ interface ClubPanelProps {
 const UNAVAILABLE = "Información no disponible";
 
 // Tarjeta de dos caras: el frente presenta al club y el reverso trae los detalles.
-// Tocar una complementaria la vuelve principal; tocar la principal la gira. El botón
+// Tocar una complementaria la vuelve principal; tocar la principal la gira. El pliegue
 // de la esquina hace lo mismo y es el control accesible por teclado. La cara oculta
 // queda `inert`.
-export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSelect }: ClubPanelProps) {
+export function ClubPanel({ club, reasons, tone, active, flipped, onSelect }: ClubPanelProps) {
   const detailsId = `detalles-${club.id}`;
   const meta = [typeLabel(club.type), club.faculty].filter(Boolean).join(", ");
   // Solo se calcula con el reverso abierto; así "próximos" se evalúa al momento de mirarlo.
@@ -40,7 +40,9 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
     (flipped ? backButton : frontButton).current?.focus({ preventScroll: true });
   }, [flipped]);
 
-  function selectFromButton() {
+  function selectFromButton(event: React.MouseEvent) {
+    // La tarjeta también escucha el clic; sin esto la acción se ejecutaría dos veces.
+    event.stopPropagation();
     focusAfterFlip.current = active;
     onSelect();
   }
@@ -64,26 +66,19 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
     >
       <div className="club__flipper">
         <div className="club__face club__face--front" inert={flipped}>
-          <ClubArt club={club} branchId={branchId} />
-          {active ? (
-            <button
-              ref={frontButton}
-              type="button"
-              className="club__flip"
-              aria-expanded={flipped}
-              aria-controls={detailsId}
-              onClick={selectFromButton}
-            >
-              <FlipIcon />
-              <span className="club__flip-label">Girar</span>
-              <span className="sr-only"> para ver los detalles de {club.name}</span>
-            </button>
-          ) : (
-            <button ref={frontButton} type="button" className="club__flip club__flip--open" onClick={selectFromButton}>
-              <OpenIcon />
-              <span className="sr-only">Abrir {club.name}</span>
-            </button>
-          )}
+          <ClubArt club={club} />
+          <button
+            ref={frontButton}
+            type="button"
+            className="club-fold"
+            aria-label={active ? `Girar para ver los detalles de ${club.name}` : `Ampliar ${club.name}`}
+            aria-expanded={active ? flipped : undefined}
+            aria-controls={detailsId}
+            onClick={selectFromButton}
+          >
+            <CornerFold />
+            {active ? <FlipIcon /> : <ExpandIcon />}
+          </button>
 
           <div className="club__body">
             <h3 className="club__name">{club.name}</h3>
@@ -99,10 +94,17 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
               <h3 className="club__back-name">{club.name}</h3>
               {club.statusLabel && <p className="club__status">{club.statusLabel}: la plataforma aún no lo registra con líder.</p>}
             </div>
-            <button ref={backButton} type="button" className="club__flip club__flip--back" onClick={selectFromButton}>
+            <button
+              ref={backButton}
+              type="button"
+              className="club-fold club-fold--back"
+              aria-label={`Volver al frente de ${club.name}`}
+              aria-expanded={flipped}
+              aria-controls={detailsId}
+              onClick={selectFromButton}
+            >
+              <CornerFold />
               <FlipIcon />
-              Volver
-              <span className="sr-only"> al frente de {club.name}</span>
             </button>
           </div>
 
@@ -173,9 +175,54 @@ export function ClubPanel({ club, branchId, reasons, tone, active, flipped, onSe
   );
 }
 
+/** El dorso y el borde curvado de la propia esquina de la tarjeta. */
+function CornerFold() {
+  const foldId = useId();
+  const paperId = `${foldId}-paper`;
+  const creaseId = `${foldId}-crease`;
+  const shadowId = `${foldId}-shadow`;
+
+  // La curva sobresale de la diagonal: es el borde de papel levantado, no un triángulo plano.
+  const liftedEdge = "M0 0C4 2 8 7 12 19C17 41 50 33 52 52";
+
+  return (
+    <svg className="club-fold__corner" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id={paperId} gradientUnits="userSpaceOnUse" x1="12" y1="48" x2="42" y2="8">
+          <stop stopColor="var(--corner-shade)" />
+          <stop offset="0.45" stopColor="var(--corner-paper)" />
+          <stop offset="1" stopColor="var(--plaque)" />
+        </linearGradient>
+        <linearGradient id={creaseId} gradientUnits="userSpaceOnUse" x1="14" y1="36" x2="29" y2="19">
+          <stop stopColor="var(--corner-shade)" />
+          <stop offset="0.35" stopColor="var(--corner-shade)" />
+          <stop offset="0.7" stopColor="var(--plaque)" />
+          <stop offset="0.88" stopColor="var(--corner-paper)" />
+          <stop offset="1" stopColor="var(--plaque)" />
+        </linearGradient>
+        <filter id={shadowId} x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="1.6" />
+        </filter>
+      </defs>
+      <path
+        className="club-fold__shadow"
+        d={liftedEdge}
+        transform="translate(-1 3)"
+        filter={`url(#${shadowId})`}
+      />
+      <path d="M0 0H52V52C50 33 17 41 12 19C8 7 4 2 0 0Z" fill={`url(#${paperId})`} />
+      <path
+        d="M0 0C15 7 28 34 52 52C50 33 17 41 12 19C8 7 4 2 0 0Z"
+        fill={`url(#${creaseId})`}
+      />
+      <path className="club-fold__edge" d={liftedEdge} />
+    </svg>
+  );
+}
+
 function FlipIcon() {
   return (
-    <svg className="club__flip-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <svg className="club-fold__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="M3.5 12a8.5 8.5 0 0 1 14.6-5.9L20.5 8.5" />
       <path d="M20.5 3.5v5h-5" />
       <path d="M20.5 12a8.5 8.5 0 0 1-14.6 5.9L3.5 15.5" />
@@ -184,13 +231,11 @@ function FlipIcon() {
   );
 }
 
-function OpenIcon() {
+function ExpandIcon() {
   return (
-    <svg className="club__flip-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M14 4h6v6" />
-      <path d="M20 4l-6.5 6.5" />
-      <path d="M10 20H4v-6" />
-      <path d="M4 20l6.5-6.5" />
+    <svg className="club-fold__icon club-fold__icon--expand" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M14 4h6v6M20 4l-6.5 6.5" />
+      <path d="M10 20H4v-6M4 20l6.5-6.5" />
     </svg>
   );
 }

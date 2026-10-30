@@ -1,17 +1,19 @@
 "use client";
 
-import { MotionConfig, motion } from "motion/react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { clubsInBranch } from "@/lib/catalog";
+import { CLUB_BY_ID, clubsInBranch } from "@/lib/catalog";
 import { demoEngine } from "@/lib/demo/engine";
 import type { AssistantTurn, DiscoveryEngine } from "@/lib/engine/types";
 import type { BranchId, ChatMessage, Profile, Recommendation } from "@/lib/types";
-import { ClubResults } from "./ClubResults";
+import { ClubResults, type ClubResultsControls } from "./ClubResults";
 import { Conversation } from "./Conversation";
 import { InterestTree } from "./InterestTree";
 import { ProfileEditor } from "./ProfileEditor";
-import { StepNav, type Step } from "./StepNav";
+import { StepNav } from "./StepNav";
+import type { Step } from "./steps";
 import { Welcome } from "./Welcome";
+import { VoiceGuide } from "./VoiceGuide";
 
 // Para conectar Gemma, sustituye este motor por uno que implemente DiscoveryEngine
 // llamando a rutas del servidor (ver lib/engine/types.ts y el README).
@@ -19,27 +21,21 @@ const engine: DiscoveryEngine = demoEngine;
 
 let messageCounter = 0;
 const newId = () => `m${++messageCounter}`;
-const emptyProfile: Profile = {
-  name: "",
-  career: "",
-  interests: [],
-  goals: [],
-  availability: null,
-};
 
 export function Experience() {
   const [step, setStep] = useState<Step>("welcome");
+  const [conversationOpen, setConversationOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [turn, setTurn] = useState<AssistantTurn | null>(null);
   const [thinking, setThinking] = useState(false);
-  const [conversationOpen, setConversationOpen] = useState(false);
-  const [profile, setProfile] = useState<Profile>(emptyProfile);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [profileConfirmed, setProfileConfirmed] = useState(false);
   const [branchId, setBranchId] = useState<BranchId | null>(null);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [seenIds, setSeenIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
+  const clubsRef = useRef<ClubResultsControls>(null);
   const firstRender = useRef(true);
 
   // Al cambiar de paso, el foco va al título del nuevo paso para lectores de pantalla y teclado.
@@ -61,52 +57,42 @@ export function Experience() {
       setMessages([{ id: newId(), role: "assistant", text: first.text }]);
       setTurn(first);
     }
-    setConversationOpen(true);
-    setStep("conversation");
+    setStep("chat");
   };
 
+  // Un envío a la vez y ninguno después de cerrar la conversación, aunque lleguen dos clics seguidos.
+  const sendingRef = useRef(false);
+
   const send = async (text: string) => {
-    const history: ChatMessage[] = [...messages, { id: newId(), role: "user", text }];
+    const value = text.trim();
+    // Desde el panel del perfil se puede seguir conversando aunque el borrador ya esté listo.
+    if (!value || sendingRef.current || (turn?.readyForProfile && step !== "profile")) return;
+    sendingRef.current = true;
+    const history: ChatMessage[] = [...messages, { id: newId(), role: "user", text: value }];
     setMessages(history);
     setThinking(true);
     setError(null);
     try {
-      if (step === "conversation") {
-        const [proposed, next] = await Promise.all([engine.proposeProfile(history), engine.reply(history)]);
-        setMessages([...history, { id: newId(), role: "assistant", text: next.text }]);
-        setProfile((current) => ({
-          ...proposed,
-          name: current.name || proposed.name,
-          career: current.career || proposed.career,
-          interests: current.interests.length ? current.interests : proposed.interests,
-          goals: current.goals.length ? current.goals : proposed.goals,
-          availability: current.availability ?? proposed.availability,
-        }));
-        setTurn(next);
-        setProfileConfirmed(false);
-        if (step === "conversation") setConversationOpen(false);
-        setStep("profile");
-        return;
-      }
-
       const next = await engine.reply(history);
       setMessages((m) => [...m, { id: newId(), role: "assistant", text: next.text }]);
+      setTurn(next);
       if (next.readyForProfile) {
         const proposed = await engine.proposeProfile(history);
+        // Conserva lo que la persona ya escribió o editó a mano en el perfil.
         setProfile((current) => ({
           ...proposed,
-          name: current.name || proposed.name,
-          career: current.career || proposed.career,
-          interests: current.interests.length ? current.interests : proposed.interests,
-          goals: current.goals.length ? current.goals : proposed.goals,
-          availability: current.availability ?? proposed.availability,
+          name: current?.name || proposed.name,
+          career: current?.career || proposed.career,
+          interests: current?.interests.length ? current.interests : proposed.interests,
+          goals: current?.goals.length ? current.goals : proposed.goals,
+          availability: current?.availability ?? proposed.availability,
         }));
         setProfileConfirmed(false);
       }
-      setTurn(next);
     } catch {
       setError("No se pudo obtener la respuesta. Tu conversación sigue aquí; intenta enviar de nuevo.");
     } finally {
+      sendingRef.current = false;
       setThinking(false);
     }
   };
@@ -136,20 +122,34 @@ export function Experience() {
   );
 
   const chooseBranch = (id: BranchId) => {
+    if (!profile) return;
     setBranchId(id);
     setStep("clubs");
     void loadRecommendations(id, profile, []);
   };
 
+  const showProfile = () => {
+    setConversationOpen(false);
+    setStep("profile");
+  };
+
   const goTo = (target: Step) => {
-    if (target === "profile") setConversationOpen(false);
+    if (target === "chat" && messages.length === 0) return startConversation();
+    if (target === "profile") return showProfile();
     setStep(target);
   };
 
+  const confirmProfile = () => {
+    setProfileConfirmed(true);
+    setStep("tree");
+  };
+
+  const shownClubIds = recommendations.map((r) => r.clubId).filter((id) => CLUB_BY_ID.has(id));
+
   const reachable: Record<Step, boolean> = {
     welcome: true,
-    conversation: true,
-    profile: true,
+    chat: true,
+    profile: profile !== null,
     tree: profileConfirmed,
     clubs: profileConfirmed && branchId !== null,
   };
@@ -162,111 +162,133 @@ export function Experience() {
         </a>
         <header className="topbar">
           <button type="button" className="brand" onClick={() => setStep("welcome")}>
-            <span className="brand__identity">
-              <span className="brand__mark" aria-hidden="true" />
-              Comunidad ESPOL
-            </span>
             {/* eslint-disable-next-line @next/next/no-img-element -- logo local de Kokoa */}
             <img className="brand__kokoa" src="/Kokoa.svg" alt="Kokoa" />
+            Comunidad ESPOL
           </button>
           {step !== "welcome" && <StepNav current={step} reachable={reachable} onSelect={goTo} />}
           <p className="demo-tag">Demo sin IA</p>
         </header>
 
         <main id="contenido" ref={mainRef} className="stage">
-          <motion.div
-            key={step}
-            className="stage__inner"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {step === "welcome" && <Welcome onStart={startConversation} />}
-            {step === "conversation" && (
-              <section className="conversation-page" aria-label="Conversación para descubrir clubes">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={step}
+              className="stage__inner"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {step === "welcome" && <Welcome onStart={startConversation} />}
+              {step === "chat" && (
                 <Conversation
                   messages={messages}
                   turn={turn}
                   thinking={thinking}
                   error={error}
                   onSend={send}
-                  onReviewProfile={() => goTo("profile")}
-                  onClose={() => {
-                    setConversationOpen(false);
-                    setStep("welcome");
-                  }}
+                  onReviewProfile={() => showProfile()}
                   canReview={profile !== null}
-                  allowReplies={false}
                 />
-              </section>
-            )}
-            {step === "profile" && (
-              <div className="profile-workspace" data-conversation-open={conversationOpen}>
-                {!conversationOpen && (
-                  <button
-                    type="button"
-                    className="btn btn--ghost profile-conversation-toggle"
-                    aria-expanded={false}
-                    aria-controls="conversation-drawer"
-                    onClick={() => setConversationOpen(true)}
-                  >
-                    Abrir conversación
-                  </button>
-                )}
-                <motion.aside
-                  id="conversation-drawer"
-                  className="conversation-drawer"
-                  data-open={conversationOpen}
-                  aria-label="Conversación"
-                  aria-hidden={!conversationOpen}
-                  inert={!conversationOpen}
-                  initial={false}
-                  animate={{ opacity: conversationOpen ? 1 : 0 }}
-                  transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <Conversation
-                    messages={messages}
-                    turn={turn}
-                    thinking={thinking}
-                    error={error}
-                    onSend={send}
-                    onReviewProfile={() => setConversationOpen(false)}
-                    onClose={() => setConversationOpen(false)}
-                    canReview={profile !== null}
-                    allowReplies
+              )}
+              {step === "profile" && profile && (
+                <div className="profile-workspace" data-conversation-open={conversationOpen}>
+                  {!conversationOpen && (
+                    <button
+                      type="button"
+                      className="btn btn--ghost profile-conversation-toggle"
+                      aria-expanded={false}
+                      aria-controls="conversation-drawer"
+                      onClick={() => setConversationOpen(true)}
+                    >
+                      Abrir conversación
+                    </button>
+                  )}
+                  <ProfileEditor
+                    profile={profile}
+                    onChange={(p) => {
+                      setProfile(p);
+                      setProfileConfirmed(false);
+                    }}
+                    onOpenConversation={() => setConversationOpen(true)}
+                    onConfirm={confirmProfile}
                   />
-                </motion.aside>
-                <ProfileEditor
-                  profile={profile}
-                  onChange={(p) => {
-                    setProfile(p);
-                    setProfileConfirmed(false);
-                  }}
-                  onOpenConversation={() => setConversationOpen(true)}
-                  onConfirm={() => {
-                    setProfileConfirmed(true);
-                    setStep("tree");
-                  }}
+                  <motion.aside
+                    id="conversation-drawer"
+                    className="conversation-drawer"
+                    data-open={conversationOpen}
+                    aria-label="Conversación"
+                    aria-hidden={!conversationOpen}
+                    inert={!conversationOpen}
+                    initial={false}
+                    animate={{ opacity: conversationOpen ? 1 : 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Conversation
+                      messages={messages}
+                      turn={turn}
+                      thinking={thinking}
+                      error={error}
+                      onSend={send}
+                      onReviewProfile={() => setConversationOpen(false)}
+                      onClose={() => setConversationOpen(false)}
+                      canReview
+                      allowReplies
+                    />
+                  </motion.aside>
+                </div>
+              )}
+              {step === "tree" && profile && (
+                <InterestTree profile={profile} onChoose={chooseBranch} onEditProfile={() => showProfile()} />
+              )}
+              {step === "clubs" && profile && branchId && (
+                <ClubResults
+                  branchId={branchId}
+                  recommendations={recommendations}
+                  error={error}
+                  onRetry={() => void loadRecommendations(branchId, profile, [])}
+                  onShowOthers={() => void loadRecommendations(branchId, profile, seenIds)}
+                  totalInBranch={clubsInBranch(branchId).length}
+                  onBackToTree={() => setStep("tree")}
+                  onEditProfile={() => showProfile()}
+                  controls={clubsRef}
                 />
-              </div>
-            )}
-            {step === "tree" && (
-              <InterestTree profile={profile} onChoose={chooseBranch} onEditProfile={() => setStep("profile")} />
-            )}
-            {step === "clubs" && branchId && (
-              <ClubResults
-                branchId={branchId}
-                recommendations={recommendations}
-                error={error}
-                onRetry={() => void loadRecommendations(branchId, profile, [])}
-                onShowOthers={() => void loadRecommendations(branchId, profile, seenIds)}
-                totalInBranch={clubsInBranch(branchId).length}
-                onBackToTree={() => setStep("tree")}
-                onEditProfile={() => setStep("profile")}
-              />
-            )}
-          </motion.div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </main>
+
+        <VoiceGuide
+          step={step}
+          voice={{
+            profile,
+            updateProfile: (p) => {
+              setProfile(p);
+              setProfileConfirmed(false);
+            },
+            confirmProfile,
+            setConversationOpen,
+            chooseBranch,
+            clubIds: shownClubIds,
+            openClub: (id) => clubsRef.current?.open(id),
+            flipClub: () => clubsRef.current?.flip(),
+            canShowOthers: branchId !== null && clubsInBranch(branchId).length > shownClubIds.length,
+            showOthers: () => {
+              if (branchId && profile) void loadRecommendations(branchId, profile, seenIds);
+            },
+          }}
+          reachable={reachable}
+          onNavigate={goTo}
+          chatMessage={messages.findLast((message) => message.role === "assistant") ?? null}
+          canConverse={step === "profile" || (step === "chat" && !(turn?.readyForProfile ?? false))}
+          busy={thinking}
+          onSend={(text) => {
+            // En el perfil, la respuesta aparece en el panel de conversación.
+            if (step === "profile") setConversationOpen(true);
+            void send(text);
+          }}
+        />
       </div>
     </MotionConfig>
   );

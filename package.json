@@ -11,6 +11,7 @@
     "logos": "node scripts/descargar-logos.mjs"
   },
   "dependencies": {
+    "@assistant-ui/react": "^0.15.32",
     "motion": "^14.8.0",
     "next": "16.4.3",
     "react": "19.3.0",

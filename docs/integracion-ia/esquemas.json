@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "comunidad-espol/integracion-ia/esquemas.json",
+  "title": "Contrato de la API de IA de Comunidad ESPOL",
+  "description": "Solicitudes y respuestas de /api/chat, /api/perfil y /api/recomendar. Fuente de verdad en prosa: contrato-api.md. Tipos TypeScript: lib/types.ts y lib/engine/types.ts.",
+  "$defs": {
+    "ChatMessage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "text"],
+      "properties": {
+        "role": { "type": "string", "enum": ["assistant", "user"] },
+        "text": { "type": "string", "minLength": 1, "maxLength": 600 }
+      }
+    },
+
+    "ChatRequest": {
+      "description": "Cuerpo de POST /api/chat y POST /api/perfil. Empieza con un mensaje del asistente y termina con uno del estudiante (user: máximo 500 caracteres).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["messages"],
+      "properties": {
+        "messages": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 60,
+          "items": { "$ref": "#/$defs/ChatMessage" }
+        }
+      }
+    },
+
+    "AssistantTurn": {
+      "description": "Respuesta 200 de POST /api/chat. Igual a AssistantTurn en lib/engine/types.ts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "suggestions", "readyForProfile"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "suggestions": {
+          "type": "array",
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 60 }
+        },
+        "readyForProfile": { "type": "boolean" }
+      }
+    },
+
+    "Profile": {
+      "description": "Respuesta 200 de POST /api/perfil. Igual a Profile en lib/types.ts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "career", "interests", "goals", "availability"],
+      "properties": {
+        "name": { "type": "string", "maxLength": 60 },
+        "career": { "type": "string", "maxLength": 80 },
+        "interests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 60 }
+        },
+        "goals": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 60 }
+        },
+        "availability": {
+          "anyOf": [{ "type": "string", "minLength": 1, "maxLength": 120 }, { "type": "null" }]
+        }
+      }
+    },
+
+    "BranchId": {
+      "type": "string",
+      "enum": ["programacion", "robotica", "tierra", "industria", "arte", "cultura", "comunidad", "otras"]
+    },
+
+    "RecommendRequest": {
+      "description": "Cuerpo de POST /api/recomendar. Sin nombre ni carrera; sin candidatos (el servidor los lee del catálogo).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branchId", "profile", "exclude"],
+      "properties": {
+        "branchId": { "$ref": "#/$defs/BranchId" },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["interests", "goals", "availability"],
+          "properties": {
+            "interests": { "type": "array", "maxItems": 4, "items": { "type": "string", "maxLength": 60 } },
+            "goals": { "type": "array", "maxItems": 4, "items": { "type": "string", "maxLength": 60 } },
+            "availability": { "anyOf": [{ "type": "string", "maxLength": 120 }, { "type": "null" }] }
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "maxItems": 50,
+          "items": { "type": "string", "pattern": "^club-[0-9]+$" }
+        }
+      }
+    },
+
+    "ModelCandidate": {
+      "description": "Club tal como el servidor lo envía al modelo dentro del prompt de recomendación. Se omiten los campos null.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^club-[0-9]+$" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "faculty": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+
+    "ServiceRecommendRequest": {
+      "description": "Opción B: cuerpo que Next.js reenvía al servicio propio en /api/recomendar. RecommendRequest más la rama y los candidatos pendientes.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branchId", "profile", "exclude", "branch", "candidates"],
+      "properties": {
+        "branchId": { "$ref": "#/$defs/BranchId" },
+        "profile": { "$ref": "#/$defs/RecommendRequest/properties/profile" },
+        "exclude": { "$ref": "#/$defs/RecommendRequest/properties/exclude" },
+        "branch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "name", "blurb"],
+          "properties": {
+            "id": { "$ref": "#/$defs/BranchId" },
+            "name": { "type": "string" },
+            "blurb": { "type": "string" }
+          }
+        },
+        "candidates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ModelCandidate" } }
+      }
+    },
+
+    "Recommendation": {
+      "description": "Igual a Recommendation en lib/types.ts. reasons[0] va al frente de la tarjeta (máximo 140 caracteres).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clubId", "reasons"],
+      "properties": {
+        "clubId": { "type": "string", "pattern": "^club-[0-9]+$" },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 220 }
+        }
+      }
+    },
+
+    "RecommendResponse": {
+      "description": "Respuesta 200 de POST /api/recomendar. Exactamente min(3, clubes pendientes) elementos, del más al menos relacionado. Es también la salida que se le pide al modelo.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommendations"],
+      "properties": {
+        "recommendations": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/Recommendation" }
+        }
+      }
+    },
+
+    "ErrorResponse": {
+      "description": "Cuerpo de cualquier respuesta 4xx o 5xx.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["error"],
+      "properties": {
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "message"],
+          "properties": {
+            "kind": { "type": "string", "enum": ["bad_request", "quota", "invalid_response", "unavailable", "timeout"] },
+            "message": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+
+  "x-rutas": {
+    "POST /api/chat": { "request": "#/$defs/ChatRequest", "response": "#/$defs/AssistantTurn" },
+    "POST /api/perfil": { "request": "#/$defs/ChatRequest", "response": "#/$defs/Profile" },
+    "POST /api/recomendar": { "request": "#/$defs/RecommendRequest", "response": "#/$defs/RecommendResponse" }
+  }
+}
