@@ -1,4 +1,130 @@
 {
+  "oe-19": {
+    "logo": "/logos/aefiec.png"
+  },
+  "oe-23": {
+    "logo": "/logos/aefict.png"
+  },
+  "oe-28": {
+    "logo": "/logos/aefadcom.png"
+  },
+  "43": {
+    "logo": "/logos/CE.png"
+  },
+  "68": {
+    "logo": "/logos/aiche.png"
+  },
+  "62": {
+    "logo": "/logos/ashrae.png"
+  },
+  "63": {
+    "logo": "/logos/aws.png"
+  },
+  "76": {
+    "logo": "/logos/cds.png"
+  },
+  "64": {
+    "logo": "/logos/cimat.png"
+  },
+  "69": {
+    "logo": "/logos/dataclub.png"
+  },
+  "65": {
+    "logo": "/logos/maec.png"
+  },
+  "70": {
+    "logo": "/logos/mates.png"
+  },
+  "75": {
+    "logo": "/logos/okeanos.png"
+  },
+  "66": {
+    "logo": "/logos/ras.png"
+  },
+  "67": {
+    "logo": "/logos/robota.png"
+  },
+  "74": {
+    "logo": "/logos/sname.png"
+  },
+  "54": {
+    "logo": "/logos/clubarqueologia.png"
+  },
+  "39": {
+    "logo": "/logos/CIAP.png"
+  },
+  "40": {
+    "logo": "/logos/TAWS.png"
+  },
+  "41": {
+    "logo": "/logos/clubmecatronica.png"
+  },
+  "42": {
+    "logo": "/logos/NIoT.png"
+  },
+  "44": {
+    "logo": "/logos/ASME.png"
+  },
+  "45": {
+    "logo": "/logos/ASCE.png"
+  },
+  "46": {
+    "logo": "/logos/IIE.png"
+  },
+  "47": {
+    "logo": "/logos/IFT.png"
+  },
+  "48": {
+    "logo": "/logos/CLIP.png"
+  },
+  "49": {
+    "logo": "/logos/AAPG.png"
+  },
+  "50": {
+    "logo": "/logos/GISSC.png"
+  },
+  "51": {
+    "logo": "/logos/Argumentum.png"
+  },
+  "52": {
+    "logo": "/logos/FANPOL.png"
+  },
+  "53": {
+    "logo": "/logos/Tweening.png"
+  },
+  "55": {
+    "logo": "/logos/AccionUniversitaria.png"
+  },
+  "56": {
+    "logo": "/logos/PHYCOM.png"
+  },
+  "57": {
+    "logo": "/logos/IEEE.png"
+  },
+  "58": {
+    "logo": "/logos/SPE.png"
+  },
+  "59": {
+    "logo": "/logos/ACI.png"
+  },
+  "60": {
+    "logo": "/logos/SME.png"
+  },
+  "61": {
+    "logo": "/logos/IAHR.png"
+  },
+  "71": {
+    "logo": "/logos/Alucine.png"
+  },
+  "72": {
+    "logo": "/logos/D-pro.png"
+  },
+  "73": {
+    "logo": "/logos/breik.png"
+  },
+  "77": {
+    "logo": "/logos/ACP.png"
+  },
   "38": {
     "logo": "/Kokoa.svg"
   }
