@@ -936,7 +936,9 @@ a {
 }
 
 .conversation-drawer[data-open="true"] {
-  align-self: stretch;
+  position: sticky;
+  top: 16px;
+  align-self: start;
   overflow: visible;
   padding: 24px;
   border: 1px solid var(--line);
@@ -2275,40 +2277,6 @@ a {
    Pantallas angostas: lectura vertical
    ------------------------------------------------------------------ */
 @media (max-width: 879px) {
-  .profile-workspace {
-    grid-template-areas:
-      "toggle"
-      "profile";
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .profile-workspace[data-conversation-open="true"] {
-    grid-template-areas:
-      "toggle"
-      "profile"
-      "conversation";
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 0;
-  }
-
-  .conversation-drawer:not([data-open="true"]) {
-    display: none;
-  }
-
-  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
-    display: block;
-    align-self: start;
-    overflow: hidden;
-  }
-
-  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
-    margin-top: 20px;
-  }
-
-  .conversation-drawer .chat__panel {
-    height: min(70dvh, 520px);
-  }
-
   .topbar {
     flex-wrap: wrap;
     gap: 8px 12px;
@@ -2535,5 +2503,46 @@ a {
 
   .orbit__trail {
     display: none;
+  }
+}
+
+/* Solo en pantallas muy angostas la conversación pasa debajo del perfil; en el resto queda a un lado. */
+@media (max-width: 639px) {
+  .profile-workspace {
+    grid-template-areas:
+      "toggle"
+      "profile";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profile-workspace[data-conversation-open="true"] {
+    grid-template-areas:
+      "toggle"
+      "profile"
+      "conversation";
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .conversation-drawer:not([data-open="true"]) {
+    display: none;
+  }
+
+  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
+    display: block;
+    align-self: start;
+    overflow: hidden;
+  }
+
+  .profile-workspace[data-conversation-open="true"] .conversation-drawer {
+    margin-top: 20px;
+  }
+
+  .conversation-drawer .chat__panel {
+    height: min(70dvh, 520px);
+  }
+
+  .conversation-drawer[data-open="true"] {
+    position: static;
   }
 }

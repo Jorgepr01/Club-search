@@ -152,8 +152,12 @@ export function Experience() {
         </a>
         <header className="topbar">
           <button type="button" className="brand" onClick={() => setStep("welcome")}>
-            <span className="brand__mark" aria-hidden="true" />
-            Comunidad ESPOL
+            <span className="brand__identity">
+              <span className="brand__mark" aria-hidden="true" />
+              Comunidad ESPOL
+            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element -- logo local de Kokoa */}
+            <img className="brand__kokoa" src="/Kokoa.svg" alt="Kokoa" />
           </button>
           {step !== "welcome" && <StepNav current={step} reachable={reachable} onSelect={goTo} />}
           <p className="demo-tag">Demo sin IA</p>
